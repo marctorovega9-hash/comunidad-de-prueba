@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador de incidencias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/*
+VOICE: entrenamiento serio pero ameno, como un juego de mesa de oficina.
+IDEA: un edificio blanco de Ibiza visto en sección; las incidencias se encienden en su sitio.
+PICTURE: la sección del edificio (azotea, 4 plantas, bajos, garaje, piscina) con marcador pulsante.
+COLOUR and TYPE: cal blanca, azul mar profundo, buganvilla como acento; Sora + Inter.
+LAYOUT: edificio y tarjeta de incidencia lado a lado; apilados en móvil.
+*/
+:root{color-scheme:light dark;--bg:light-dark(#f7f5f0,#0c1a2b);--card:light-dark(#fff,#132740);--ink:light-dark(#0e2236,#eef3f8);--mut:light-dark(#5a6b7c,#9fb2c6);--sea:light-dark(#0d4f8b,#4ea3e6);--sea2:light-dark(#dcebf7,#183654);--pink:#d6336c;--ok:#2b8a3e;--mid:#c27c0e;--bad:#c92a2a;--line:light-dark(#e2ddd3,#24405f);--wall:light-dark(#ffffff,#e9e4da)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:Sora,system-ui,sans-serif;line-height:1.1;margin:0}
+h1{font-size:clamp(28px,4vw,42px);font-weight:800;text-wrap:balance}
+h2{font-size:22px;font-weight:600}
+header{background:var(--sea);color:#fff;padding:22px max(5vw,16px)}
+header p{margin:6px 0 0;opacity:.85;max-width:62ch}
+.band{padding:clamp(20px,3vw,40px) max(5vw,16px);max-width:1240px;margin:0 auto}
+.game{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:28px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+.bld{position:sticky;top:12px}
+svg{width:100%;height:auto;display:block}
+.meters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.m label{font-size:13px;color:var(--mut);display:block}
+.bar{height:10px;background:var(--sea2);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--sea);transition:width .5s}
+.m b{font-size:15px}
+.zone{font-size:13px;color:var(--pink);font-weight:600}
+.opts{display:grid;gap:10px;margin-top:16px}
+button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
+button:focus-visible,input:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+.opt{text-align:left;padding:12px 14px;background:var(--bg);color:var(--ink);border:1.5px solid var(--line)}
+.opt:hover:not(:disabled){border-color:var(--sea)}
+.opt.q2{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
+.opt.q1{border-color:var(--mid);background:color-mix(in srgb,var(--mid) 12%,transparent)}
+.opt.q0{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.opt:disabled{cursor:default}
+.fb{margin-top:16px;padding:14px;border-radius:10px;background:var(--sea2)}
+.fb h3{font-size:16px;margin-bottom:4px}
+.main{background:var(--pink);color:#fff;border:0;padding:0 20px;font-weight:600}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);padding:0 16px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.players{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+input{font:inherit;font-size:16px;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);width:100%;min-height:44px}
+.turn{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.chip{padding:4px 12px;border-radius:20px;background:var(--sea2);font-size:14px}
+.chip.on{background:var(--sea);color:#fff;font-weight:600}
+.muted{color:var(--mut);font-size:14px}
+table{width:100%;border-collapse:collapse}td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left}td.n{text-align:right;font-variant-numeric:tabular-nums}
+.law{font-size:14px;color:var(--mut);margin-top:8px}
+.pulse{animation:p 1.4s ease-out infinite;transform-origin:center;transform-box:fill-box}
+@keyframes p{0%{opacity:.9;transform:scale(.6)}100%{opacity:0;transform:scale(2.2)}}
+@media(prefers-reduced-motion:reduce){.pulse{animation:none;opacity:.4}}
+@media(max-width:760px){.game{grid-template-columns:minmax(0,1fr)}.bld{position:static}}
+</style>
+</head>
+<body>
+<header>
+<h1>Simulador de incidencias de una comunidad</h1>
+<p>Entrenamiento para la administración de fincas: van saltando problemas en el edificio, cada uno decide qué haría y se ve cómo afecta a la caja, a los vecinos y al riesgo legal.</p>
+</header>
+
+<div class="band">
+<div class="game">
+  <div class="card bld">
+    <svg id="svg" viewBox="0 0 420 380" role="img" aria-label="Edificio en sección"></svg>
+    <div class="meters" id="meters"></div>
+  </div>
+  <div class="card" id="panel"></div>
+</div>
+<p class="muted" style="margin-top:18px">Casos de ejemplo con criterios generales de la Ley de Propiedad Horizontal. Antes de usarlos como protocolo de la empresa, contrastadlos con la normativa vigente y con un administrador colegiado.</p>
+</div>
+
+<script>
+{
+const Z={azotea:[170,34],p4:[170,84],p3:[170,134],p2:[170,184],p1:[170,234],bajo:[170,284],garaje:[170,345],piscina:[355,300],portal:[110,290]};
+const ZN={azotea:'Azotea',p4:'4ª planta',p3:'3ª planta',p2:'2ª planta',p1:'1ª planta',bajo:'Planta baja',garaje:'Garaje',piscina:'Piscina',portal:'Portal y ascensor'};
+const C=[
+{z:'p3',t:'Fuga de agua del 3ºB al 2ºB',x:'Sábado, 23:00. La vecina del 2ºB llama: le cae agua del techo del baño. El del 3ºB está de viaje.',o:[
+['Llamar al servicio de urgencias del seguro de la comunidad, intentar localizar al del 3ºB o a quien tenga llave, y pedir a la del 2ºB fotos de los daños.',[-5,10,10],2,'Contienes el daño ya y dejas todo documentado. Luego el perito decidirá si la tubería es común o privativa y qué seguro paga.'],
+['Decirle que el lunes, en horario de oficina, lo miráis.',[0,-25,-10],0,'Dos días de agua cayendo multiplican el daño y el cabreo. Las urgencias de agua no esperan.'],
+['Mandar a un fontanero propio a forzar la puerta del 3ºB.',[-10,-5,-25],0,'Entrar en una vivienda privada sin permiso es un problema legal serio. Si hay riesgo grave, quien entra son los bomberos o la policía.']],
+l:'Tened siempre a mano el teléfono 24 h del seguro de la comunidad y una lista de llaves de contacto.'},
+{z:'portal',t:'Ascensor parado con una persona dentro',x:'Un vecino mayor lleva diez minutos atrapado en el ascensor entre la 1ª y la 2ª.',o:[
+['Llamar a la empresa mantenedora (su teléfono de rescate) y, si tarda o la persona se encuentra mal, al 112. Tranquilizarle por el interfono.',[0,10,10],2,'Correcto: el rescate lo hace personal autorizado. Después pide el parte de la avería.'],
+['Pedir a un vecino manitas que abra las puertas a mano.',[0,0,-30],0,'Muy peligroso. Si hay un accidente, la responsabilidad puede caer sobre la comunidad.'],
+['Llamar a la mantenedora y no hacer nada más.',[0,-5,0],1,'Bien la llamada, pero falta acompañar a la persona y valorar el 112 si hay riesgo.']],
+l:'Revisad el contrato de mantenimiento: tiempo máximo de respuesta en rescates.'},
+{z:'bajo',t:'Vecino moroso: seis cuotas sin pagar',x:'El propietario del bajo A debe seis meses. Dice que no paga porque "la comunidad no hace nada".',o:[
+['Requerirle el pago por escrito, llevar la deuda a junta para aprobar la liquidación, notificársela y, si no paga, reclamar por proceso monitorio.',[10,5,10],2,'Es el camino de la Ley de Propiedad Horizontal (art. 21). Estar molesto no exime de pagar.'],
+['Cortarle el agua o el acceso a la piscina hasta que pague.',[0,-10,-25],0,'No se pueden cortar suministros ni servicios por cuenta propia. Solo se pueden limitar servicios si los estatutos o la junta lo han previsto legalmente.'],
+['Dejarlo correr, ya pagará.',[-20,-10,-5],0,'La deuda crece y los demás vecinos acaban pagando lo suyo.']],
+l:'Cuanto antes se reclama, más fácil es cobrar. Seguimiento mensual de recibos devueltos.'},
+{z:'p4',t:'Piso turístico con fiestas',x:'Tres vecinos se quejan de grupos de fiesta en el 4ºA, que se alquila por días. Gritos hasta las 4 de la madrugada.',o:[
+['Recoger las quejas por escrito, avisar al propietario, recordar las normas de convivencia y, si sigue, que el presidente le requiera formalmente y llevarlo a junta para valorar la acción de cesación.',[0,10,10],2,'Es el procedimiento ordenado. Para el ruido en el momento, los vecinos pueden llamar a la Policía Local.'],
+['Mandar un WhatsApp al grupo de vecinos poniendo verde al propietario.',[0,-10,-15],0,'Exponer públicamente a un propietario puede volverse en contra (datos personales, difamación) y no soluciona nada.'],
+['Decir que eso no es cosa del administrador.',[0,-20,0],1,'En parte es verdad (el ruido puntual es cosa de la policía), pero la comunidad sí tiene herramientas y el administrador debe guiarlas.']],
+l:'Informaos de lo que permite la normativa de alquiler turístico en Ibiza y lo que diga vuestra comunidad sobre ello.'},
+{z:'p2',t:'Cierre de terraza sin permiso',x:'El 2ºA ha cerrado la terraza con aluminio blanco. Otros vecinos dicen que cambia la fachada.',o:[
+['Revisar estatutos y acuerdos previos; si no hay autorización, requerirle por escrito y llevarlo a junta para decidir si se autoriza o se exige reponerlo.',[0,5,10],2,'Cambiar la fachada necesita acuerdo de la comunidad. La junta decide y, si hace falta, se acude al juzgado.'],
+['Contratar a alguien que lo desmonte.',[-15,-10,-30],0,'Nunca. Tocar lo de un propietario sin sentencia es un problema legal.'],
+['Aceptarlo porque queda bonito.',[0,-10,-10],0,'Sienta precedente: luego todos querrán cerrar la suya.']],
+l:'Guardad un archivo de todas las autorizaciones de obras concedidas.'},
+{z:'azotea',t:'Gotera en el 4º desde la azotea',x:'Tras las lluvias, el 4ºB tiene una mancha de humedad en el techo. La azotea es un elemento común.',o:[
+['Avisar al seguro, pedir que un técnico revise la impermeabilización y pedir 2 o 3 presupuestos. Si la obra es grande, junta.',[-10,10,10],2,'La comunidad responde de los elementos comunes. Bien hacer pedir varios presupuestos.'],
+['Decirle al vecino que lo arregle él, que es su techo.',[0,-15,-15],0,'Si el origen es la azotea común, le toca a la comunidad.'],
+['Encargar la obra entera al primer presupuesto sin preguntar.',[-20,-5,0],1,'Arreglar está bien, pero sin comparar precios y sin junta (si es una obra grande) te lo pueden reprochar.']],
+l:'Obras de conservación necesarias: son obligatorias y no requieren unanimidad.'},
+{z:'piscina',t:'Depuradora averiada en pleno agosto',x:'El agua de la piscina está turbia. Hay niños bañándose y la empresa de mantenimiento no contesta.',o:[
+['Cerrar la piscina con un aviso hasta que el agua cumpla los parámetros sanitarios, y buscar otra empresa de urgencia.',[-5,-5,15],2,'La salud va primero. Una piscina comunitaria tiene que cumplir la normativa sanitaria.'],
+['Echar cloro a ojo y dejarla abierta.',[0,5,-25],0,'Si alguien se intoxica o hay un accidente, la responsabilidad es de la comunidad.'],
+['Esperar a que conteste la empresa de siempre.',[0,-10,-10],1,'Mientras tanto, la piscina sigue abierta con agua en mal estado.']],
+l:'En temporada, tened una segunda empresa de piscinas localizada.'},
+{z:'garaje',t:'Humo en el garaje',x:'Un vecino avisa de que sale humo de una plaza del garaje.',o:[
+['Llamar al 112, avisar para que se desaloje y no entrar. Después, avisar al seguro.',[0,10,15],2,'Correcto. Ni el administrador ni los vecinos deben hacer de bomberos.'],
+['Bajar con un extintor.',[0,0,-15],1,'Un conato pequeño se puede atacar con extintor, pero un garaje con humo es peligroso. Primero el 112.'],
+['Llamar al seguro antes que a nadie.',[0,-10,-20],0,'El seguro va después. Primero, la seguridad de las personas.']],
+l:'Revisad que los extintores y la ventilación del garaje estén al día.'},
+{z:'p1',t:'Piso vacío ocupado',x:'Vecinos ven que han entrado personas en el 1ºA, cuyo dueño vive en Alemania.',o:[
+['Avisar enseguida al propietario y a la policía. La comunidad colabora con los testimonios.',[0,10,10],2,'La rapidez es clave. Quien puede denunciar es sobre todo el propietario; la comunidad apoya.'],
+['Organizar a los vecinos para sacarlos.',[0,0,-30],0,'Nunca. Riesgo de violencia y de problemas penales.'],
+['Esperar a ver si se van solos.',[0,-15,-10],0,'Cuanto más tiempo pasa, más difícil es recuperar la vivienda.']],
+l:'Tened los contactos actualizados de los propietarios que no viven en la isla.'},
+{z:'portal',t:'Hay que convocar una junta extraordinaria',x:'El presidente quiere una junta urgente para aprobar una derrama por la fachada.',o:[
+['Redactar la convocatoria con el orden del día, lugar, fecha y hora, enviarla a todos los propietarios con antelación y ponerla en el tablón.',[0,5,10],2,'Una convocatoria mal hecha puede hacer que se anulen los acuerdos.'],
+['Avisar por el grupo de WhatsApp y listo.',[0,0,-15],0,'No todos están en el grupo y no queda constancia formal.'],
+['Convocar sin orden del día y decidir ahí lo que salga.',[0,-5,-20],0,'Solo se pueden tomar acuerdos sobre lo que aparece en el orden del día.']],
+l:'Pueden convocar el presidente o los propietarios que representen al menos el 25% de las cuotas o del número de propietarios.'},
+{z:'p3',t:'Un propietario quiere impugnar un acuerdo',x:'El 3ºA dice que va a impugnar la derrama aprobada hace un mes. Además, debe dos cuotas.',o:[
+['Informarle con calma: para impugnar normalmente tiene que estar al corriente de pago, y hay plazos legales. Guardar bien el acta y la documentación.',[0,5,10],2,'Hay que tener las actas y las convocatorias impecables por si llega una demanda.'],
+['Decirle que no puede hacer nada.',[0,-10,-5],0,'Sí puede impugnar si cumple los requisitos. Mentirle empeora el conflicto.'],
+['Anular la derrama para evitar problemas.',[-10,-10,-10],0,'El administrador no puede anular un acuerdo de la junta.']],
+l:'Plazo general de impugnación: 3 meses (1 año si el acuerdo va contra la ley o los estatutos).'},
+{z:'p2',t:'Una vecina pide ver las facturas',x:'La del 2ºB quiere ver las facturas de jardinería del último año porque le parecen caras.',o:[
+['Facilitárselas en la oficina o por correo electrónico y explicar los gastos.',[0,15,5],2,'La transparencia genera confianza. Los propietarios tienen derecho a conocer las cuentas.'],
+['Decirle que se espere a la junta anual.',[0,-10,0],1,'No es ilegal, pero transmite opacidad.'],
+['Negarse: solo el presidente puede verlas.',[0,-20,-10],0,'Falso, y genera desconfianza hacia la administración.']],
+l:'Mantened la contabilidad ordenada y digitalizada; pedirán verla.'},
+{z:'garaje',t:'Cucarachas en el garaje y los trasteros',x:'Varios vecinos han visto cucarachas en el garaje.',o:[
+['Contratar una empresa de control de plagas para las zonas comunes y avisar a los vecinos de las fechas.',[-5,10,5],2,'Es una actuación de mantenimiento normal. Si el foco está en un local privado, se le requiere.'],
+['Comprar insecticida y dárselo al conserje.',[-1,0,-5],1,'Barato, pero poco eficaz y puede incumplir la normativa de biocidas.'],
+['Que cada uno se lo arregle en su casa.',[0,-15,0],0,'Las zonas comunes son cosa de la comunidad.']],
+l:'Valorad un contrato anual preventivo si el problema se repite.'},
+{z:'bajo',t:'Propietario extranjero no entiende la derrama',x:'Un propietario inglés escribe enfadado: no entiende por qué le cobran 1.200 € extra.',o:[
+['Contestarle en inglés: qué se aprobó, en qué junta, para qué es, su cuota según su coeficiente y las fechas de pago. Adjuntar el acta.',[5,15,5],2,'Comunicar en su idioma evita la morosidad. Mucha clientela en Ibiza es extranjera.'],
+['Responder en español que está en el acta.',[0,-10,0],1,'Correcto legalmente, pero aumenta el riesgo de que no pague.'],
+['Ignorar el correo.',[-10,-15,0],0,'Mala atención y riesgo de impago.']],
+l:'Tened plantillas de comunicaciones en inglés y en alemán.'},
+{z:'piscina',t:'Perros en la piscina',x:'Un vecino baña a su perro en la piscina comunitaria y otros se quejan.',o:[
+['Revisar las normas de régimen interior; recordárselas por escrito al vecino y poner un cartel. Si no hay normas, proponerlas en junta.',[0,10,5],2,'Las normas de régimen interior regulan el uso de las zonas comunes.'],
+['Prohibirlo tú mismo con un cartel.',[0,0,-5],1,'El cartel ayuda, pero las normas las aprueba la junta.'],
+['No hacer nada, cada uno con lo suyo.',[0,-15,-5],0,'Además, es un problema sanitario.']],
+l:'Unas buenas normas de régimen interior ahorran muchos conflictos.'},
+{z:'portal',t:'El fondo de reserva no llega',x:'Al preparar el presupuesto ves que el fondo de reserva está por debajo de lo exigido.',o:[
+['Incluir en el presupuesto la aportación necesaria y explicarlo en la junta ordinaria.',[10,0,10],2,'La ley exige un fondo de reserva de al menos el 10% del último presupuesto ordinario.'],
+['Usar el fondo para pintar el portal y ya se repondrá.',[-10,5,-15],0,'El fondo de reserva es para conservación y reparaciones. No es una caja de libre uso.'],
+['No decir nada para no subir las cuotas.',[-5,0,-10],0,'Incumplimiento y problemas cuando llegue una avería grande.']],
+l:'Presupuesto y cuentas: se aprueban al menos una vez al año en la junta ordinaria.'}
+];
+
+let st={players:['Sílvia','Jose','Marc'],turn:0,pts:[],m:[60,70,70],deck:[],i:0,ans:null,miss:[],started:false};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clamp=v=>Math.max(0,Math.min(100,v));
+try{const p=JSON.parse(localStorage.getItem('simfincas-players'));if(Array.isArray(p)&&p.length)st.players=p}catch(e){}
+
+function drawBld(zone){
+  let s='<rect x="0" y="0" width="420" height="380" fill="var(--sea2)" rx="10"/>';
+  s+='<rect x="0" y="310" width="420" height="70" fill="color-mix(in srgb,var(--mut) 25%,transparent)"/>';
+  s+='<rect x="60" y="20" width="220" height="290" fill="var(--wall)" stroke="var(--line)"/>';
+  s+='<rect x="54" y="14" width="232" height="10" fill="var(--sea)"/>';
+  for(let f=0;f<5;f++){const y=60+f*50;s+=`<line x1="60" x2="280" y1="${y}" y2="${y}" stroke="var(--line)"/>`;
+    if(f<4)[85,135,205,235].forEach(x=>s+=`<rect x="${x}" y="${y+14}" width="22" height="24" rx="10" fill="var(--sea)" opacity=".75"/>`)}
+  s+='<rect x="95" y="268" width="30" height="42" rx="14" fill="var(--sea)"/>';
+  s+='<rect x="60" y="310" width="220" height="60" fill="color-mix(in srgb,var(--mut) 40%,transparent)"/>';
+  [80,130,180,230].forEach(x=>s+=`<rect x="${x}" y="335" width="34" height="20" rx="4" fill="var(--wall)" opacity=".7"/>`);
+  s+='<rect x="300" y="290" width="110" height="20" rx="6" fill="#4ea3e6"/><path d="M300 310h110" stroke="var(--line)"/>';
+  s+='<path d="M330 290q-6-40 10-62M342 228q-22 0-30 12M342 228q16-6 30 4" stroke="var(--ok)" stroke-width="4" fill="none"/>';
+  [[318,214],[330,224],[365,226],[350,220]].forEach(([x,y])=>s+=`<circle cx="${x}" cy="${y}" r="6" fill="var(--pink)"/>`);
+  const L=[['Azotea',34],['4ª',84],['3ª',134],['2ª',184],['1ª',234],['Bajos',284]];
+  L.forEach(([t,y])=>s+=`<text x="50" y="${y+4}" text-anchor="end" font-size="12" fill="var(--mut)">${t}</text>`);
+  s+='<text x="170" y="374" text-anchor="middle" font-size="11" fill="var(--mut)">Garaje</text><text x="355" y="326" text-anchor="middle" font-size="11" fill="var(--mut)">Piscina</text>';
+  if(zone&&Z[zone]){const [x,y]=Z[zone];s+=`<circle class="pulse" cx="${x}" cy="${y}" r="16" fill="var(--pink)"/><circle cx="${x}" cy="${y}" r="9" fill="var(--pink)" stroke="#fff" stroke-width="3"/>`}
+  $('#svg').innerHTML=s;
+}
+function drawMeters(){
+  const n=['Caja de la comunidad','Satisfacción vecinos','Seguridad legal'];
+  $('#meters').innerHTML=st.m.map((v,k)=>`<div class="m"><label>${n[k]}</label><div class="bar"><i style="width:${v}%"></i></div><b>${v}</b></div>`).join('');
+}
+function setup(){
+  drawBld(null);drawMeters();
+  $('#panel').innerHTML=`<h2>Nueva partida</h2><p class="muted">Jugad por turnos en el mismo dispositivo. La comunidad es compartida (los marcadores son de todos), pero cada uno suma puntos según lo bien que decide.</p>
+  <div class="players">${[0,1,2,3].map(k=>`<input id="pl${k}" placeholder="Jugador ${k+1}${k>0?' (opcional)':''}" value="${esc(st.players[k]||'')}">`).join('')}</div>
+  <div class="row"><label class="muted" for="nq">Incidencias:</label><select id="nq" style="font:inherit;font-size:16px;min-height:44px;border-radius:10px;padding:0 10px;background:var(--bg);color:var(--ink);border:1.5px solid var(--line)"><option>8</option><option selected>12</option><option value="${C.length}">Todas (${C.length})</option></select>
+  <button class="main" id="go">Empezar</button></div>`;
+  $('#go').onclick=start;
+}
+function start(){
+  const ps=[0,1,2,3].map(k=>$('#pl'+k).value.trim()).filter(Boolean);
+  st.players=ps.length?ps:['Jugador 1'];
+  try{localStorage.setItem('simfincas-players',JSON.stringify(st.players))}catch(e){}
+  const n=+$('#nq').value;
+  st.deck=C.map((c,k)=>k).sort(()=>Math.random()-.5).slice(0,n);
+  st.i=0;st.turn=0;st.pts=st.players.map(()=>0);st.m=[60,70,70];st.miss=[];st.ans=null;
+  show();
+}
+function show(){
+  const c=C[st.deck[st.i]];st.ans=null;
+  drawBld(c.z);drawMeters();
+  const order=c.o.map((o,k)=>k).sort(()=>Math.random()-.5);
+  $('#panel').innerHTML=`<div class="turn">${st.players.map((p,k)=>`<span class="chip ${k===st.turn?'on':''}">${esc(p)} · ${st.pts[k]}</span>`).join('')}</div>
+  <p class="muted">Incidencia ${st.i+1} de ${st.deck.length} · Le toca a <b>${esc(st.players[st.turn])}</b></p>
+  <div class="zone">${ZN[c.z]}</div><h2>${c.t}</h2><p>${c.x}</p><p><b>¿Qué haces?</b></p>
+  <div class="opts">${order.map(k=>`<button class="opt" data-k="${k}">${c.o[k][0]}</button>`).join('')}</div><div id="fb"></div>`;
+  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>pick(+b.dataset.k));
+}
+function pick(k){
+  if(st.ans!==null)return;st.ans=k;
+  const c=C[st.deck[st.i]],o=c.o[k];
+  st.m=st.m.map((v,j)=>clamp(v+o[1][j]));
+  st.pts[st.turn]+=[0,5,10][o[2]];
+  if(o[2]<2)st.miss.push({c,who:st.players[st.turn]});
+  document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;const q=c.o[+b.dataset.k][2];if(+b.dataset.k===k||q===2)b.classList.add('q'+q)});
+  drawMeters();
+  const best=c.o.find(x=>x[2]===2);
+  const head=['Mala decisión','Aceptable, pero mejorable','Muy bien'][o[2]];
+  $('#fb').innerHTML=`<div class="fb"><h3>${head} (+${[0,5,10][o[2]]} puntos)</h3><p style="margin:0">${o[3]}</p>
+  ${o[2]<2?`<p style="margin:8px 0 0"><b>Lo ideal:</b> ${best[0]}</p>`:''}<p class="law">${c.l}</p></div>
+  <div class="row" style="margin-top:14px"><button class="main" id="nx">${st.i+1<st.deck.length?'Siguiente incidencia':'Ver resultados'}</button></div>`;
+  $('#nx').onclick=()=>{st.i++;st.turn=(st.turn+1)%st.players.length;st.i<st.deck.length?show():end()};
+  $('#nx').focus();
+}
+function end(){
+  drawBld(null);drawMeters();
+  const rank=st.players.map((p,k)=>[p,st.pts[k]]).sort((a,b)=>b[1]-a[1]);
+  const avg=Math.round(st.m.reduce((a,b)=>a+b)/3);
+  const verdict=avg>=75?'La comunidad está contenta y bien gestionada.':avg>=55?'La comunidad sobrevive, pero hay cosas que mejorar.':'La comunidad está pensando en cambiar de administrador.';
+  $('#panel').innerHTML=`<h2>Resultado de la partida</h2><p>${verdict}</p>
+  <table><thead><tr><th>Jugador</th><th style="text-align:right">Puntos</th></tr></thead><tbody>${rank.map(r=>`<tr><td>${esc(r[0])}</td><td class="n">${r[1]}</td></tr>`).join('')}</tbody></table>
+  <h3 style="margin-top:20px;font-size:18px">Para repasar (${st.miss.length})</h3>
+  ${st.miss.length?st.miss.map(x=>`<details style="margin-top:8px"><summary><b>${x.c.t}</b> <span class="muted">· ${esc(x.who)}</span></summary><p>${x.c.o.find(o=>o[2]===2)[0]}</p><p class="law">${x.c.l}</p></details>`).join(''):'<p class="muted">Ningún fallo. Perfecto.</p>'}
+  <div class="row" style="margin-top:18px"><button class="main" id="again">Jugar otra vez</button><button class="ghost" id="cfg">Cambiar jugadores</button></div>`;
+  $('#again').onclick=()=>{const n=st.deck.length;st.deck=C.map((c,k)=>k).sort(()=>Math.random()-.5).slice(0,n);st.i=0;st.turn=0;st.pts=st.players.map(()=>0);st.m=[60,70,70];st.miss=[];show()};
+  $('#cfg').onclick=setup;
+}
+setup();
+}
+</script>
+</body>
+</html>
