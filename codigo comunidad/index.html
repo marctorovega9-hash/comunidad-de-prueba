@@ -3,76 +3,72 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Comunidad Es Pins</title>
+<title>Simulador de comunidades</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /*
 VOICE: entrenamiento serio pero ameno, como un juego de mesa de oficina.
-IDEA: un edificio blanco de Ibiza visto de frente (con el garaje en sección) donde cada vecino asoma con su problema.
-PICTURE: fachada con balcones, persianas mallorquinas, bar en los bajos, piscina y garaje; de noche se encienden las ventanas.
+IDEA: edificios de Ibiza vistos de frente (garaje en sección) donde cada vecino asoma con su problema; el reloj avanza y llega la noche.
 COLOUR and TYPE: cal blanca, azul mar profundo, buganvilla como acento; Sora + Inter.
-LAYOUT: edificio y ficha del vecino lado a lado; apilados en móvil. Debajo, la biblioteca de artículos de la LPH.
+LAYOUT: edificio y ficha del vecino lado a lado; apilados en móvil.
 */
-:root{
-  --bg:#f4f1ea;--card:#fff;--ink:#0e2236;--mut:#5a6b7c;--line:#e2ddd3;
-  --sea:#0d4f8b;--sea2:#dcebf7;--pink:#d6336c;--ok:#2b8a3e;--mid:#b8730a;--bad:#c92a2a;
-  --sky1:#7fbdec;--sky2:#e8f3fb;--sun:#ffd166;--stars:0;--cloud:.9;--seaBg:#2f7fc1;--seaBg2:#5aa6db;--hill:#a9bb8a;
-  --wall:#fdfcf8;--wall2:#e7e0d0;--stone:#dccaa5;--stone2:#c7b38b;--glass:#a9d0ea;--glass2:#78aed6;
-  --shut:#2f6e8e;--rail:#33424f;--walk:#d8cdb7;--soil:#a8916a;--soil2:#94805c;--garage:#626b75;--garage2:#4d555e;
-  --water:#4fb3e8;--leaf:#3f8f4a;--trunk:#8a6a45;--sign:#0d4f8b;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]){
-  --bg:#0c1a2b;--card:#132740;--ink:#eef3f8;--mut:#9fb2c6;--line:#24405f;--sea:#4ea3e6;--sea2:#183654;
-  --sky1:#07112a;--sky2:#26406c;--sun:#f3f1e4;--stars:1;--cloud:0;--seaBg:#0f3157;--seaBg2:#1a4a7a;--hill:#24352f;
-  --wall:#d8d2c4;--wall2:#b3ab9a;--stone:#a6957a;--stone2:#8d7d63;--glass:#ffcf70;--glass2:#f0a940;
-  --shut:#24506a;--rail:#1c2730;--walk:#5d5546;--soil:#4c4334;--soil2:#3f382b;--garage:#2f3740;--garage2:#232a32;
-  --water:#2a7fb8;--leaf:#2c6a36;--trunk:#5f4a31;--sign:#163a5f;
-}}
-:root[data-theme=dark]{
-  --bg:#0c1a2b;--card:#132740;--ink:#eef3f8;--mut:#9fb2c6;--line:#24405f;--sea:#4ea3e6;--sea2:#183654;
-  --sky1:#07112a;--sky2:#26406c;--sun:#f3f1e4;--stars:1;--cloud:0;--seaBg:#0f3157;--seaBg2:#1a4a7a;--hill:#24352f;
-  --wall:#d8d2c4;--wall2:#b3ab9a;--stone:#a6957a;--stone2:#8d7d63;--glass:#ffcf70;--glass2:#f0a940;
-  --shut:#24506a;--rail:#1c2730;--walk:#5d5546;--soil:#4c4334;--soil2:#3f382b;--garage:#2f3740;--garage2:#232a32;
-  --water:#2a7fb8;--leaf:#2c6a36;--trunk:#5f4a31;--sign:#163a5f;
-}
+:root{--bg:#f4f1ea;--card:#fff;--ink:#0e2236;--mut:#5a6b7c;--line:#e2ddd3;--sea:#0d4f8b;--sea2:#dcebf7;--pink:#d6336c;--ok:#2b8a3e;--mid:#b8730a;--bad:#c92a2a;--night:#3b5bdb}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0c1a2b;--card:#132740;--ink:#eef3f8;--mut:#9fb2c6;--line:#24405f;--sea:#4ea3e6;--sea2:#183654;--night:#748ffc}}
+:root[data-theme=dark]{--bg:#0c1a2b;--card:#132740;--ink:#eef3f8;--mut:#9fb2c6;--line:#24405f;--sea:#4ea3e6;--sea2:#183654;--night:#748ffc}
 *{box-sizing:border-box;min-width:0}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
 h1,h2,h3,h4{font-family:Sora,system-ui,sans-serif;line-height:1.15;margin:0}
-h1{font-size:clamp(26px,3.6vw,40px);font-weight:800;text-wrap:balance}
+h1{font-size:clamp(24px,3.4vw,38px);font-weight:800;text-wrap:balance}
 h2{font-size:22px;font-weight:600}
-header{background:linear-gradient(120deg,#0b3f70,#0d4f8b 55%,#1a6bb0);color:#fff;padding:20px max(4vw,16px)}
-header .row{justify-content:space-between}
-header p{margin:6px 0 0;opacity:.88;max-width:70ch}
-.band{padding:clamp(16px,2.5vw,32px) max(4vw,16px);max-width:1320px;margin:0 auto}
+header{background:linear-gradient(120deg,#0b3f70,#0d4f8b 55%,#1a6bb0);color:#fff;padding:18px max(4vw,16px) 0}
+header p{margin:6px 0 0;opacity:.88;max-width:72ch}
+.hrow{display:flex;gap:12px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
+.ctabs{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+.ctab{background:rgba(255,255,255,.12);color:#fff;border:0;border-radius:12px 12px 0 0;padding:8px 16px;min-height:44px;text-align:left;line-height:1.2}
+.ctab small{display:block;opacity:.75;font-size:12px}
+.ctab.on{background:var(--bg);color:var(--ink)}
+.band{padding:clamp(16px,2.5vw,28px) max(4vw,16px);max-width:1320px;margin:0 auto}
 .game{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;align-items:start}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
 .bld{position:sticky;top:12px;padding:10px}
 #svg{width:100%;height:auto;max-height:84vh;display:block;border-radius:10px}
 .meters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:10px 6px 4px}
-.m label{font-size:12.5px;color:var(--mut);display:flex;justify-content:space-between}
+.m label{font-size:12.5px;color:var(--mut);display:flex;justify-content:space-between;gap:4px}
 .bar{height:9px;background:var(--sea2);border-radius:6px;overflow:hidden}
 .bar i{display:block;height:100%;background:var(--sea);transition:width .5s}
 .zone{font-size:13px;color:var(--pink);font-weight:600;letter-spacing:.02em}
 button{font:inherit;cursor:pointer;border-radius:10px;min-height:44px}
-button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
 .main{background:var(--pink);color:#fff;border:0;padding:0 20px;font-weight:600}
 .ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);padding:0 16px}
 header .ghost{color:#fff;border-color:rgba(255,255,255,.45)}
+.mini{min-height:36px;padding:0 12px;font-size:14px;background:var(--bg);color:var(--ink);border:1.5px solid var(--line)}
+.mini.on{border-color:var(--sea);background:var(--sea);color:#fff}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .muted{color:var(--mut);font-size:14px}
 .turn{display:flex;gap:6px;flex-wrap:wrap}
 .chip{padding:3px 11px;border-radius:20px;background:var(--sea2);font-size:13.5px}
 .chip.on{background:var(--sea);color:#fff;font-weight:600}
-.prog{height:6px;border-radius:4px;background:var(--sea2);overflow:hidden;margin:10px 0 14px}
+.clock{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-top:10px;padding:8px 12px;border-radius:12px;background:#fff3bf;color:#5c3d00;font-weight:600}
+.clock.nt{background:#1c2b5a;color:#e6ebff}
+.clock .mini{min-height:32px}
+.prog{height:6px;border-radius:4px;background:var(--sea2);overflow:hidden;margin:10px 0 0}
 .prog i{display:block;height:100%;background:var(--pink);transition:width .5s}
-.who{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+.who{display:flex;gap:14px;align-items:center;margin-bottom:10px}
 .ava{width:84px;height:96px;flex:none;background:var(--sea2);border-radius:14px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:12.5px;font-weight:600;padding:2px 10px;border-radius:20px;background:var(--sea2)}
+.tag.n{background:#1c2b5a;color:#e6ebff}
 .say{position:relative;background:var(--sea2);border-radius:14px;padding:14px 16px;margin:4px 0 14px}
 .say:before{content:"";position:absolute;left:30px;top:-10px;border:10px solid transparent;border-top:0;border-bottom-color:var(--sea2)}
 .say p{margin:0}.say .intro{font-style:italic;color:var(--mut);margin-bottom:6px}
 .say .q{font-weight:600}
-.opts{display:grid;gap:10px;margin-top:10px}
+.mtabs{display:flex;gap:6px;margin:4px 0 10px}
+.mtabs button{flex:1;background:var(--bg);color:var(--ink);border:1.5px solid var(--line);font-size:14.5px}
+.mtabs button.on{border-color:var(--sea);background:var(--sea);color:#fff;font-weight:600}
+textarea{font:inherit;font-size:16px;width:100%;min-height:120px;margin-top:6px;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical}
+.opts{display:grid;gap:10px}
 .opt{text-align:left;padding:12px 14px;background:var(--bg);color:var(--ink);border:1.5px solid var(--line);line-height:1.45}
 .opt:hover:not(:disabled){border-color:var(--sea)}
 .opt.q2{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
@@ -82,7 +78,10 @@ header .ghost{color:#fff;border-color:rgba(255,255,255,.45)}
 .fb{margin-top:14px;padding:14px;border-radius:12px;border-left:5px solid var(--sea);background:color-mix(in srgb,var(--sea) 8%,transparent)}
 .fb.g2{border-color:var(--ok)}.fb.g1{border-color:var(--mid)}.fb.g0{border-color:var(--bad)}
 .fb h3{font-size:16px;margin-bottom:4px}
-.fb p{margin:6px 0 0}
+.fb p{margin:8px 0 0}
+.kw{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+.kw li{font-size:13px;padding:2px 10px;border-radius:20px;border:1.5px solid}
+.kw .y{border-color:var(--ok);color:var(--ok)}.kw .n{border-color:var(--bad);color:var(--bad)}
 .lawbox{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--card)}
 .lawbox h4{font-size:14px;color:var(--sea);margin:10px 0 2px}
 .lawbox h4:first-of-type{margin-top:4px}
@@ -94,447 +93,909 @@ header .ghost{color:#fff;border-color:rgba(255,255,255,.45)}
 .nb svg{width:34px;height:38px;flex:none;border-radius:8px;background:var(--sea2)}
 .nb small{display:block;color:var(--mut);font-size:12px;line-height:1.2}
 .nb b{font-size:14px;line-height:1.2;display:block}
-.nb .st{margin-left:auto;font-weight:700}
-.st.p{color:var(--pink)}.st.g2{color:var(--ok)}.st.g1{color:var(--mid)}.st.g0{color:var(--bad)}
+.nb .st{margin-left:auto;font-weight:700;font-size:12.5px;white-space:nowrap}
+.st.p{color:var(--pink)}.st.z{color:var(--night)}.st.d{color:var(--ok)}
 input{font:inherit;font-size:16px;padding:9px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);width:100%;min-height:44px}
 .players{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:10px 0}
 details.cfg{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
 summary{cursor:pointer;font-weight:600}
 table{width:100%;border-collapse:collapse}td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left}td.n{text-align:right;font-variant-numeric:tabular-nums}
-.lib{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:14px}
-.art{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;scroll-margin-top:20px;transition:box-shadow .3s}
-.art.flash{box-shadow:0 0 0 3px var(--pink)}
-.art h3{font-size:15px;color:var(--sea)}.art h4{font-size:14px;margin:2px 0 6px}
-.art p{margin:0;font-size:14.5px}
-.art .used{margin-top:8px;font-size:12.5px;color:var(--mut)}
-.artlink{background:none;border:0;padding:0;min-height:0;color:var(--sea);text-decoration:underline;font-size:13px}
 a{color:var(--sea)}
-/* SVG */
+.toast{background:#1c2b5a;color:#e6ebff;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-weight:600}
+.toast.day{background:#fff3bf;color:#5c3d00}
+/* ESCENA: sigue el reloj del juego, no el tema de la página */
+#svg{--sky1:#7fbdec;--sky2:#e8f3fb;--sun:#ffd166;--stars:0;--cloud:.9;--seaBg:#2f7fc1;--seaBg2:#5aa6db;--hill:#a9bb8a;--stone:#dccaa5;--stone2:#c7b38b;--glass:#a9d0ea;--glass2:#78aed6;--rail:#33424f;--walk:#d8cdb7;--soil:#a8916a;--soil2:#94805c;--garage:#626b75;--garage2:#4d555e;--water:#4fb3e8;--leaf:#3f8f4a;--trunk:#8a6a45;--grass:#86b86f;--lampo:0;--wall:var(--wallD);--wall2:var(--wall2D);--shut:var(--shutD)}
+#svg.night{--sky1:#07112a;--sky2:#26406c;--sun:#f3f1e4;--stars:1;--cloud:0;--seaBg:#0f3157;--seaBg2:#1a4a7a;--hill:#24352f;--stone:#a6957a;--stone2:#8d7d63;--glass:#ffcf70;--glass2:#f0a940;--rail:#1c2730;--walk:#5d5546;--soil:#4c4334;--soil2:#3f382b;--garage:#2f3740;--garage2:#232a32;--water:#2a7fb8;--leaf:#2c6a36;--trunk:#5f4a31;--grass:#2f5a2a;--lampo:1;--wall:var(--wallN);--wall2:var(--wall2N);--shut:var(--shutN)}
+#svg.night .dim{fill:#27324a}
 .wall{fill:var(--wall)}.wall2{fill:var(--wall2)}.frame{fill:var(--wall2)}.glass{fill:var(--glass)}.glass2{fill:var(--glass2)}
 .mull{stroke:var(--wall);stroke-width:3;fill:none}.sill{fill:var(--wall2)}
 .shut{fill:var(--shut)}.louv{stroke:rgba(0,0,0,.28);stroke-width:1}
 .slab{fill:var(--wall2)}.shade{fill:#000;opacity:.13}.rail{fill:var(--rail)}.bal{stroke:var(--rail);stroke-width:1.6}
-.stone{fill:var(--stone)}.stone2{fill:var(--stone2)}.walk{fill:var(--walk)}.soil{fill:var(--soil)}.soil2{fill:var(--soil2)}
+.stone{fill:var(--stone)}.stone2{fill:var(--stone2)}.walk{fill:var(--walk)}.soil{fill:var(--soil)}.soil2{fill:var(--soil2)}.grass{fill:var(--grass)}
 .garage{fill:var(--garage)}.garage2{fill:var(--garage2)}.water{fill:var(--water)}.leaf{fill:var(--leaf)}.leafs{stroke:var(--leaf);fill:none;stroke-linecap:round}
-.trunk{stroke:var(--trunk);fill:none;stroke-linecap:round}.bloom{fill:var(--pink)}.sign{fill:var(--sign)}
+.trunk{stroke:var(--trunk);fill:none;stroke-linecap:round}.bloom{fill:#d6336c}
 .star{fill:#fff;opacity:var(--stars)}.cloud{fill:#fff;opacity:var(--cloud)}.sun{fill:var(--sun)}.moonmask{fill:var(--sky1);opacity:var(--stars)}
-.seaBg{fill:var(--seaBg)}.hill{fill:var(--hill)}.lamp{fill:var(--glass);}
-.lbl{font:600 13px Inter,system-ui,sans-serif;fill:var(--mut)}
+.hill{fill:var(--hill)}.lampglow{opacity:var(--lampo)}
 .hit{fill:transparent;stroke:transparent;stroke-width:3;cursor:pointer;outline:none}
-.hit:hover,.hit:focus-visible{stroke:var(--pink);stroke-dasharray:9 6;fill:rgba(214,51,108,.06)}
-.hit.sel{stroke:var(--pink);stroke-dasharray:none;fill:rgba(214,51,108,.1)}
+.hit:hover,.hit:focus-visible{stroke:#d6336c;stroke-dasharray:9 6;fill:rgba(214,51,108,.06)}
+.hit.sel{stroke:#d6336c;stroke-dasharray:none;fill:rgba(214,51,108,.1)}
 .bob{animation:bob 1.6s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(-6px)}}
 .wave{animation:wv 3s ease-in-out infinite}
 @keyframes wv{50%{transform:translateX(-8px)}}
-@media(prefers-reduced-motion:reduce){.bob,.wave{animation:none}}
+.zz{animation:zz 2.4s ease-in-out infinite}
+@keyframes zz{0%{opacity:0;transform:translateY(4px)}50%{opacity:1}100%{opacity:0;transform:translateY(-10px)}}
+@media(prefers-reduced-motion:reduce){.bob,.wave,.zz{animation:none}}
 @media(max-width:860px){.game{grid-template-columns:minmax(0,1fr)}.bld{position:static}#svg{max-height:none}}
 </style>
 </head>
 <body>
 <header>
-  <div class="row">
+  <div class="hrow">
     <div>
-      <h1>Comunidad Es Pins · Simulador LPH</h1>
-      <p>Toca a un vecino del edificio: te contará su problema y tendrás que responderle como lo haría un buen administrador de fincas. Todas las respuestas están contrastadas con la Ley de Propiedad Horizontal.</p>
+      <h1>Simulador de comunidades · LPH</h1>
+      <p>Elige un edificio y toca a cualquier vecino: te contará su incidencia y tendrás que responderle como un buen administrador de fincas, escribiendo tu respuesta o eligiendo una opción. El reloj avanza: de noche llegan las urgencias.</p>
     </div>
-    <button class="ghost" id="theme" aria-label="Cambiar día o noche">☀︎ / ☾</button>
+    <button class="ghost" id="theme" aria-label="Cambiar tema claro u oscuro de la página">◐ Tema</button>
   </div>
+  <div class="ctabs" id="ctabs"></div>
 </header>
 
 <div class="band">
   <div class="game">
     <div class="card bld">
-      <svg id="svg" viewBox="0 0 1000 1060" role="img" aria-label="Edificio Es Pins con sus vecinos. Toca a un vecino para ver su incidencia."></svg>
+      <svg id="svg" viewBox="0 0 1000 1060" role="img" aria-label="Edificio con sus vecinos. Toca a un vecino para ver su incidencia."></svg>
       <div class="meters" id="meters"></div>
     </div>
     <div class="card" id="panel" aria-live="polite"></div>
   </div>
+  <p class="muted" style="margin-top:20px">Material formativo basado en la Ley 49/1960 de Propiedad Horizontal (<a href="https://www.boe.es/buscar/act.php?id=BOE-A-1960-10906" target="_blank" rel="noopener">texto consolidado en el BOE</a>) y en la normativa fiscal y laboral citada en cada caso. Los artículos son resúmenes, no el texto literal. No sustituye el asesoramiento de un administrador de fincas colegiado, un asesor fiscal o un abogado, ni la lectura de los estatutos de cada comunidad.</p>
 </div>
-
-<section class="band" id="biblioteca">
-  <h2>Lo que dice la ley</h2>
-  <p class="muted" style="max-width:75ch">Resumen de los artículos de la Ley 49/1960, de Propiedad Horizontal, que se usan en el juego (texto consolidado con las reformas de 2013, 2019, 2022 y la Ley Orgánica 1/2025). Son resúmenes, no el texto literal: consulta el <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1960-10906" target="_blank" rel="noopener">texto consolidado en el BOE</a>.</p>
-  <div class="lib" id="lib"></div>
-  <p class="muted" style="margin-top:20px">Material formativo. No sustituye el asesoramiento de un administrador de fincas colegiado o de un abogado, ni la lectura de los estatutos de cada comunidad.</p>
-</section>
 
 <script>
 {
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clamp=v=>Math.max(0,Math.min(100,v));
+const norm=s=>String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 
-/* ---------- LEY DE PROPIEDAD HORIZONTAL (resúmenes) ---------- */
+/* =================== LEYES (solo se muestran al resolver cada incidencia) =================== */
 const ARTS={
-'5':['Título constitutivo y estatutos','El título constitutivo describe el edificio y cada piso o local y fija su cuota de participación. Puede incluir estatutos con reglas sobre uso, destino, gastos o administración, que obligan a todos los propietarios.'],
+'5':['Título constitutivo y estatutos','El título constitutivo describe el edificio y cada piso o local y fija su cuota de participación. Puede incluir estatutos con reglas sobre uso, destino, gastos o administración, que obligan a todos los propietarios (y a terceros si están inscritos en el Registro).'],
 '6':['Normas de régimen interior','Para regular la convivencia y el buen uso de los servicios y elementos comunes, la junta puede aprobar normas de régimen interior, dentro de la ley y los estatutos. Obligan a todos mientras la junta no las modifique.'],
 '7.1':['Obras dentro del propio piso','El propietario puede modificar su piso siempre que no menoscabe la seguridad del edificio, su estructura general, su configuración o estado exteriores, ni perjudique a otro propietario, y debe avisar antes a quien administre la comunidad. En el resto del edificio (elementos comunes) no puede hacer ninguna alteración sin permiso.'],
 '7.2':['Actividades molestas o ilícitas','No se pueden desarrollar en el piso actividades prohibidas por los estatutos, dañinas para el edificio, molestas, insalubres, nocivas, peligrosas o ilícitas. El presidente requiere su cese advirtiendo de acciones judiciales; si siguen, la junta puede autorizar la acción de cesación contra el propietario y, en su caso, el ocupante. El juez puede ordenar el cese inmediato y la sentencia puede privar del uso del piso hasta 3 años.'],
 '7.3':['Viviendas turísticas: permiso previo','Añadido por la Ley Orgánica 1/2025 (en vigor desde el 3 de abril de 2025): quien quiera empezar a alquilar su vivienda como vivienda de uso turístico debe obtener antes la aprobación expresa de la comunidad, con la mayoría del art. 17.12.'],
 '9.1.b':['Mantener el piso en buen estado','Cada propietario debe conservar en buen estado su piso e instalaciones privativas, sin perjudicar a la comunidad ni a los demás, y reparar los daños causados por su descuido o el de las personas de las que responda.'],
 '9.1.d':['Dejar entrar para reparar','Cada propietario debe consentir en su piso las reparaciones que exija la conservación del edificio y permitir la entrada para hacerlas o para reparar daños (art. 9.1.c y d).'],
-'9.1.e':['Pagar los gastos · el piso responde','Cada propietario paga los gastos generales según su cuota o lo que se haya establecido. El piso responde de lo que se deba de la parte vencida del año en curso y de los tres años naturales anteriores, aunque cambie de dueño. En la venta, el vendedor debe declarar que está al corriente o aportar certificado de deudas de la comunidad.'],
-'9.1.f':['Fondo de reserva','Fondo para obras de conservación, reparación y rehabilitación del edificio y para las obras de accesibilidad del art. 10.1.b. No puede ser inferior al 10% del último presupuesto ordinario.'],
-'9.1.h':['Domicilio para notificaciones','Cada propietario debe comunicar un domicilio en España para notificaciones. Si no lo hace, se le notifica en el piso; y si tampoco es posible, en el tablón de anuncios de la comunidad durante 3 días naturales.'],
+'9.1.e':['Pagar los gastos · el piso responde','Cada propietario paga los gastos generales según su cuota o lo que se haya establecido. El piso responde de lo que se deba de la parte vencida del año en curso y de los tres años naturales anteriores, aunque cambie de dueño. En la venta, el vendedor debe declarar que está al corriente o aportar certificado de deudas, que expide el secretario con el visto bueno del presidente en un máximo de 7 días naturales.'],
+'9.1.f':['Fondo de reserva','Fondo para obras de conservación, reparación y rehabilitación del edificio y para las obras de accesibilidad del art. 10.1.b. No puede ser inferior al 10% del último presupuesto ordinario. Con cargo a él se puede contratar un seguro de daños o un contrato de mantenimiento permanente.'],
+'9.1.h':['Domicilio para notificaciones','Cada propietario debe comunicar un domicilio en España para notificaciones. Si no lo hace, se le notifica en el piso; y si tampoco es posible, en el tablón de anuncios de la comunidad durante 3 días naturales, con plenos efectos.'],
 '9.1.i':['Comunicar la venta','Quien vende debe comunicar el cambio de dueño a la comunidad. Si no lo hace, sigue respondiendo de las deudas posteriores junto con el comprador.'],
 '9.2':['No usar un servicio no exime de pagarlo','Son gastos generales los que no se pueden imputar a un piso concreto, y no utilizar un servicio no exime de pagarlo (salvo las mejoras no exigibles del art. 17.4).'],
 '10.1.a':['Obras de conservación: obligatorias','Las obras necesarias para mantener y conservar el edificio y sus servicios, incluidas las que exija la Administración, son obligatorias y no requieren acuerdo previo de la junta.'],
 '10.1.b':['Accesibilidad: obligatoria hasta 12 mensualidades','Son obligatorias, sin acuerdo de la junta, las obras de accesibilidad que pidan propietarios en cuya vivienda vivan personas con discapacidad o mayores de 70 años, si lo que se reparte al año (descontadas ayudas) no supera 12 mensualidades de gastos comunes. Siguen siendo obligatorias si quien las pide asume el exceso.'],
 '10.3.b':['Estructura y cerramiento de terrazas: 3/5','Dividir o unir pisos, construir nuevas plantas o alterar la estructura o fábrica del edificio, incluido el cerramiento de terrazas, requiere la aprobación de 3/5 del total de propietarios que representen 3/5 de las cuotas, además de la autorización administrativa.'],
+'13.2':['La presidencia es obligatoria','El presidente se elige entre los propietarios (por elección, turno rotatorio o sorteo). El nombramiento es obligatorio, aunque el designado puede pedir al juez su relevo dentro del mes siguiente a acceder al cargo, alegando sus razones.'],
+'13.3':['El presidente representa a la comunidad','El presidente ostenta legalmente la representación de la comunidad, en juicio y fuera de él, en todos los asuntos que la afecten.'],
 '14':['Qué decide la junta','La junta nombra y cesa a los cargos, aprueba el plan de gastos e ingresos y las cuentas, los presupuestos y las obras extraordinarias, los estatutos y normas de régimen interior, y trata cualquier asunto de interés general.'],
 '15.1':['Ir a la junta o enviar a alguien','Se puede asistir personalmente o por medio de un representante. Para representar a un propietario basta un escrito firmado por él.'],
 '15.2':['Morosos: hablan pero no votan','Quien no esté al corriente de las deudas vencidas con la comunidad, y no las haya impugnado judicialmente ni consignado, puede asistir y deliberar, pero no votar.'],
 '16.1':['Junta ordinaria anual','La junta se reúne al menos una vez al año para aprobar presupuestos y cuentas, y además cuando lo considere el presidente o lo pidan la cuarta parte de los propietarios o quienes representen al menos el 25% de las cuotas.'],
-'16.2':['Cómo se convoca','Convoca el presidente (o quienes promuevan la junta). La citación indica los asuntos del orden del día, el lugar, el día y la hora en primera y, en su caso, segunda convocatoria, e incluye la lista de propietarios que no están al corriente de pago, advirtiendo de que no podrán votar.'],
+'16.2':['Cómo se convoca','Convoca el presidente (o quienes promuevan la junta). La citación indica los asuntos del orden del día, el lugar, el día y la hora en primera y, en su caso, segunda convocatoria, e incluye la lista de propietarios que no están al corriente de pago, advirtiendo de que no podrán votar. Cualquier propietario puede pedir por escrito al presidente que un asunto de interés se incluya en el orden del día de la siguiente junta.'],
 '16.3':['Con cuánta antelación','La junta ordinaria se convoca con al menos 6 días de antelación; las extraordinarias, con la antelación suficiente para que llegue a todos los interesados.'],
 '17.2':['Accesibilidad por mayoría simple','Las obras de accesibilidad (ascensor, rampas, salvaescaleras) pueden aprobarse por mayoría de propietarios que representen la mayoría de las cuotas, y entonces obligan a todos aunque superen las 12 mensualidades.'],
-'17.3':['Vigilancia y conserjería: 3/5','Crear o suprimir servicios de portería, conserjería, vigilancia u otros servicios comunes de interés general requiere 3/5 del total de propietarios que representen 3/5 de las cuotas.'],
+'17.3':['Vigilancia, conserjería y arrendar elementos comunes: 3/5','Crear o suprimir servicios de portería, conserjería, vigilancia u otros servicios comunes de interés general, y arrendar elementos comunes sin uso específico, requiere 3/5 del total de propietarios que representen 3/5 de las cuotas (para arrendar, también el consentimiento del propietario directamente afectado, si lo hay).'],
+'17.4':['Mejoras no exigibles','Nadie puede exigir mejoras no necesarias. Si la cuota de instalación de una mejora no exigible supera tres mensualidades ordinarias de gastos comunes, quien votó en contra no está obligado a pagarla. Si después quiere disfrutarla, deberá abonar su parte actualizada con el interés legal.'],
 '17.5':['Punto de recarga del coche eléctrico','Instalar un punto de recarga para uso privado en una plaza individual de garaje solo requiere comunicarlo antes a la comunidad. La instalación y la electricidad las paga el interesado.'],
 '17.6':['Unanimidad','Los acuerdos que modifican el título constitutivo o los estatutos, y que no tienen otra mayoría prevista en la ley, requieren unanimidad. Por ejemplo, cambiar las cuotas de participación.'],
 '17.7':['Mayoría simple','Para los demás acuerdos basta la mayoría del total de propietarios que represente la mayoría de las cuotas; en segunda convocatoria, la mayoría de los asistentes que represente más de la mitad de las cuotas de los presentes.'],
 '17.8':['El voto de los ausentes','Los propietarios ausentes que fueron bien citados y que, una vez informados del acuerdo, no comunican por escrito su desacuerdo al secretario en 30 días naturales, cuentan como votos a favor.'],
 '17.12':['Pisos turísticos: 3/5','Por 3/5 de propietarios y cuotas la junta puede aprobar, limitar o condicionar la actividad de vivienda turística, e incrementar hasta un 20% la participación en gastos comunes de esa vivienda. Estos acuerdos no tienen efectos retroactivos.'],
 '18':['Impugnar un acuerdo','Se pueden impugnar los acuerdos contrarios a la ley o a los estatutos, gravemente lesivos para la comunidad en beneficio de algunos propietarios, o que perjudiquen gravemente a uno sin obligación de soportarlo o con abuso de derecho. Pueden hacerlo quienes votaron en contra, los ausentes y los privados indebidamente del voto, estando al corriente de pago o consignando la deuda. Plazo: 3 meses (1 año si es contrario a la ley o a los estatutos). Impugnar no suspende el acuerdo salvo que el juez lo ordene.'],
+'19':['Actas y libro de actas','Los acuerdos se reflejan en un libro de actas diligenciado por el Registrador de la Propiedad. El acta se cierra con las firmas del presidente y del secretario al terminar la reunión o en los 10 días naturales siguientes, y se envía a los propietarios. Los errores se pueden subsanar antes de la siguiente junta, que debe ratificarlo. El secretario custodia los libros y la documentación se conserva al menos 5 años.'],
+'20.b':['El administrador: presupuesto','El administrador prepara con antelación y presenta a la junta el plan de gastos previsibles, proponiendo los medios para atenderlos.'],
 '20.c':['El administrador: conservación y urgencias','El administrador atiende la conservación del edificio, ordena las reparaciones ordinarias y, en las extraordinarias, adopta las medidas urgentes informando enseguida al presidente o a los propietarios.'],
 '20.e':['El administrador: documentación','El administrador actúa, en su caso, como secretario de la junta y custodia la documentación de la comunidad a disposición de los propietarios.'],
 '21':['Reclamar a un moroso (monitorio)','Si un propietario no paga, la comunidad puede reclamarle por proceso monitorio. Hace falta el certificado del acuerdo de la junta que aprueba la liquidación de la deuda, firmado por el secretario con el visto bueno del presidente y notificado al deudor. Los gastos del requerimiento previo pueden añadirse a la reclamación.'],
-'LOPD':['Videovigilancia (fuera de la LPH)','Ley Orgánica 3/2018, art. 22: hay que señalizar la zona grabada con un cartel informativo, grabar solo lo imprescindible y borrar las imágenes en un mes como máximo, salvo que acrediten un delito.']
+'LOPD':['Videovigilancia (LO 3/2018, art. 22)','Hay que señalizar la zona grabada con un cartel informativo, grabar solo lo imprescindible y borrar las imágenes en un mes como máximo, salvo que acrediten un delito.'],
+'RGPD':['Protección de datos (RGPD y LO 3/2018)','La comunidad es responsable del tratamiento de los datos de los propietarios. Solo puede difundir datos cuando una ley lo ampara (por ejemplo, la lista de deudores en la convocatoria o la notificación en el tablón cuando no hay otra forma). Con el administrador debe firmar un contrato de encargado del tratamiento.'],
+'LIVA':['Ley 37/1992 del IVA','Alquilar elementos que no son vivienda (una azotea, un local) está sujeto y no exento de IVA, y convierte a la comunidad en empresario a esos efectos. Las obras de renovación o reparación de edificios destinados principalmente a viviendas tributan al 10% si el destinatario es la comunidad (o un particular), la construcción terminó hace al menos 2 años y los materiales aportados no superan el 40% de la base (art. 91.Uno.2.10º).'],
+'M303':['Modelos 303 y 390 (IVA)','Autoliquidación trimestral del IVA (1-20 de abril, julio y octubre, y 1-30 de enero) y resumen anual (modelo 390, en enero). Antes hay que darse de alta en el censo de empresarios con el modelo 036.'],
+'M036':['Modelo 036 · NIF y censo','Con el modelo 036 la comunidad solicita su NIF a la Agencia Tributaria (aportando el acta de constitución y el nombramiento del presidente) y comunica altas o cambios en el censo de empresarios.'],
+'M347':['Modelo 347 · operaciones con terceros','Las comunidades de propietarios declaran en febrero las compras a cada proveedor que superen 3.005,06 € en el año, sin incluir los suministros de agua, energía eléctrica y combustibles ni los seguros.'],
+'M184':['Modelo 184 · atribución de rentas','Las entidades en régimen de atribución de rentas (como una comunidad que alquila elementos comunes) presentan en enero una declaración con las rentas obtenidas y la parte atribuida a cada miembro, salvo que no ejerzan actividades económicas y sus rentas no superen 3.000 € al año. Cada propietario declara su parte en su IRPF.'],
+'RIRPF':['Retenciones de IRPF (RD 439/2007, art. 76)','Las comunidades de propietarios están obligadas a retener e ingresar a cuenta del IRPF sobre los rendimientos del trabajo y de actividades profesionales que paguen (en general, el 15% a los profesionales).'],
+'M111':['Modelos 111 y 190','Las retenciones practicadas (nóminas y profesionales) se ingresan con el modelo 111 trimestral (1-20 de abril, julio, octubre y enero) y se resumen en el modelo 190 anual, en enero. Al trabajador o profesional se le entrega un certificado de retenciones.'],
+'TGSS':['Seguridad Social','El empleador se inscribe como empresa en la Tesorería General de la Seguridad Social (código de cuenta de cotización), da de alta al trabajador antes de que empiece y liquida e ingresa las cotizaciones de cada mes durante el mes siguiente, a través del Sistema RED.'],
+'ET20':['Estatuto de los Trabajadores, art. 20','El trabajador realiza el trabajo convenido bajo la dirección del empresario o de la persona en quien este delegue.'],
+'ET29':['Estatuto de los Trabajadores, art. 29','El salario se paga puntualmente en la fecha y lugar convenidos, con recibo de salarios (nómina). El interés por mora en el pago del salario es del 10% de lo adeudado.'],
+'ET31':['Estatuto de los Trabajadores, art. 31','El trabajador tiene derecho a dos pagas extraordinarias al año, una por Navidad y otra en el mes que fije el convenio, que puede acordar prorratearlas en las doce mensualidades.'],
+'ET34':['Estatuto de los Trabajadores, arts. 34 y 35','La empresa debe registrar diariamente la jornada de cada trabajador y conservar los registros 4 años. Las horas extraordinarias se pagan o se compensan con descanso según el convenio o el contrato, y son voluntarias salvo pacto.'],
+'ET38':['Estatuto de los Trabajadores, art. 38','Las vacaciones anuales retribuidas no pueden ser inferiores a 30 días naturales. Las fechas se fijan de común acuerdo y el trabajador debe conocerlas al menos dos meses antes.'],
+'IT':['Baja médica (incapacidad temporal)','En la baja por enfermedad común o accidente no laboral no se cobra prestación los tres primeros días (salvo mejora del convenio); del 4º al 15º la paga el empleador y desde el 16º la Seguridad Social o la mutua, aunque la empresa la adelanta en nómina (pago delegado).'],
+'LPRL':['Ley 31/1995 de Prevención de Riesgos Laborales','El empleador debe evaluar los riesgos de cada puesto, organizar la prevención (por ejemplo, con un servicio de prevención ajeno), formar e informar al trabajador y darle gratis los equipos de protección necesarios.'],
+'CAE':['RD 171/2004 · Coordinación de actividades empresariales','Cuando trabajan en el edificio empresas externas, el titular del centro de trabajo (la comunidad) debe informarles de los riesgos del lugar y de las medidas de emergencia, y coordinarse con ellas en materia de prevención.'],
+'RD742':['Normativa sanitaria de piscinas (RD 742/2013 y normas autonómicas)','Fija los criterios técnico-sanitarios de las piscinas, incluidas las de comunidades con distinta exigencia según su tamaño: control y tratamiento del agua, y cierre del baño cuando hay riesgo para la salud.'],
+'RD88':['Reglamento de ascensores (RD 88/2013)','Los ascensores deben tener contrato de mantenimiento con una empresa conservadora autorizada, que atiende las averías y el rescate de personas atrapadas, y pasar las inspecciones periódicas obligatorias.'],
+'CC1902':['Código Civil, arts. 1902 y 1907','Quien causa un daño por culpa o negligencia debe repararlo, y el propietario de un edificio responde de los daños por falta de las reparaciones necesarias. Por eso conviene un seguro de responsabilidad civil y tener las zonas comunes en buen estado.']
 };
-const artName=k=>k==='LOPD'?'LO 3/2018, art. 22':'Art. '+k+' LPH';
-const artId=k=>'art-'+k.replace(/\./g,'-');
 
-/* ---------- VECINOS ---------- */
-// o: [texto, [caja, convivencia, seguridad legal], calidad 0-2, explicación]
-const N=[
-{id:'toni',u:'local',name:'Toni',role:'Dueño del Bar Es Racó',look:{skin:'#d9a07a',hair:'short',hc:'#2b1d14',shirt:'#c0392b',beard:1},
- qs:[{i:'¡Oye! Me ha llegado la derrama para renovar el ascensor.',q:'Mi local da a la calle y no he pisado el ascensor en mi vida. ¿Por qué tengo que pagarlo?',a:['9.1.e','9.2','5','17.6'],o:[
- ['Te toca pagar según tu cuota de participación, porque no usar un servicio no te libra de pagarlo. La única excepción sería que el título constitutivo o los estatutos eximan a los locales de ese gasto: lo compruebo y te digo.',[5,5,10],2,'Los gastos generales se reparten por cuota y no usar un servicio no exime de pagarlo. Pero muchos estatutos sí eximen a los locales de los gastos de ascensor o portal, así que hay que mirarlo antes de contestar.'],
- ['Tienes toda la razón. Hablo con el presidente y te quitamos de la derrama del ascensor, que no es justo que lo pagues.',[-10,-10,-15],0,'Ni el administrador ni el presidente pueden cambiar el reparto. Las cuotas están en el título constitutivo y cambiarlas exige unanimidad.'],
- ['Lo aprobó la junta y punto: aquí todos los vecinos pagan lo mismo, uses el ascensor o no.',[5,-10,0],1,'No se paga “lo mismo”, sino según la cuota de cada piso o local. Y te has saltado revisar si los estatutos eximen a los locales.']]}]},
-{id:'tomas',u:'bA',name:'Tomás',role:'Propietario del bajo A',look:{skin:'#e8b98f',hair:'bald',hc:'#bbb',shirt:'#6c757d',glasses:1},
- qs:[{i:'Sí, debo seis cuotas. ¿Y qué?',q:'No pienso pagar ni un euro hasta que arregléis la humedad de mi trastero. ¿Me vais a obligar?',a:['9.1.e','21','15.2'],o:[
- ['La humedad la tramitamos aparte, pero no te exime de pagar. Si no te pones al día, la junta aprobará la liquidación de tu deuda, se te notificará y se reclamará por proceso monitorio. Y mientras debas, puedes ir a la junta pero no votar.',[15,0,10],2,'Es el camino de la ley: acuerdo de la junta con la liquidación, certificado firmado por el secretario con el visto bueno del presidente, notificación y monitorio. El moroso que no ha impugnado ni consignado pierde el voto.'],
- ['Pues hasta que pagues te cortamos el agua y te quitamos la llave de la piscina.',[0,-10,-25],0,'El administrador no puede cortar suministros ni servicios por su cuenta: expone a la comunidad a una demanda. Lo que procede es la reclamación judicial.'],
- ['Te mando un burofax reclamando la deuda y, si no pagas en diez días, vamos directamente al juzgado.',[5,0,0],1,'El requerimiento es un buen primer paso (y su coste se puede reclamar), pero para el monitorio hace falta que la junta apruebe la liquidación de la deuda y que se te notifique.']]}]},
-{id:'lucia',u:'1A',name:'Lucía',role:'Propietaria del 1º A',look:{skin:'#f1c7a4',hair:'long',hc:'#4a2c1a',shirt:'#2a9d8f'},
- qs:[{i:'Llevo meses sin dormir bien.',q:'El bar de abajo tiene la música hasta las dos y los olores de la cocina suben a mi casa. ¿Puede hacer algo la comunidad?',a:['7.2'],o:[
- ['Sí. Mándame tus quejas por escrito, con fechas. El presidente requerirá al bar que cese la actividad molesta, avisando de acciones legales. Si sigue, la junta puede autorizar una acción de cesación y el juez puede llegar a prohibirle usar el local hasta 3 años.',[0,10,10],2,'Es el procedimiento del art. 7.2: requerimiento del presidente, acuerdo de junta y demanda contra el propietario y, si lo hay, el inquilino. El juez puede ordenar el cese inmediato como medida cautelar. Para el ruido en el momento, la Policía Local.'],
- ['Eso es cosa del Ayuntamiento y de la Policía Local. Denúncialo tú y la comunidad se queda al margen, que no es asunto nuestro.',[0,-10,0],1,'Policía y Ayuntamiento pueden actuar (ruido, licencia de actividad), pero la comunidad tiene su propia herramienta en la LPH y el administrador debe explicarla.'],
- ['Pon un cartel en el portal con el nombre del dueño del bar para que todo el edificio sepa lo que está haciendo.',[0,-10,-20],0,'Señalar públicamente a alguien puede vulnerar su honor y sus datos personales, y no soluciona nada.']]}]},
-{id:'carmen',u:'1B',name:'Carmen',role:'Propietaria del 1º B · 79 años',look:{skin:'#f0c8a8',hair:'bun',hc:'#d9d9d9',shirt:'#9b5de5',glasses:1},
- qs:[{i:'Ya no puedo con los escalones del portal.',q:'¿Pueden poner una rampa o un salvaescaleras? El del 3º dice que hace falta que lo voten todos y que él no lo va a votar.',a:['10.1.b','17.2'],o:[
- ['No hace falta unanimidad. Como usted tiene más de 70 años, si lo pide, la obra es obligatoria para la comunidad sin votación, siempre que a cada vecino no le toque pagar al año más de 12 mensualidades de cuota, descontadas las ayudas. Si cuesta más, puede aprobarse por mayoría simple.',[-10,15,10],2,'Las obras de accesibilidad pedidas por mayores de 70 años o personas con discapacidad son obligatorias hasta ese límite (art. 10.1.b). Por encima, basta la mayoría de propietarios y cuotas (art. 17.2) y obliga a todos.'],
- ['Si un solo vecino se niega, no se puede hacer: las obras en elementos comunes necesitan unanimidad.',[0,-20,-15],0,'Falso. La accesibilidad tiene un régimen especial: obligatoria hasta 12 mensualidades y, por encima, mayoría simple.'],
- ['Se puede poner si la paga usted entera; si no, tendrá que esperar a que la junta la vote.',[0,-5,-5],1,'Es cierto que si quien la pide asume la parte que exceda de las 12 mensualidades sigue siendo obligatoria, pero no tiene por qué pagarla entera: hasta ese límite paga la comunidad.']]},
- {i:'Otra cosa, ya que estamos.',q:'A la junta irá mi hijo, que yo ya casi no salgo de casa. ¿Puede votar por mí?',a:['15.1'],o:[
- ['Sí. Puede ir en su representación con un escrito firmado por usted; por ejemplo, una autorización para esa junta. No hace falta notario.',[0,10,5],2,'La ley solo exige un escrito firmado por el propietario para la representación voluntaria.'],
- ['No, en la junta solo pueden votar los propietarios en persona.',[0,-15,-10],0,'Falso: se puede asistir por medio de representante.'],
- ['Sí, pero necesita un poder notarial; si no, no se le dejará votar.',[0,-5,0],1,'Pedir poder notarial es exigir más que la ley: basta un escrito firmado.']]}]},
-{id:'javier',u:'2A',name:'Javier',role:'Propietario del 2º A',look:{skin:'#c68c5a',hair:'short',hc:'#111',shirt:'#264653'},
- qs:[{i:'¡Por fin tengo piso propio!',q:'Quiero tirar el tabique entre la cocina y el salón y cambiar las ventanas por unas de PVC gris antracita. ¿Necesito permiso de la comunidad?',a:['7.1'],o:[
- ['El tabique puedes tirarlo si no es estructural (que lo confirme un técnico) y con licencia municipal, avisando antes al administrador. Las ventanas grises son otra cosa: cambian el aspecto de la fachada y necesitas autorización de la comunidad.',[0,5,10],2,'El art. 7.1 permite modificar el propio piso si no se afecta a la seguridad, la estructura ni la configuración o estado exteriores, avisando antes al administrador. La fachada es un elemento común.'],
- ['Es tu piso: puedes hacer lo que quieras dentro y en las ventanas, y no tienes que avisar a nadie.',[0,-5,-20],0,'Hay que avisar al administrador antes de cualquier obra, y lo que afecta a la fachada necesita autorización.'],
- ['Para cualquier obra dentro de tu piso, aunque sea un tabique, necesitas un acuerdo de la junta.',[0,-10,0],1,'Demasiado estricto: las obras interiores que no tocan estructura, seguridad ni fachada no necesitan acuerdo, solo comunicarlas.']]}]},
-{id:'marta',u:'2B',name:'Marta',role:'Propietaria del 2º B · sábado, 23:00',look:{skin:'#e3b089',hair:'curly',hc:'#7a4b2a',shirt:'#e76f51'},
- qs:[{i:'¡Me cae agua del techo del baño!',q:'Viene del 3º B y el dueño está de viaje hasta el martes. ¿Qué hacemos?',a:['9.1.b','9.1.d','20.c'],o:[
- ['Llamo ya al servicio de urgencias del seguro y busco a quien tenga llave del 3º B. Su propietario está obligado a dejar entrar para reparar y responde de los daños si la avería es de su instalación. Tú haz fotos de todo.',[-5,10,10],2,'Cada propietario debe mantener su piso en buen estado y responde de los daños por su descuido (9.1.b), y debe permitir la entrada para reparar (9.1.d). El administrador adopta las medidas urgentes informando al presidente (20.c).'],
- ['Mando ahora mismo a un cerrajero para que abra la puerta del 3º B y entre el fontanero.',[-10,-5,-25],0,'Entrar en una vivienda sin permiso puede ser allanamiento. Si hay un riesgo grave e inmediato, quienes entran son los bomberos o la policía.'],
- ['Cierro la llave de paso general del edificio hasta que vuelva el vecino del 3º B.',[0,-15,0],1,'Cortas la fuga, pero dejas a todo el edificio sin agua varios días. Como medida de minutos, vale; como solución, no.']]}]},
-{id:'pedro',u:'3A',name:'Pedro',role:'Propietario del 3º A',look:{skin:'#e0ac85',hair:'short',hc:'#6b6b6b',shirt:'#1d3557',mous:1},
- qs:[{i:'Voté en contra de la derrama de la fachada.',q:'Se aprobó hace dos meses y voy a impugnarla. Y las dos cuotas que debo no las pago hasta que salga el juicio. ¿Algún problema?',a:['18'],o:[
- ['Puedes impugnarla porque votaste en contra, pero antes tienes que ponerte al corriente o consignar la deuda en el juzgado. El plazo es de 3 meses (1 año si fuera contrario a la ley o a los estatutos). Y mientras tanto el acuerdo se aplica: la derrama hay que pagarla.',[5,0,10],2,'Art. 18: pueden impugnar quienes votaron en contra, los ausentes y los privados indebidamente del voto, al corriente de pago o consignando. Impugnar no suspende el acuerdo salvo que el juez lo decida.'],
- ['No puedes impugnar nada: lo votó la mayoría y ya está.',[0,-10,-10],0,'Falso: quien votó en contra puede impugnar si se dan los motivos del art. 18.'],
- ['Puedes impugnar, pero como debes cuotas tendrás que pagarlas o consignarlas antes. Del plazo ya se ocupará tu abogado.',[5,0,0],1,'Bien lo del pago, pero conviene avisar del plazo (3 meses, ya van 2) y de que la derrama se sigue aplicando.']]}]},
-{id:'klaus',u:'3B',name:'Klaus',role:'Propietario del 3º B · vive en Múnich',look:{skin:'#f3d2b8',hair:'short',hc:'#d9b26f',shirt:'#457b9d',glasses:1},
- qs:[{i:'Hallo! Compré el piso hace un mes.',q:'Y ahora me reclamáis 2.300 € que debía el antiguo dueño, algunos de hace seis años. ¡Yo no debo nada!',a:['9.1.e','9.1.i'],o:[
- ['El piso responde de las cuotas impagadas del año en curso y de los tres años naturales anteriores, aunque cambie de dueño. Esa parte se te puede reclamar y tú puedes repetir contra el vendedor. Lo anterior solo se le puede reclamar al antiguo dueño.',[10,5,10],2,'Es la afección real del art. 9.1.e. Por eso, al vender, el vendedor debe declarar que está al corriente o aportar certificado de deudas de la comunidad.'],
- ['La deuda va con el piso, así que tienes que pagarla entera, sea del año que sea.',[5,-15,-15],0,'No: la afección del piso se limita al año en curso y los tres anteriores.'],
- ['Solo te podemos reclamar lo de este año; todo lo demás es del vendedor.',[-5,5,-5],1,'Te quedas corto: también responde el piso de los tres años naturales anteriores.']]},
- {i:'Otra pregunta.',q:'Paso medio año en Alemania. Si no puedo venir a una junta, ¿mi opinión ya no cuenta?',a:['9.1.h','17.8','15.1'],o:[
- ['Sí cuenta. Te notificaremos los acuerdos en el domicilio que nos indiques; si no estás de acuerdo con uno, tienes 30 días naturales para decirlo por escrito al secretario. Si no dices nada, cuentas como voto a favor. También puedes delegar tu voto por escrito.',[0,10,10],2,'El art. 17.8 computa a los ausentes debidamente citados que no discrepan en 30 días como votos favorables (clave en los acuerdos que exigen unanimidad o mayorías reforzadas).'],
- ['Si no vienes, no cuentas: los acuerdos los deciden los que están.',[0,-10,-10],0,'Falso: los ausentes pueden discrepar en 30 días y también pueden impugnar.'],
- ['Solo cuenta si delegas tu voto ante notario antes de la junta.',[0,0,-5],1,'Delegar es buena idea, pero basta un escrito firmado. Y aunque no delegues, tienes el plazo de 30 días.']]}]},
-{id:'sofia',u:'4A',name:'Sofía',role:'Propietaria del 4º A',look:{skin:'#f1c7a4',hair:'long',hc:'#c9a227',shirt:'#f4a261'},
- qs:[{i:'Este fin de semana, otra fiesta en el 4º B.',q:'Lo alquilan a turistas por días: maletas, gritos y música hasta las cinco. ¿La comunidad puede prohibir los pisos turísticos?',a:['7.3','17.12','7.2'],o:[
- ['Sí puede actuar. Desde abril de 2025, quien quiera empezar a alquilar su piso como vivienda turística necesita antes la aprobación expresa de la junta por 3/5. Si ya se alquilaba antes, la junta puede limitar o condicionar la actividad por 3/5, sin efecto retroactivo. Y por las fiestas, el presidente puede requerir el cese.',[0,10,10],2,'Arts. 7.3 y 17.12 (reformados por la LO 1/2025). El Tribunal Supremo admitió en 2024 que “limitar” puede incluir prohibir. Contra las molestias, el art. 7.2. En Ibiza, además, hay que mirar la normativa turística balear.'],
- ['No. Cada propietario hace lo que quiere con su piso y la comunidad no puede meterse.',[0,-15,-15],0,'Falso: la LPH da herramientas a la comunidad tanto contra las molestias como para limitar la actividad turística.'],
- ['Solo se podría prohibir cambiando los estatutos por unanimidad, así que en la práctica es imposible.',[0,-10,-5],1,'Era la regla antigua. Desde 2019 basta 3/5 (art. 17.12) y desde 2025 la actividad nueva necesita aprobación previa (art. 7.3).']]}]},
-{id:'james',u:'4B',name:'James',role:'Propietario del 4º B · británico',look:{skin:'#f6d5c0',hair:'short',hc:'#a0522d',shirt:'#e9c46a'},
- qs:[{i:'Hello! Una pregunta rápida.',q:'La factura del jardinero me parece carísima. I want to see the invoices. ¿Me las podéis enseñar o tengo que esperar a la junta?',a:['20.e','14','16.1'],o:[
- ['Of course. Como propietario puedes consultar la documentación de la comunidad, que el administrador custodia a vuestra disposición. Te envío las facturas y el contrato del jardinero, y si quieres lo repasamos en la oficina.',[0,15,5],2,'El administrador custodia la documentación “a disposición de los titulares” (art. 20.e). Además, la junta aprueba cada año presupuesto y cuentas. La transparencia evita conflictos y morosidad.'],
- ['Podrás verlas cuando se presenten las cuentas en la junta ordinaria, que es cuando toca.',[0,-10,0],1,'No es ilegal que se revisen en la junta, pero negar el acceso antes transmite opacidad: la documentación está a disposición de los propietarios.'],
- ['Las facturas solo puede verlas el presidente; tendrías que pedírselas a él.',[0,-15,-10],0,'Falso: cualquier propietario puede consultar la documentación de la comunidad.']]}]},
-{id:'enrique',u:'atA',name:'Enrique',role:'Propietario del ático A',look:{skin:'#e8b98f',hair:'bald',hc:'#cfcfcf',shirt:'#3a86ff',beard:1},
- qs:[{i:'Tengo la mejor terraza del edificio.',q:'Quiero cerrarla con cristal y ganar un salón con vistas al mar. La terraza es mía, así que la cierro, ¿no?',a:['7.1','10.3.b'],o:[
- ['Aunque sea tuya, cerrarla altera la fachada y la configuración exterior del edificio. Necesitas que la junta lo apruebe por 3/5 de propietarios y cuotas, además de la licencia municipal.',[0,0,10],2,'El cerramiento de terrazas aparece expresamente en el art. 10.3.b: 3/5 de propietarios y cuotas más autorización administrativa.'],
- ['Si es de tu propiedad, puedes cerrarla sin pedir permiso a nadie; basta con la licencia del Ayuntamiento.',[0,-10,-20],0,'La licencia no sustituye a la autorización de la comunidad cuando se altera la fachada.'],
- ['Para eso necesitas la unanimidad de todos los vecinos: con que uno diga que no, no hay cerramiento.',[0,-5,0],1,'Antes de 2013 la jurisprudencia exigía unanimidad. Hoy el art. 10.3.b fija 3/5 para el cerramiento de terrazas.']]}]},
-{id:'elena',u:'atB',name:'Elena',role:'Propietaria del ático B',look:{skin:'#c99267',hair:'bob',hc:'#1b1b1b',shirt:'#06a77d'},
- qs:[{i:'Mire cómo está mi techo...',q:'Después de las lluvias me ha salido una mancha de humedad enorme en el salón. Encima solo está la azotea. ¿Quién lo arregla?',a:['10.1.a','20.c'],o:[
- ['La azotea es un elemento común: repararla es una obra de conservación obligatoria y no necesita votación. Aviso al seguro, un técnico localiza la filtración y pido varios presupuestos. Los daños de tu techo los asume la comunidad o su seguro.',[-10,15,10],2,'Las obras de conservación son obligatorias sin acuerdo (10.1.a) y, si son urgentes, el administrador actúa ya informando al presidente (20.c). La comunidad responde de los daños que causan los elementos comunes mal conservados.'],
- ['Es tu techo, así que lo arreglas tú y luego, si quieres, lo llevas a la junta.',[0,-15,-15],0,'Si el origen es la azotea común, le toca a la comunidad.'],
- ['Hay que esperar a la junta ordinaria de mayo para aprobar la reparación.',[0,-10,-5],1,'Las obras de conservación necesarias no requieren acuerdo, y esperar meses agrava el daño.']]}]},
-{id:'rosa',u:'portal',name:'Rosa',role:'Presidenta de la comunidad',look:{skin:'#d7a17c',hair:'bob',hc:'#8d5524',shirt:'#d6336c',glasses:1},
- qs:[{i:'Como presidenta, tengo dos dudas.',q:'Quiero convocar ya una junta extraordinaria para aprobar una derrama de la fachada. ¿Cómo lo hacemos para que nadie nos la pueda tumbar?',a:['16.2','16.3','9.1.h','15.2'],o:[
- ['La convoca usted como presidenta. La citación indica los asuntos del orden del día, el lugar, el día y la hora en primera y segunda convocatoria, e incluye la lista de propietarios que deben cuotas, advirtiendo de que no podrán votar. Se envía al domicilio de cada uno y, si no se puede, al tablón.',[0,5,10],2,'Arts. 16.2 y 9.1.h. En la extraordinaria no hay un plazo fijo: la antelación debe permitir que llegue a todos (en la ordinaria, mínimo 6 días). Una convocatoria defectuosa puede tumbar los acuerdos.'],
- ['La votamos por el grupo de WhatsApp de vecinos, que es más rápido y estamos casi todos.',[0,0,-20],0,'Un grupo de WhatsApp no es una junta: no todos están, no hay convocatoria formal ni acta.'],
- ['La convocamos por carta con el orden del día. Lo de la lista de vecinos que deben cuotas no hace falta.',[0,0,-5],1,'La ley exige incluir en la convocatoria la relación de propietarios que no están al corriente, con la advertencia de que no podrán votar.']]},
- {i:'Y la segunda duda...',q:'¿No podríamos pagar la fachada con el fondo de reserva? ¿Cuánto dinero tiene que haber ahí?',a:['9.1.f'],o:[
- ['Sí: el fondo de reserva sirve precisamente para obras de conservación y reparación como la fachada. Debe ser como mínimo el 10% del último presupuesto ordinario, así que si lo usamos habrá que reponerlo en el próximo presupuesto.',[10,5,10],2,'El fondo de reserva es para conservación, reparación, rehabilitación y accesibilidad, con una dotación mínima del 10% del último presupuesto ordinario.'],
- ['No, el fondo de reserva no se puede tocar nunca: es una hucha intocable.',[0,-5,0],1,'Se puede usar para su fin. Lo que no se puede es destinarlo a otra cosa o dejarlo por debajo del mínimo sin reponerlo.'],
- ['Sí, y con lo que sobre organizamos la cena de Navidad de la comunidad.',[-15,5,-15],0,'El fondo de reserva tiene un destino legal concreto: no es una caja para gastos libres.']]}]},
-{id:'diego',u:'gar1',name:'Diego',role:'Plaza de garaje 7',look:{skin:'#b97a50',hair:'short',hc:'#3d2817',shirt:'#2b9348'},
- qs:[{i:'¡Me he pasado al coche eléctrico!',q:'Quiero poner un punto de recarga en mi plaza del garaje. ¿Tiene que aprobarlo la junta?',a:['17.5'],o:[
- ['No. Basta con que lo comuniques antes a la comunidad. La instalación y la electricidad que gastes corren de tu cuenta, normalmente con un contador propio.',[0,10,10],2,'Art. 17.5: en una plaza individual, solo hace falta comunicación previa; coste y consumo, a cargo del interesado.'],
- ['Sí, y por unanimidad, porque el cableado pasa por zonas comunes.',[0,-15,-15],0,'Falso: la ley lo simplificó precisamente para no bloquear estas instalaciones.'],
- ['Sí, hace falta mayoría simple en junta; te lo incluyo en el orden del día.',[0,-5,-5],1,'No hace falta votación: basta la comunicación previa.']]}]},
-{id:'nuria',u:'gar2',name:'Nuria',role:'Plaza de garaje 12',look:{skin:'#efc19d',hair:'long',hc:'#1b1b1b',shirt:'#ff7f51'},
- qs:[{i:'¡Me han robado la bici del garaje!',q:'Queremos poner cámaras en el garaje y en el portal. ¿Las puede poner el presidente o hay que votarlo?',a:['17.3','LOPD'],o:[
- ['Hay que votarlo en junta: un servicio de vigilancia necesita 3/5 de propietarios y cuotas. Además hay que cumplir la protección de datos: carteles informativos, grabar solo zonas comunes y borrar las imágenes en un mes como máximo.',[-5,10,10],2,'Art. 17.3 LPH para el acuerdo y art. 22 de la LO 3/2018 para el tratamiento de las imágenes.'],
- ['Basta con mayoría simple, como cualquier gasto ordinario.',[0,0,-5],1,'La vigilancia figura expresamente entre los servicios que requieren 3/5.'],
- ['Las pone el presidente esta misma semana y ya lo contaremos en la próxima junta.',[-5,-5,-20],0,'Sin acuerdo de junta y sin cumplir la protección de datos, la comunidad se expone a sanciones.']]}]},
-{id:'antonio',u:'pool',name:'Antonio',role:'Vecino del edificio y dueño de Toby',dog:1,look:{skin:'#e0ac85',hair:'curly',hc:'#9e9e9e',shirt:'#ffbe0b'},
- qs:[{i:'¡Toby, ven aquí!',q:'Un vecino se ha quejado porque baño a mi perro en la piscina. Si pago la cuota como todos, ¿por qué no puedo?',a:['6','17.7'],o:[
- ['Porque el uso de las zonas comunes lo pueden regular las normas de régimen interior que aprueba la junta por mayoría simple, y obligan a todos. Además, la piscina debe cumplir la normativa sanitaria. Lo reviso y, si no hay norma, la propongo en la próxima junta.',[0,10,10],2,'Art. 6: normas de régimen interior para el uso de los elementos comunes, aprobadas por mayoría simple (17.7).'],
- ['Tienes razón: pagas como todos, así que puedes usarla como quieras.',[0,-15,-10],0,'Pagar la cuota no da derecho a cualquier uso: hay normas de convivencia y sanitarias.'],
- ['Lo prohíbo yo con un cartel en la puerta de la piscina y asunto arreglado.',[0,0,-5],1,'El cartel ayuda, pero las normas de uso las aprueba la junta, no el administrador.']]}]}
+/* =================== BANCO DE INCIDENCIAS =================== */
+// grupos: G propietarios · V vivienda · L local · P garaje · C zonas comunes/urgencias · PR presidencia · AD administración/fiscal/laboral · LB empleado
+// time: d día · n noche · a cualquiera · kw: conceptos clave para corregir la respuesta escrita
+const T=[];
+const t=(g,time,id,tit,i,q,ok,mid,bad,note,kw,a,req)=>T.push({g,time,id,tit,i,q,ok,mid,bad,note,kw,a,req});
+
+// ---- G · cualquier propietario
+t('G','d','moroso','Cuotas impagadas','Sí, debo seis cuotas. ¿Y qué?','No pienso pagar ni un euro hasta que arregléis la humedad de mi trastero. ¿Me vais a obligar?',
+ 'La humedad la tramitamos aparte, pero no te exime de pagar. Si no te pones al día, la junta aprobará la liquidación de la deuda, se te notificará y se reclamará por proceso monitorio. Y mientras debas, puedes ir a la junta pero no votar.',
+ 'Te mando un burofax y, si no pagas en diez días, vamos directamente al juzgado.','Hasta que pagues, te cortamos el agua y te quitamos la llave de la piscina.',
+ 'Para el monitorio hace falta el acuerdo de junta con la liquidación, certificado del secretario con el visto bueno del presidente y notificarlo. Cortar suministros por cuenta propia no tiene base legal.',
+ 'Liquidación aprobada en junta:junta|liquidac;Proceso monitorio:monitorio|judicial|juzgad|reclam;Pierde el voto:voto|votar',['9.1.e','21','15.2']);
+t('G','d','impugnar','Impugnar una derrama','Voté en contra de la derrama de la fachada.','Se aprobó hace dos meses y voy a impugnarla. Y las cuotas que debo no las pago hasta que salga el juicio. ¿Algún problema?',
+ 'Puedes impugnarla porque votaste en contra, pero antes tienes que ponerte al corriente o consignar la deuda. El plazo es de 3 meses (1 año si fuera contrario a la ley o a los estatutos). Y mientras tanto el acuerdo se aplica: la derrama hay que pagarla.',
+ 'Puedes impugnar, pero como debes cuotas tendrás que pagarlas antes. Del plazo ya se ocupará tu abogado.','No puedes impugnar nada: lo votó la mayoría y ya está.',
+ 'Impugnar no suspende el acuerdo salvo que el juez lo decida. Ya han pasado 2 de los 3 meses.',
+ 'Al corriente o consignar:corriente|consign|pagar|deuda;Plazo de 3 meses:3 meses|tres meses|plazo;No suspende el acuerdo:suspend|ejecut|se aplica|hay que pagar',['18']);
+t('G','d','compraDeuda','Deudas del anterior dueño','Compré el piso hace un mes.','Y ahora me reclamáis 2.300 € que debía el antiguo dueño, algunos de hace seis años. ¡Yo no debo nada!',
+ 'El piso responde de las cuotas impagadas del año en curso y de los tres años naturales anteriores, aunque cambie de dueño. Esa parte se te puede reclamar y tú puedes repetir contra el vendedor. Lo anterior solo se le puede reclamar al antiguo dueño.',
+ 'Solo te podemos reclamar lo de este año; todo lo demás es del vendedor.','La deuda va con el piso, así que tienes que pagarla entera, sea del año que sea.',
+ 'Es la afección real del piso. Por eso, en la venta, el vendedor debe aportar el certificado de deudas de la comunidad.',
+ 'Año en curso y 3 anteriores:tres años|3 años|anteriores;Repetir contra el vendedor:vendedor|anterior propietario|antiguo dueño|repetir',['9.1.e','9.1.i']);
+t('G','d','ausente','No puedo ir a la junta','Paso medio año fuera de la isla.','Si no puedo venir a una junta, ¿mi opinión ya no cuenta?',
+ 'Sí cuenta. Te notificamos los acuerdos en el domicilio que nos indiques; si no estás de acuerdo con uno, tienes 30 días naturales para decirlo por escrito al secretario. Si no dices nada, cuentas como voto a favor. También puedes delegar tu voto por escrito.',
+ 'Solo cuenta si delegas tu voto ante notario antes de la junta.','Si no vienes, no cuentas: los acuerdos los deciden los que están.',
+ 'Esto es clave en los acuerdos que exigen unanimidad o mayorías reforzadas. Para delegar basta un escrito firmado.',
+ '30 días:30 dias|treinta;Por escrito al secretario:escrito|secretari;Delegar el voto:deleg|represent',['17.8','15.1','9.1.h']);
+t('G','d','facturas','Quiero ver las facturas','La factura del jardinero me parece carísima.','¿Me enseñáis las facturas o tengo que esperar a la junta?',
+ 'Claro. Como propietario puedes consultar la documentación de la comunidad, que el administrador custodia a vuestra disposición. Te envío las facturas y el contrato, y si quieres lo repasamos en la oficina.',
+ 'Podrás verlas cuando se presenten las cuentas en la junta ordinaria.','Las facturas solo puede verlas el presidente.',
+ 'La transparencia evita conflictos y morosidad. Además, la junta aprueba cada año el presupuesto y las cuentas.',
+ 'Tiene derecho a consultarlas:derecho|claro|por supuesto|consultar|puedes ver|si,;Documentación a su disposición:administrador|documentac|custodi|enviar|oficina',['20.e','14']);
+t('G','d','represent','Mi hijo irá a la junta','Ya casi no salgo de casa.','A la junta irá mi hijo en mi lugar. ¿Puede votar por mí?',
+ 'Sí. Puede ir en su representación con un escrito firmado por usted, por ejemplo una autorización para esa junta. No hace falta notario.',
+ 'Sí, pero necesita un poder notarial.','No, en la junta solo pueden votar los propietarios en persona.',
+ 'La ley solo exige un escrito firmado por el propietario para la representación voluntaria.',
+ 'Puede representarle:represent|en su nombre|puede votar|por usted;Escrito firmado:escrito|firmad|autorizac',['15.1'],'old');
+t('G','d','rampa','Rampa para el portal','Ya no puedo con los escalones del portal.','¿Pueden poner una rampa o un salvaescaleras? Un vecino dice que hace falta que lo voten todos y él votará que no.',
+ 'No hace falta unanimidad. Como usted tiene más de 70 años, si lo pide, la obra es obligatoria para la comunidad sin votación, siempre que a cada vecino no le toque pagar al año más de 12 mensualidades de cuota, descontadas las ayudas. Si cuesta más, puede aprobarse por mayoría simple.',
+ 'Se puede poner si la paga usted entera; si no, tendrá que esperar a que la junta la vote.','Si un solo vecino se niega, no se puede hacer.',
+ 'Además, si quien la pide asume la parte que exceda de las 12 mensualidades, la obra sigue siendo obligatoria.',
+ 'Obligatoria sin votación:obligatori|sin votac|sin acuerdo|no hace falta;12 mensualidades:12|doce|mensualidad;Mayoría simple si supera:mayoria',['10.1.b','17.2'],'old');
+t('G','d','ordenDia','Incluir un punto en la junta','Quiero que se hable de una cosa en la junta.','Me gustaría que en la próxima junta se trate el horario de la piscina. ¿Puedo pedir que lo incluyan?',
+ 'Sí. Cualquier propietario puede pedir por escrito al presidente que se trate un asunto de interés para la comunidad, y se incluirá en el orden del día de la siguiente junta que se celebre.',
+ 'Plantéalo en ruegos y preguntas y allí lo votamos.','No, el orden del día lo decide solo el administrador.',
+ 'En ruegos y preguntas no se pueden adoptar acuerdos válidos: solo se acuerda lo que figura en el orden del día.',
+ 'Por escrito al presidente:escrito|presidente;Orden del día de la siguiente junta:orden del dia|siguiente junta|proxima junta|inclu',['16.2']);
+t('G','d','cuota','Mi cuota está mal','Creo que pago demasiado.','Mi cuota de participación es mayor que la de pisos más grandes que el mío. ¿Me la podéis cambiar?',
+ 'La cuota está fijada en el título constitutivo. Cambiarla supone modificarlo, y eso exige unanimidad de la junta. Puedo incluirlo en el orden del día para que se estudie.',
+ 'Se puede cambiar con una mayoría de 3/5 en la junta.','Te la ajusto yo en los próximos recibos.',
+ 'Ni el administrador ni el presidente pueden cambiar cuotas por su cuenta.',
+ 'Título constitutivo:titulo|escritura|estatut;Unanimidad:unanim|todos',['5','17.6']);
+t('G','d','mejora','Mejora que no quiero pagar','He votado en contra de climatizar la piscina.','Se ha aprobado igualmente y me tocan casi cuatro mensualidades de derrama. ¿Tengo que pagar?',
+ 'Si es una mejora no necesaria y lo que te toca supera tres mensualidades ordinarias de gastos comunes, como votaste en contra no estás obligado a pagarla. Si más adelante quieres usarla, tendrás que pagar tu parte actualizada.',
+ 'Tienes que pagarla, pero puedes hacerlo a plazos.','Lo que aprueba la mayoría lo pagan todos, sin excepción.',
+ 'Es la regla de las mejoras no exigibles. No se aplica a obras necesarias de conservación ni a las de accesibilidad.',
+ 'Tres mensualidades:3 mensualidad|tres mensualidad|tres cuotas|3 cuotas;No está obligado:no estas obligad|no tienes que pagar|no obligad|disidente;Si la usa, paga después:usar|disfrut|actualiz|mas adelante',['17.4']);
+t('G','d','vendido','He vendido el piso','Esta semana he firmado la venta.','¿Tengo que avisar a la comunidad o ya se encarga el comprador?',
+ 'Tienes que comunicar tú el cambio de titularidad a la comunidad, de forma que quede constancia. Si no lo haces, seguirás respondiendo de las deudas que se generen, junto con el comprador.',
+ 'Avísanos cuando quieras, no tiene importancia legal.','No hace falta: en cuanto firmas la escritura, la comunidad lo sabe.',
+ 'Mientras no se comunique, el vendedor responde solidariamente con el nuevo titular.',
+ 'Comunicar el cambio:comunic|avis|notific;Responde de las deudas:respond|solidari|deuda',['9.1.i']);
+t('G','d','domicilio','No me llegan las convocatorias','Vivo entre Madrid e Ibiza.','Nunca me llegan las convocatorias ni las actas. ¿Qué hago?',
+ 'Comunícanos por escrito un domicilio en España para notificaciones. Si no lo haces, te notificamos en el piso y, si no es posible, en el tablón de anuncios durante 3 días naturales, con plenos efectos.',
+ 'Mira el grupo de WhatsApp, ahí lo ponemos todo.','Si no te llega la convocatoria, los acuerdos no te afectan.',
+ 'La notificación en el tablón es válida cuando falla la entrega en el domicilio designado o en el piso.',
+ 'Comunicar domicilio:domicilio|direcc;Tablón de anuncios:tablon|3 dias|tres dias',['9.1.h']);
+t('G','d','inquilino','Mi inquilino quiere votar','Tengo el piso alquilado.','Mi inquilino quiere ir a la junta a quejarse del ascensor. ¿Puede votar?',
+ 'Solo si le das tu representación por escrito; entonces vota en tu nombre. Sin eso, al no ser propietario, no tiene voto, aunque puede trasladarte sus quejas a ti o al presidente.',
+ 'Puede ir y hablar, pero no votar nunca.','Sí, los inquilinos votan igual que los propietarios.',
+ 'La representación voluntaria solo exige un escrito firmado por el propietario.',
+ 'Representación por escrito:represent|escrito|autoriz;No es propietario:propietari|no tiene voto|no puede votar',['15.1']);
+t('G','d','listaMorosos','Mi nombre en la convocatoria','¡He visto mi nombre en la lista de deudores!','Sale en la convocatoria de la junta. ¿Eso es legal?',
+ 'Sí. La ley obliga a incluir en la convocatoria la relación de propietarios que no están al corriente de pago, advirtiendo de que no podrán votar. Lo que no se puede hacer es exponer esa lista en sitios públicos fuera de lo que prevé la ley.',
+ 'Es legal porque lo aprobó la junta.','No, eso vulnera tu privacidad; lo quitamos ya.',
+ 'Si te pones al día antes de la junta, podrás votar.',
+ 'Lo exige la ley:ley|obliga|legal;Advertencia de privación del voto:voto|votar',['16.2','15.2','RGPD']);
+t('G','d','actaError','Error en el acta','He leído el acta de la última junta.','Pone que voté a favor de la derrama y voté en contra. ¿Qué hago?',
+ 'Comunícalo por escrito cuanto antes. Los errores del acta se pueden subsanar antes de la siguiente junta, que deberá ratificar la corrección. Y que conste tu voto en contra es importante: te permite impugnar.',
+ 'Ya lo hablaremos en la próxima junta, no corre prisa.','El acta ya está firmada y no se puede cambiar.',
+ 'La subsanación debe hacerse antes de la siguiente reunión.',
+ 'Por escrito:escrito|comunic;Subsanar antes de la siguiente junta:subsan|correg|rectific|siguiente junta',['19']);
+t('G','d','perro','¿Puedo tener perro?','Me acabo de mudar con mi perra.','Un vecino dice que en esta comunidad no se pueden tener perros. ¿Me pueden obligar a deshacerme de ella?',
+ 'Solo si los estatutos lo prohíben expresamente. Si no, puedes tenerla, siempre que no cause molestias, suciedad o riesgos; en ese caso la comunidad podría actuar como actividad molesta.',
+ 'Puedes tenerla, pero solo si la junta lo aprueba.','Sí, basta con que un vecino se queje.',
+ 'Los estatutos obligan a terceros si están inscritos en el Registro de la Propiedad.',
+ 'Estatutos:estatut;Si no molesta:molest|ruido|sucied',['5','7.2']);
+t('G','d','presiNo','Me toca ser presidente','Ha salido mi nombre en el turno rotatorio.','Me toca ser presidente y no tengo tiempo. ¿Puedo negarme?',
+ 'El cargo es obligatorio. Puedes pedir al juez que te releve, alegando tus razones, dentro del mes siguiente a tu nombramiento; mientras tanto sigues siendo presidente.',
+ 'Puedes dimitir mandando un correo al administrador.','Basta con no ir a las juntas y ya se nombrará a otro.',
+ 'Mientras el juez no resuelva, el designado ejerce la presidencia.',
+ 'Es obligatorio:obligatori;Relevo ante el juez:juez|juzgad|relevo;En un mes:mes',['13.2']);
+
+// ---- V · vivienda
+t('V','d','obrasPiso','Obras en mi piso','¡Por fin estoy reformando!','Quiero tirar el tabique entre la cocina y el salón y cambiar las ventanas por unas de PVC gris antracita. ¿Necesito permiso?',
+ 'El tabique puedes tirarlo si no es estructural (que lo confirme un técnico) y con licencia municipal, avisando antes al administrador. Las ventanas grises cambian el aspecto de la fachada: para eso necesitas autorización de la comunidad.',
+ 'Para cualquier obra dentro de tu piso, aunque sea un tabique, necesitas acuerdo de la junta.','Es tu piso: haz lo que quieras dentro y en las ventanas.',
+ 'La fachada es un elemento común. Las obras interiores que no tocan estructura ni exterior solo hay que comunicarlas.',
+ 'Avisar al administrador:avis|comunic|administrador;Que no sea estructural:estructur|carga|tecnico;Fachada necesita autorización:fachada|autoriz|permiso|junta',['7.1']);
+t('V','n','fuga','Agua del piso de arriba','¡Me cae agua del techo del baño!','Viene del piso de arriba y su dueño está de viaje hasta el martes. ¿Qué hacemos?',
+ 'Llamo ya al servicio de urgencias del seguro y busco a quien tenga llave del piso de arriba. Su propietario está obligado a dejar entrar para reparar y responde de los daños si la avería es de su instalación. Tú haz fotos de todo.',
+ 'Cierro la llave de paso general del edificio hasta que vuelva.','Mando a un cerrajero a abrir la puerta del vecino.',
+ 'Entrar en una vivienda sin permiso puede ser allanamiento; si hay riesgo grave, entran bomberos o policía. El administrador adopta medidas urgentes informando al presidente.',
+ 'Seguro / urgencias:seguro|urgenc|fontaner;Localizar llave o al propietario:llave|propietari|contact|localiz;Fotos / daños:foto|danos|perito',['9.1.b','9.1.d','20.c'],'notTop');
+t('V','d','bar','Ruido del local de abajo','Llevo meses sin dormir bien.','El local de abajo tiene música hasta las dos y los olores de la cocina suben a mi casa. ¿Puede hacer algo la comunidad?',
+ 'Sí. Mándame tus quejas por escrito, con fechas. El presidente requerirá al local que cese la actividad molesta. Si sigue, la junta puede autorizar una acción de cesación y el juez puede llegar a prohibirle usar el local hasta 3 años. Para el ruido en el momento, la Policía Local.',
+ 'Eso es cosa del Ayuntamiento; denúncialo tú y la comunidad se queda al margen.','Pon un cartel en el portal con el nombre del dueño del local.',
+ 'La acción se dirige contra el propietario y, si lo hay, contra el inquilino. El juez puede ordenar el cese inmediato como medida cautelar.',
+ 'Quejas por escrito:escrito|queja|fechas;Requerimiento del presidente:presidente|requer;Acción de cesación:cesac|junta|judicial|demanda',['7.2'],'first');
+t('V','d','turistico','Piso turístico al lado','Otra vez maletas y fiesta en el piso de al lado.','Lo alquilan a turistas por días. ¿La comunidad puede prohibir los pisos turísticos?',
+ 'Sí puede actuar. Desde abril de 2025, quien quiera empezar a alquilar como vivienda turística necesita antes la aprobación expresa de la junta por 3/5. Si ya se alquilaba antes, la junta puede limitar o condicionar la actividad por 3/5, sin efecto retroactivo. Y por las fiestas, el presidente puede requerir el cese.',
+ 'Solo se podría prohibir cambiando los estatutos por unanimidad.','No: cada propietario hace lo que quiere con su piso.',
+ 'El Tribunal Supremo admitió en 2024 que limitar puede incluir prohibir. En Ibiza también hay que mirar la normativa turística balear.',
+ '3/5 de la junta:3/5|tres quintos|tres quintas;Aprobación previa (desde 2025):previa|aprobac|2025;Molestias / cesación:molest|cesac|requer',['7.3','17.12','7.2']);
+t('V','d','terraza','Cerrar la terraza','Tengo una terraza preciosa.','Quiero cerrarla con cristal y ganar un salón. La terraza es mía, así que la cierro, ¿no?',
+ 'Aunque sea tuya, cerrarla altera la fachada y la configuración exterior. Necesitas que la junta lo apruebe por 3/5 de propietarios y cuotas, además de la licencia municipal.',
+ 'Necesitas la unanimidad de todos los vecinos.','Si es tuya, puedes cerrarla con la licencia del Ayuntamiento.',
+ 'El cerramiento de terrazas aparece expresamente en el art. 10.3.b desde la reforma de 2013.',
+ 'Altera la fachada:fachada|exterior|configurac;3/5 en junta:3/5|tres quintos|tres quintas|junta;Licencia:licencia|ayuntamiento',['7.1','10.3.b']);
+t('V','d','gotera','Gotera desde la azotea','Mire cómo está mi techo.','Vivo en la última planta y tras las lluvias tengo una mancha enorme de humedad. Encima solo está la azotea. ¿Quién lo arregla?',
+ 'La azotea es un elemento común: repararla es una obra de conservación obligatoria y no necesita votación. Aviso al seguro, un técnico localiza la filtración y pido varios presupuestos. Los daños de tu techo los asume la comunidad o su seguro.',
+ 'Hay que esperar a la junta ordinaria para aprobar la reparación.','Es tu techo, así que lo arreglas tú.',
+ 'Si es urgente, el administrador actúa ya informando al presidente.',
+ 'Elemento común:comun|azotea|cubierta;Conservación obligatoria sin junta:obligatori|conservac|sin votac|sin junta|no necesita;Seguro y técnico:seguro|tecnico|presupuest',['10.1.a','20.c'],'top');
+t('V','d','aire','Aire acondicionado en fachada','Este verano me muero de calor.','Quiero colgar el aparato del aire acondicionado en la fachada principal, junto a mi ventana. ¿Puedo?',
+ 'La fachada es un elemento común: colgar el aparato altera su aspecto, así que necesitas autorización de la comunidad, salvo que los estatutos o un acuerdo de junta ya lo permitan en un sitio y modelo determinados.',
+ 'Si es pequeño, puedes ponerlo sin preguntar.','Sí, la parte de fachada junto a tu ventana es tuya.',
+ 'Suele aprobarse una ubicación común (patio o cubierta) para todos los aparatos.',
+ 'Fachada elemento común:fachada|comun;Autorización:autoriz|permiso|junta|acuerdo|estatut',['7.1']);
+t('V','n','fiesta','Fiesta a las tres de la madrugada','¡No hay quien duerma!','Son las tres de la madrugada y el vecino de arriba tiene una fiesta con la música altísima. ¿Qué hago?',
+ 'Ahora mismo, llama a la Policía Local para que actúe y deje constancia. Mañana pásame tu queja por escrito: si se repite, el presidente le requerirá que cese y la junta podrá autorizar la acción de cesación.',
+ 'Mañana le mando un aviso educado y ya está.','Corta la luz de su piso desde el cuarto de contadores.',
+ 'El ruido nocturno lo atiende la policía; la comunidad actúa si la molestia es reiterada.',
+ 'Policía:polic|092|112;Queja por escrito:escrito|queja;Requerimiento y cesación:requer|cesac|presidente',['7.2'],'notTop');
+t('V','d','bajante','Humedad por la bajante','Tengo una mancha en la pared del baño.','El fontanero dice que viene de la bajante general del edificio. ¿Quién paga?',
+ 'Si la avería está en la bajante común, la reparación es una obra de conservación a cargo de la comunidad, sin necesidad de acuerdo. También responde de los daños en tu piso, normalmente a través del seguro. Mando a un técnico para confirmarlo.',
+ 'Pagáis a medias tú y la comunidad.','Lo que pasa dentro de tu piso lo pagas tú.',
+ 'La bajante general es un elemento común aunque pase por dentro de una vivienda.',
+ 'Bajante común:comun|bajante|comunidad;Conservación obligatoria:conservac|obligatori|repar;Seguro / técnico:seguro|danos|tecnico|perito',['10.1.a','20.c']);
+t('V','d','gatos','Demasiados gatos','El olor llega hasta el rellano.','La vecina de al lado tiene más de diez gatos y hay pulgas en la escalera. ¿Se puede hacer algo?',
+ 'Sí: si causa insalubridad o molestias, es una actividad prohibida por la ley. Recogemos las quejas, el presidente le requiere que lo corrija y, si sigue, la junta puede autorizar la acción de cesación. También se puede avisar a sanidad del Ayuntamiento.',
+ 'Le dejamos una nota anónima en el buzón.','Cada uno puede tener en casa los animales que quiera.',
+ 'La misma regla sirve para cualquier actividad insalubre o molesta, también si la causa un inquilino.',
+ 'Insalubre o molesta:insalubr|molest;Requerimiento del presidente:presidente|requer;Acción de cesación:cesac|junta|judicial',['7.2']);
+t('V','d','alquilarTur','Quiero alquilar a turistas','Me vendría bien un dinero extra.','Quiero alquilar mi piso a turistas este verano. ¿Necesito algo de la comunidad?',
+ 'Sí. Desde abril de 2025 necesitas antes la aprobación expresa de la junta, por 3/5 de propietarios y cuotas. Además, necesitarás la autorización turística que exija la normativa balear.',
+ 'Basta con avisar al presidente.','No necesitas nada: es tu piso.',
+ 'Sin esa aprobación previa, la comunidad puede actuar contra la actividad.',
+ 'Aprobación previa de la junta:junta|aprobac|autoriz|previa;3/5:3/5|tres quintos|tres quintas;Normativa turística:turistic|licencia|consell|balear',['7.3','17.12']);
+t('V','d','toldo','Toldo de otro color','Quiero dar un toque de color.','Voy a poner un toldo verde en mi balcón; los demás son blancos. ¿Algún problema?',
+ 'Sí: cambiar el color rompe la uniformidad de la fachada, que es un elemento común. Hay que mirar si los estatutos o las normas de régimen interior fijan un modelo; si no, necesitas autorización de la comunidad.',
+ 'Ponlo y, si alguien se queja, ya lo cambiarás.','El balcón es tuyo, pon el color que quieras.',
+ 'Lo más sencillo es usar el mismo modelo y color que el resto.',
+ 'Uniformidad de la fachada:fachada|uniform|estetic|aspecto;Estatutos o normas:estatut|normas|modelo;Autorización:autoriz|permiso|junta',['7.1','6']);
+
+// ---- L · local
+t('L','d','ascensorLocal','La derrama del ascensor','Me ha llegado la derrama del ascensor.','Mi local da a la calle y no lo he usado en mi vida. ¿Por qué tengo que pagarlo?',
+ 'Te toca pagar según tu cuota, porque no usar un servicio no te libra de pagarlo. La única excepción sería que el título constitutivo o los estatutos eximan a los locales de ese gasto: lo compruebo y te digo.',
+ 'Aquí todos pagan lo mismo, uses el ascensor o no.','Tienes razón; te quitamos de la derrama.',
+ 'Muchos estatutos eximen a los locales de los gastos de ascensor o portal. Cambiar el reparto sin estatutos exige unanimidad.',
+ 'Pagar según cuota:cuota|coeficiente|participac;No usar no exime:no usar|no lo uses|no exime|aunque no;Revisar estatutos:estatut|titulo',['9.2','9.1.e','5','17.6']);
+t('L','d','humos','Salida de humos','Quiero montar un restaurante.','Necesito sacar una chimenea por el patio de luces hasta la cubierta. ¿Puedo?',
+ 'El patio y la cubierta son elementos comunes: necesitas autorización de la junta, salvo que los estatutos ya permitan a los locales instalar salidas de humos. Además necesitarás licencia de actividad y cumplir la normativa de humos y ruidos.',
+ 'Si el Ayuntamiento te da licencia, no hace falta nada más.','Los locales pueden hacer lo que quieran en el patio.',
+ 'La licencia municipal no sustituye al permiso de la comunidad.',
+ 'Elemento común:comun|patio|cubierta;Autorización o estatutos:junta|autoriz|estatut|permiso;Licencia:licencia|ayuntamiento',['7.1','5']);
+t('L','d','rotulo','Rótulo luminoso','Quiero que se vea mi negocio.','Voy a poner un rótulo luminoso grande en la fachada, encima del escaparate. ¿Necesito permiso?',
+ 'Depende de los estatutos: muchos permiten a los locales poner rótulos en su fachada. Si no dicen nada, al afectar a un elemento común necesitas autorización de la comunidad, además de la licencia municipal.',
+ 'Ponlo; si a la comunidad no le gusta, que te denuncie.','La fachada que da a la calle es parte de tu local.',
+ 'La fachada es elemento común aunque esté delante del local.',
+ 'Estatutos:estatut;Autorización:autoriz|permiso|junta|comunidad;Licencia:licencia|ayuntamiento',['7.1','5']);
+t('L','d','mesas','Mesas en la acera','Viene el buen tiempo.','Quiero poner mesas en la acera delante del local. ¿Tiene que aprobarlo la comunidad?',
+ 'La acera es vía pública: el permiso lo da el Ayuntamiento, no la comunidad. Eso sí, si las mesas causan molestias a los vecinos, la comunidad podría actuar contra la actividad molesta.',
+ 'Sí, necesitas mayoría simple en la junta.','No necesitas ningún permiso para la acera.',
+ 'La comunidad no decide sobre la vía pública, pero sí puede reaccionar ante molestias.',
+ 'Vía pública / Ayuntamiento:ayuntamiento|municip|publica|licencia;Molestias:molest|ruido',['7.2']);
+t('L','d','pilar','Quitar un pilar','Estamos reformando el local.','Queremos quitar un pilar que molesta en medio. El albañil dice que no pasa nada.',
+ 'No por tu cuenta: un pilar es estructura del edificio. Necesitas proyecto técnico, licencia y la aprobación de la junta por 3/5. Si se toca sin permiso, la comunidad puede exigir reponerlo.',
+ 'Puedes hacerlo si un arquitecto firma el proyecto.','Si lo dice el albañil, adelante.',
+ 'Alterar la estructura nunca entra en las obras libres del propio piso o local.',
+ 'Estructura:estructur|pilar;Proyecto y licencia:tecnic|arquitect|proyecto|licencia;Junta 3/5:junta|3/5|tres quintos|autoriz',['7.1','10.3.b']);
+
+// ---- P · garaje
+t('P','d','recarga','Punto de recarga','¡Me he pasado al coche eléctrico!','Quiero poner un punto de recarga en mi plaza. ¿Tiene que aprobarlo la junta?',
+ 'No. Basta con que lo comuniques antes a la comunidad. La instalación y la electricidad que gastes corren de tu cuenta, normalmente con un contador propio.',
+ 'Sí, hace falta mayoría simple en junta.','Sí, y por unanimidad, porque el cable pasa por zonas comunes.',
+ 'Solo se aplica a plazas individuales y para uso privado.',
+ 'Solo comunicación previa:comunic|avis|no hace falta|sin junta;Lo paga el interesado:pagas tu|tu cuenta|interesado|contador|consumo',['17.5']);
+t('P','d','camaras','Cámaras en el garaje','¡Me han robado la bici!','Queremos poner cámaras en el garaje y el portal. ¿Las puede poner el presidente o hay que votarlo?',
+ 'Hay que votarlo en junta: un servicio de vigilancia necesita 3/5 de propietarios y cuotas. Además hay que cumplir la protección de datos: carteles informativos, grabar solo zonas comunes y borrar las imágenes en un mes como máximo.',
+ 'Basta con mayoría simple, como cualquier gasto.','Las pone el presidente y ya lo contaremos en la junta.',
+ 'Sin acuerdo y sin cumplir protección de datos, la comunidad se expone a sanciones.',
+ 'Junta 3/5:3/5|tres quintos|tres quintas;Carteles informativos:cartel|inform|señal;Borrar en un mes:mes|30 dias|borr',['17.3','LOPD']);
+t('P','d','jaula','Cerrar la plaza','Necesito un trastero.','Quiero cerrar mi plaza de garaje con una reja para guardar cosas. ¿Puedo?',
+ 'Cerrar la plaza altera el garaje y puede afectar a la ventilación, la evacuación y la seguridad contra incendios. Necesitas autorización de la comunidad (salvo que los estatutos lo permitan) y cumplir la normativa contra incendios.',
+ 'Si la reja es baja, no hace falta permiso.','Es tu plaza; ciérrala y mete lo que quieras.',
+ 'Además, guardar materiales inflamables en el garaje suele estar prohibido.',
+ 'Autorización / estatutos:autoriz|permiso|junta|estatut;Seguridad contra incendios:incendi|seguridad|ventilac|evacuac',['7.1','5']);
+t('P','d','alquilarPlaza','Alquilar mi plaza','Ya no tengo coche.','Voy a alquilar mi plaza a una persona que no vive en el edificio. ¿Puedo?',
+ 'Sí, salvo que los estatutos lo prohíban. Conviene avisar a la comunidad, entregar el mando bajo tu responsabilidad y recordar al inquilino las normas de uso del garaje. Tú sigues respondiendo frente a la comunidad.',
+ 'Necesitas que la junta lo apruebe por mayoría.','No, las plazas solo pueden usarlas los vecinos.',
+ 'El uso de las plazas puede estar limitado por los estatutos.',
+ 'Sí, salvo estatutos:estatut;Normas de uso / mando:normas|mando|avis|respons',['5','6']);
+t('P','d','lavar','Lavar el coche en el garaje','Cada sábado lo mismo.','Un vecino lava el coche en el garaje con el agua comunitaria. ¿Puede?',
+ 'El agua del garaje la pagan todos. El uso de las zonas comunes se puede regular con normas de régimen interior aprobadas por mayoría simple (por ejemplo, prohibir lavar coches). Mientras, se le recuerda que no haga un uso abusivo.',
+ 'Le pasamos a él la factura entera del agua.','Si paga su cuota, puede usar el agua como quiera.',
+ 'Las normas de régimen interior obligan a todos mientras la junta no las cambie.',
+ 'Normas de régimen interior:normas|regimen interior|reglamento;Mayoría simple en junta:junta|mayoria|acuerdo',['6','17.7']);
+
+// ---- C · zonas comunes y urgencias
+t('C','d','perroPiscina','Perro en la piscina','¡Toby, ven aquí!','Un vecino se ha quejado porque baño a mi perro en la piscina. Si pago como todos, ¿por qué no puedo?',
+ 'Porque el uso de las zonas comunes lo pueden regular las normas de régimen interior que aprueba la junta por mayoría simple, y obligan a todos. Además, la piscina debe cumplir la normativa sanitaria. Lo reviso y, si no hay norma, la propongo en la próxima junta.',
+ 'Lo prohíbo yo con un cartel y asunto arreglado.','Tienes razón: pagas como todos, así que puedes usarla.',
+ 'El administrador puede recordar las normas, pero las aprueba la junta.',
+ 'Normas de régimen interior:normas|regimen interior;Junta / mayoría:junta|mayoria;Sanidad:sanitar|higien|salud',['6','17.7','RD742'],'resident');
+t('C','a','ascensor','Atrapado en el ascensor','¡Hay alguien atrapado en el ascensor!','Lleva diez minutos entre dos plantas. ¿Qué hacemos?',
+ 'Llamo al teléfono de rescate 24 h de la empresa mantenedora y, si la persona se encuentra mal o tardan, al 112. Mientras, la tranquilizamos por el interfono. Nadie debe intentar abrir las puertas por su cuenta.',
+ 'Llamo a la mantenedora y espero a que vengan.','Que un vecino abra las puertas con la llave de emergencia.',
+ 'El rescate lo hace personal autorizado. La comunidad debe tener al día el contrato de mantenimiento.',
+ 'Mantenedora / rescate:mantenedor|mantenimiento|empresa|rescate;112:112|emergenc|bomber;No abrir uno mismo:no abr|nadie|tranquiliz|interfono',['RD88','10.1.a']);
+t('C','n','humo','Humo en el garaje','¡Sale humo del garaje!','Huele a quemado y sale humo por la rampa. ¿Qué hacemos?',
+ 'Llamo al 112, aviso para que nadie baje y se desaloje si hace falta. No intentamos apagar un fuego con humo denso. Después, aviso al seguro y revisamos extintores y ventilación.',
+ 'Bajo con un extintor a ver qué pasa.','Llamo primero al seguro para que lo registren.',
+ 'Primero la seguridad de las personas; el seguro, después.',
+ '112 / bomberos:112|bomber|emergenc;No bajar / desalojar:desaloj|no baj|nadie|evacu;Seguro después:seguro',['20.c','10.1.a']);
+t('C','n','inundacion','El garaje se inunda','¡Tormenta!','El garaje se está inundando y el agua ya llega a las ruedas de los coches.',
+ 'Aviso a bomberos si hay riesgo, que nadie baje si el agua alcanza los cuadros eléctricos, pido una empresa de achique urgente y aviso al seguro con fotos. Después, revisar bombas y sumideros: es una obra de conservación.',
+ 'Esperamos a que pare de llover y mañana lo vemos.','Que bajen los vecinos a sacar los coches con el agua por las rodillas.',
+ 'El agua y la electricidad son una combinación peligrosa: primero la seguridad.',
+ 'Bomberos / achique:bomber|112|achique|bomba;Seguridad eléctrica:electric|luz|cuadro;Seguro:seguro|foto',['20.c','10.1.a']);
+t('C','n','apagon','Apagón en la escalera','Se ha ido la luz de la escalera.','No funcionan el portal, la escalera ni el ascensor, pero los pisos sí tienen luz.',
+ 'Si solo fallan las zonas comunes, es la instalación de la comunidad: compruebo si ha saltado el diferencial del cuadro común y, si no, llamo al electricista de urgencias. Revisamos que nadie quede atrapado en el ascensor y que funcione el alumbrado de emergencia.',
+ 'Llamo a la compañía eléctrica para que vengan.','Que cada vecino use la linterna del móvil y mañana se verá.',
+ 'Si solo falla lo común, la distribuidora no actuará: la avería es de la instalación de la comunidad.',
+ 'Cuadro común / diferencial:cuadro|diferencial|automatic;Electricista de urgencias:electricista|urgenc|tecnico;Ascensor / emergencia:ascensor|emergenc',['20.c','10.1.a']);
+t('C','n','portal','Alguien duerme en el portal','Hay una persona durmiendo en el portal.','Ha entrado cuando alguien abrió la puerta. ¿Qué hacemos?',
+ 'Hablarle con respeto, sin violencia. Si no quiere irse o hay riesgo, llamar a la Policía Local, que también puede avisar a los servicios sociales. Después, revisar el cierre de la puerta del portal.',
+ 'Dejarle y mañana ver si se ha ido.','Que unos vecinos le saquen a la fuerza.',
+ 'Usar la fuerza puede acabar en lesiones y en un problema penal.',
+ 'Respeto, sin violencia:respeto|sin violencia|hablar|calma;Policía / servicios sociales:polic|servicios sociales|112;Revisar la puerta:puerta|cerradura|cierre',['20.c']);
+t('C','n','okupas','Gente en el piso vacío','Se ve luz en el piso vacío.','Esta noche ha entrado gente en el piso cuyo dueño vive en el extranjero.',
+ 'Avisar ya a la policía y al propietario: cuanto antes, mejor. El propietario es quien puede denunciar y pedir la recuperación de la vivienda; la comunidad colabora con testimonios y, si hay molestias o daños, puede ejercer la acción de cesación.',
+ 'Esperar unos días a ver si se van solos.','Organizar a los vecinos para echarlos.',
+ 'La comunidad no debe usar la fuerza; sí puede actuar por actividades molestas o ilícitas.',
+ 'Policía:polic|denunc|112;Avisar al propietario:propietari|dueno;Acción de cesación:cesac|molest|ilicit',['7.2']);
+t('C','n','puertaGaraje','Puerta del garaje abierta','La puerta del garaje se ha quedado abierta.','Está atascada y son las once de la noche. ¿Qué hacemos?',
+ 'Es una reparación urgente por seguridad: llamo al servicio técnico 24 h de la puerta y, si se puede, se cierra a mano con el desbloqueo de seguridad. Informo al presidente y a los vecinos.',
+ 'Mañana a primera hora llamo al técnico.','Ponemos un coche atravesado en la rampa.',
+ 'Bloquear la rampa impediría evacuar en una emergencia.',
+ 'Técnico urgente:tecnico|urgenc|24|reparac;Informar:presidente|vecinos|inform',['20.c']);
+t('C','d','piscinaTurbia','Piscina turbia','El agua de la piscina está verde.','Hay niños bañándose y la empresa de mantenimiento no contesta.',
+ 'Cerrar la piscina con un aviso hasta que el agua cumpla los parámetros sanitarios y buscar otra empresa de urgencia. La salud va primero.',
+ 'Esperar a que conteste la empresa de siempre.','Echar cloro a ojo y dejarla abierta.',
+ 'Si alguien enferma por el agua, la responsabilidad es de la comunidad.',
+ 'Cerrar la piscina:cerr|prohib|aviso;Parámetros sanitarios:sanitari|parametr|analisis|calidad;Otra empresa:empresa|mantenim|tecnico',['RD742']);
+t('C','d','plaga','Cucarachas','He visto cucarachas en la escalera.','Y otros vecinos dicen que también en el garaje. ¿Qué se hace?',
+ 'Contratar una empresa autorizada de control de plagas para las zonas comunes y avisar a los vecinos de las fechas. Si el foco está en un piso o local, se le requiere que actúe.',
+ 'Dar un spray al conserje.','Que cada vecino se apañe en su casa.',
+ 'Es mantenimiento de las zonas comunes; el foco privado es responsabilidad de su dueño.',
+ 'Empresa de plagas:empresa|plaga|desinsect|fumig;Avisar a los vecinos:avis|vecinos;Foco privado:foco|origen|requer',['10.1.a','9.1.b']);
+t('C','n','piscinaNoche','Fiesta en la piscina','Son las dos de la madrugada.','Hay un grupo bañándose y gritando en la piscina. ¿Qué hago?',
+ 'Si hay normas de régimen interior con horario, se les recuerda; si siguen molestando, se llama a la Policía Local. Al día siguiente, aviso por escrito al propietario responsable y, si no hay horario aprobado, se propone en junta.',
+ 'Mañana pongo un cartel.','Vaciar la piscina para que no vuelva a pasar.',
+ 'El horario de uso de la piscina se fija en las normas de régimen interior.',
+ 'Normas / horario:normas|horario|regimen;Policía:polic;Junta:junta',['6','7.2']);
+t('C','d','caida','Caída en la escalera','¡Se ha caído una señora!','Ha resbalado en la escalera recién fregada y se ha hecho daño en la muñeca.',
+ 'Atenderla y, si hace falta, llamar al 112. Recoger datos, testigos y fotos (si había cartel de suelo mojado) y dar parte al seguro de responsabilidad civil de la comunidad. Después, revisar la señalización durante la limpieza.',
+ 'Dar parte al seguro dentro de un mes, sin prisa.','Pedirle que no diga nada para que no suba el seguro.',
+ 'Ocultar un siniestro puede dejar a la comunidad sin cobertura.',
+ 'Atender / 112:atend|112|ayud|medic;Datos, testigos y fotos:datos|testig|foto;Seguro de responsabilidad civil:seguro|responsabilidad',['CC1902']);
+t('C','n','robo','Robo en los trasteros','Han forzado mi trastero esta noche.','Se han llevado la bici y las herramientas. ¿Qué hacemos?',
+ 'Denunciar a la Policía o la Guardia Civil. Revisar puertas y cerraduras, dar parte al seguro si cubre robo en zonas comunes y llevar a junta medidas de seguridad (cerraduras, cámaras por 3/5).',
+ 'Cambiar la cerradura sin avisar a nadie.','Revisar los trasteros de los demás para buscar lo robado.',
+ 'Entrar en trasteros ajenos sin permiso no está permitido.',
+ 'Denuncia:denunc|polic|guardia civil;Seguro:seguro;Medidas en junta:junta|cerradura|camara|seguridad',['17.3','20.c'],'resident');
+t('C','n','gas','Olor a gas','¡Huele muchísimo a gas en el rellano!','Es de madrugada y no sabemos de dónde viene.',
+ 'Que nadie encienda luces, accione interruptores ni use el ascensor; abrir ventanas, salir del edificio y llamar al teléfono de urgencias de la distribuidora de gas o al 112.',
+ 'Llamar mañana a un técnico.','Encender las luces del portal para ver de dónde viene.',
+ 'Cualquier chispa puede provocar una explosión.',
+ 'No accionar interruptores:interruptor|luces|chispa|no encend;Ventilar y salir:ventil|ventanas|salir|evacu;Urgencias / 112:112|urgenc|distribuidora',['20.c']);
+t('C','d','arbol','Árbol peligroso','Tras el temporal el pino grande está inclinado.','Cae justo encima de la zona de juegos de los niños.',
+ 'Acordonar la zona de inmediato, llamar a una empresa de poda para valorarlo y, si hay peligro inminente, a los bomberos. Es una actuación urgente de conservación: se informa al presidente y se da parte al seguro.',
+ 'Esperar a la junta para votar si se tala.','Que un vecino lo corte con su motosierra.',
+ 'La comunidad responde de los daños que causen sus elementos mal conservados.',
+ 'Acordonar:acordon|precint|cerrar|alej;Empresa / bomberos:empresa|poda|jardiner|bomber;Seguro y presidente:seguro|presidente',['10.1.a','20.c','CC1902']);
+
+// ---- PR · presidencia y juntas
+t('PR','d','convocar','Convocar una junta','Como presidenta, tengo una duda.','Quiero convocar ya una junta extraordinaria para aprobar una derrama. ¿Cómo lo hacemos para que nadie la pueda tumbar?',
+ 'La convoca usted como presidenta. La citación indica los asuntos del orden del día, el lugar, el día y la hora en primera y segunda convocatoria, e incluye la lista de propietarios que deben cuotas, advirtiendo de que no podrán votar. Se envía al domicilio de cada uno y, si no se puede, al tablón.',
+ 'Por carta con el orden del día; la lista de deudores no hace falta.','La votamos por el grupo de WhatsApp.',
+ 'En la extraordinaria no hay un plazo fijo: la antelación debe permitir que llegue a todos (en la ordinaria, mínimo 6 días).',
+ 'Orden del día:orden del dia|asuntos;Lugar, fecha y hora:lugar|fecha|hora|dia;Lista de deudores:deudor|moroso|corriente;Notificación:domicilio|tablon|notific',['16.2','16.3','9.1.h','15.2']);
+t('PR','d','fondo','El fondo de reserva','Estoy mirando las cuentas.','¿Podríamos pagar la reparación de la fachada con el fondo de reserva? ¿Cuánto tiene que haber ahí?',
+ 'Sí: el fondo de reserva sirve para obras de conservación y reparación como la fachada. Debe ser como mínimo el 10% del último presupuesto ordinario, así que si lo usamos habrá que reponerlo en el próximo presupuesto.',
+ 'No, el fondo de reserva no se puede tocar nunca.','Sí, y con lo que sobre hacemos la cena de Navidad.',
+ 'El fondo tiene un destino legal concreto: no es una caja para gastos libres.',
+ 'Conservación y reparación:conservac|reparac|fachada;Mínimo 10%:10;Reponerlo:repon|presupuesto',['9.1.f']);
+t('PR','d','antena','Alquilar la azotea','Nos ofrecen dinero por la azotea.','Una compañía de telefonía quiere poner una antena en la azotea por 6.000 € al año. ¿Lo puedo firmar yo?',
+ 'No sin acuerdo de la junta. Arrendar un elemento común requiere 3/5 de propietarios y cuotas, y el consentimiento del propietario directamente afectado si lo hay. Luego habrá obligaciones fiscales: la comunidad tendrá que facturar con IVA.',
+ 'Basta con mayoría simple en junta.','Firme usted, que representa a la comunidad.',
+ 'La presidenta representa a la comunidad, pero ejecuta lo que acuerda la junta.',
+ 'Junta 3/5:3/5|tres quintos|tres quintas|junta;Consentimiento del afectado:afectad|consentim;IVA / Hacienda:iva|hacienda|factur|fiscal',['17.3','13.3','LIVA']);
+t('PR','d','exAdmin','El anterior administrador','Cesamos al anterior administrador hace un mes.','Todavía no nos ha devuelto los libros de actas ni las cuentas. ¿Qué hacemos?',
+ 'Se le requiere por escrito que entregue toda la documentación (libros de actas, contabilidad, contratos y fondos), que custodiaba a disposición de los propietarios. Si no lo hace, se le reclama judicialmente.',
+ 'Esperar a que los mande cuando pueda.','Empezar un libro nuevo y olvidarnos de lo anterior.',
+ 'El nombramiento y el cese del administrador los acuerda la junta.',
+ 'Requerir por escrito:requer|escrito|burofax;Entregar documentación:document|libro|actas|cuentas;Reclamar judicialmente:judicial|juzgad|reclam',['14','20.e','19']);
+t('PR','d','acta','Firmar y enviar el acta','Ayer celebramos la junta.','¿Cuándo tenemos que firmar y enviar el acta?',
+ 'El acta la firman el presidente y el secretario al acabar la reunión o en los 10 días naturales siguientes. Después se envía a todos los propietarios. Los ausentes tienen 30 días desde que la reciben para discrepar.',
+ 'Con mandarla antes de la próxima junta es suficiente.','No hace falta enviarla: quien quiera, que pase por la oficina.',
+ 'Desde que se cierra el acta, los acuerdos son ejecutivos.',
+ '10 días:10 dias|diez dias;Presidente y secretario:presidente|secretari|firma;Enviar a los propietarios:enviar|remit|notific|propietari',['19','17.8']);
+t('PR','d','quorum','Pocos en la junta','En segunda convocatoria solo vinimos 8 de 20.','¿Los acuerdos que tomamos valen?',
+ 'Sí. En segunda convocatoria no hace falta quórum. Para los acuerdos de mayoría simple basta la mayoría de los asistentes que represente más de la mitad de las cuotas de los presentes. Para los que exigen mayorías especiales, se suman los ausentes que no discrepen en 30 días.',
+ 'Valen todos, incluso los que exigen unanimidad.','No valen: hay que repetir la junta.',
+ 'Por eso es importante notificar el acta a los ausentes.',
+ 'Sin quórum mínimo:quorum|valen|validos;Mayoría de asistentes:asistentes|presentes|mayoria;Ausentes 30 días:ausentes|30',['17.7','17.8']);
+t('PR','d','morosoVota','El moroso quiere votar','El del bajo debe tres cuotas.','Dice que en la junta va a votar sí o sí. ¿Le dejo?',
+ 'Puede asistir y hablar, pero no votar mientras no esté al corriente, salvo que haya impugnado judicialmente la deuda o la haya consignado. Debe figurar en la lista de deudores de la convocatoria.',
+ 'Puede votar si promete pagar.','No puede ni entrar en la junta.',
+ 'Si paga antes de la junta, recupera el voto.',
+ 'Puede asistir y hablar:asist|hablar|deliber|entrar;No vota:no puede votar|sin voto|no vota|no votar;Salvo impugnación o consignación:impugn|consign',['15.2','16.2']);
+t('PR','d','reparacion','Firmar una reparación','El ascensor necesita una reparación de 900 €.','¿Puedo firmar yo el presupuesto o hace falta junta?',
+ 'Puede firmarlo: usted representa a la comunidad, y una reparación ordinaria de conservación, prevista en el presupuesto, se encarga con el administrador sin junta. Si fuese una obra extraordinaria importante, habría que aprobarla en junta, salvo urgencia.',
+ 'No, cualquier gasto necesita junta.','Sí, y también la reforma del portal de 40.000 € sin consultar.',
+ 'Las obras extraordinarias las aprueba la junta.',
+ 'Representa a la comunidad:represent|presidente;Reparación ordinaria:ordinari|conservac|presupuesto;Extraordinarias en junta:extraordinari|junta',['13.3','20.c','14']);
+t('PR','d','juntaAnual','¿Hay que hacer junta?','Nadie quiere hacer junta este año.','¿Es obligatorio celebrarla?',
+ 'Sí: la junta ordinaria se celebra al menos una vez al año para aprobar el presupuesto y las cuentas. Se convoca con al menos 6 días de antelación.',
+ 'Si nadie la pide, no hace falta.','Podemos aprobar las cuentas por WhatsApp.',
+ 'Sin presupuesto aprobado, la gestión queda en el aire y es más fácil impugnar.',
+ 'Una vez al año:una vez al ano|anual|cada ano|obligatori;Presupuesto y cuentas:presupuest|cuentas;6 días:6 dias|seis dias',['16.1','16.3','14']);
+t('PR','d','demandar','Demandar al vecino ruidoso','Estoy harta del ruido de un vecino.','Quiero que la comunidad le demande. ¿Puedo presentar la demanda yo directamente?',
+ 'Primero usted le requiere formalmente que cese. Si sigue, la junta tiene que autorizar la acción de cesación; con ese acuerdo, usted, como presidenta, demanda en representación de la comunidad.',
+ 'Puede demandar directamente, sin pasar por la junta.','No, solo pueden demandar los vecinos afectados.',
+ 'Sin requerimiento previo ni acuerdo de junta, la demanda de la comunidad puede fracasar.',
+ 'Requerimiento previo:requer;Acuerdo de junta:junta|acuerdo|autoriz;Presidente representa:president|represent',['7.2','13.3']);
+
+// ---- AD · administración, fiscal y laboral (llegan al buzón o los plantea la presidencia)
+t('AD','d','iva303','IVA por la antena','Correo de la gestoría.','La comunidad ya cobra el alquiler de la antena de la azotea. ¿Tenemos que hacer algo con Hacienda?',
+ 'Sí. Alquilar un elemento común que no es vivienda convierte a la comunidad en empresario a efectos de IVA: alta en el censo (modelo 036), facturas con IVA, modelo 303 cada trimestre y 390 anual. Además, como las rentas se atribuyen a los propietarios, hay que presentar el modelo 184.',
+ 'Solo hay que declararlo en la renta de cada vecino.','No, las comunidades nunca pagan impuestos.',
+ 'El alquiler de vivienda estaría exento de IVA; el de una azotea para una antena, no.',
+ 'Alta censal 036:036|censo|alta;IVA y modelo 303:iva|303|trimestr;Modelo 184:184|atribuc',['LIVA','M303','M184']);
+t('AD','d','iva10','IVA de la obra de fachada','Ha llegado la factura de la fachada.','La empresa nos factura con IVA del 21%. Es una reparación de un edificio de viviendas. ¿Es correcto?',
+ 'Probablemente no. Las obras de renovación y reparación de edificios principalmente de viviendas van al 10% si el destinatario es la comunidad, el edificio terminó hace al menos 2 años y los materiales aportados no superan el 40% del total. Hay que pedir que rectifique la factura.',
+ 'La pagamos y ya reclamaremos el año que viene.','Todas las obras llevan el 21%, sin excepción.',
+ 'Comprobar las condiciones antes de pagar ahorra a los vecinos un 11% del importe.',
+ 'IVA del 10%:10|reducido;Viviendas, 2 años:vivienda|2 anos|dos anos;Materiales hasta 40%:40|material;Rectificar la factura:rectific|nueva factura|correg',['LIVA']);
+t('AD','d','m347','Modelo 347','Estamos en febrero.','La gestoría pregunta si la comunidad tiene que presentar el modelo 347.',
+ 'Sí, si con algún proveedor ha superado 3.005,06 € en el año. La comunidad declara sus compras a proveedores (limpieza, ascensor, obras…), sin incluir agua, luz, combustibles ni seguros. El plazo es febrero.',
+ 'Solo si la comunidad tiene actividad empresarial.','No, las comunidades no presentan nada a Hacienda.',
+ 'Es una declaración informativa: no se paga nada, pero no presentarla tiene sanción.',
+ '3.005,06 €:3005|3.005|3000|3.000;Proveedores:proveedor;Sin agua, luz ni seguros:agua|luz|electric|seguro|combustible;Febrero:febrero',['M347']);
+t('AD','d','m184','Ingresos de la comunidad','Hemos alquilado la antigua vivienda del portero.','Este año la comunidad ha cobrado 4.800 € de alquiler. ¿Hay que declararlo?',
+ 'Sí. La comunidad es una entidad en atribución de rentas: debe presentar en enero el modelo 184 con esos ingresos y la parte de cada propietario según su cuota, y cada uno la declara en su IRPF.',
+ 'Lo declara solo el presidente en su renta.','No, es dinero de la comunidad y no tributa.',
+ 'El alquiler de una vivienda está exento de IVA, pero los ingresos sí se declaran.',
+ 'Atribución de rentas:atribuc;Modelo 184:184;Cada propietario según cuota:propietari|cuota|irpf|renta',['M184']);
+t('AD','d','retencion','Factura del abogado','Factura del abogado del monitorio.','Son 1.000 € más IVA y es autónomo. ¿Se paga entera?',
+ 'No: la comunidad está obligada a retener IRPF a los profesionales (normalmente el 15%). Pagamos el importe menos la retención, la ingresamos en Hacienda con el modelo 111 trimestral y la incluimos en el resumen anual (modelo 190).',
+ 'Se paga entera y que él lo declare.','Se paga sin IVA porque las comunidades no pagan IVA.',
+ 'La retención se calcula sobre la base, sin el IVA.',
+ 'Retención IRPF:retenc|irpf|15;Modelo 111:111;Modelo 190:190',['RIRPF','M111']);
+t('AD','d','nomina','Pagar la nómina','Es día 28.','¿Qué hay que hacer este mes con el sueldo del empleado de la comunidad?',
+ 'Calcular y pagar la nómina según su contrato y el convenio colectivo, con la retención de IRPF y su cuota de Seguridad Social. Durante el mes siguiente se liquidan e ingresan los seguros sociales por el Sistema RED. Las retenciones se ingresan con el modelo 111 trimestral.',
+ 'Pagarle el bruto; la Seguridad Social ya la pagará él.','Pagarle en mano, sin nómina.',
+ 'La comunidad es el empleador y responde de cotizar e ingresar retenciones.',
+ 'Nómina y convenio:nomina|convenio|contrato;Seguridad Social:seguridad social|cotiz|seguros sociales|red;Retención IRPF / 111:irpf|retenc|111',['ET29','TGSS','M111']);
+t('AD','d','contratar','Contratar a un empleado','La junta ha aprobado contratar un conserje.','Nunca hemos tenido empleados. ¿Qué hay que hacer?',
+ 'Inscribir a la comunidad como empresa en la Seguridad Social, dar de alta al trabajador antes de que empiece, comunicar el contrato al servicio de empleo y aplicar el convenio de empleados de fincas urbanas que corresponda. Además, organizar la prevención de riesgos laborales.',
+ 'Basta con firmar un contrato privado con él.','Que se haga autónomo y nos facture, aunque trabaje solo para nosotros y con horario.',
+ 'Un autónomo con horario y un único cliente es un falso autónomo: sanción y regularización.',
+ 'Inscripción como empresa:inscrip|empresa|cuenta de cotizac|ccc;Alta antes de empezar:alta;Contrato y convenio:contrato|convenio;Prevención de riesgos:prevenc|riesgos',['TGSS','LPRL']);
+t('AD','d','m190','Certificado de retenciones','Es enero.','El empleado pide el certificado de retenciones para su declaración de la renta.',
+ 'Hay que entregarle el certificado de retenciones e ingresos a cuenta del año. Además, la comunidad presenta en enero el modelo 190, el resumen anual de lo ingresado con el modelo 111.',
+ 'Que lo pida él en Hacienda.','No hace falta, con las nóminas le basta.',
+ 'El certificado debe coincidir con lo declarado en el modelo 190.',
+ 'Certificado de retenciones:certificad;Modelo 190:190;Enero:enero',['M111']);
+t('AD','d','nif','La comunidad no tiene NIF','El banco no nos deja abrir cuenta.','Dice que la comunidad necesita un NIF. ¿Cómo se consigue?',
+ 'La comunidad necesita su propio NIF: se pide a Hacienda con el modelo 036, aportando el acta de constitución y el nombramiento del presidente. Con el NIF y el certificado del acta, el presidente abre la cuenta a nombre de la comunidad.',
+ 'Se pide en el Registro de la Propiedad.','Abrimos la cuenta a nombre del presidente.',
+ 'Mezclar el dinero de la comunidad con el de una persona es un riesgo serio.',
+ 'NIF propio:nif|cif;Modelo 036:036;Acta y presidente:acta|presidente',['M036','13.3']);
+t('AD','d','firmas','Cambio de firmas en el banco','Ha cambiado el presidente.','El banco sigue teniendo como firmante al anterior.',
+ 'Llevar al banco el certificado del acta donde se nombró al nuevo presidente (firmado por el secretario con el visto bueno del presidente) para cambiar las firmas autorizadas. Hasta entonces, el anterior no debe disponer de fondos.',
+ 'Que el anterior siga firmando hasta la próxima junta.','El nuevo firma con la tarjeta del anterior.',
+ 'Los cargos se acreditan siempre con certificado del acta.',
+ 'Certificado del acta:acta|certificad;Cambiar firmas:firma|autoriz',['13.3','19']);
+t('AD','d','libroActas','El libro de actas','El libro de actas se ha llenado.','¿Podemos seguir en un cuaderno normal?',
+ 'No: el libro de actas debe estar diligenciado por el Registro de la Propiedad. Hay que diligenciar uno nuevo. Y la documentación de la comunidad se conserva al menos 5 años.',
+ 'Sí, mientras lo firmen el presidente y el secretario.','Ya no hace falta libro, con el correo basta.',
+ 'Si el libro se pierde, hay que acreditarlo para que el Registro diligencie otro.',
+ 'Registro de la Propiedad:registr;Diligenciar / legalizar:diligenc|legaliz|sellad;5 años:5 anos|cinco anos',['19']);
+t('AD','d','certDeuda','Certificado para una venta','Llama la notaría.','Un propietario vende su piso y el notario pide el certificado de deudas con la comunidad.',
+ 'Lo expide el secretario con el visto bueno del presidente, en un máximo de 7 días naturales desde que se pide. Debe reflejar el estado real de las deudas: si es erróneo por negligencia, quien lo firma responde.',
+ 'Lo firma el administrador cuando tenga tiempo.','Le decimos al notario que no hay deudas para no retrasar la venta.',
+ 'Con ese certificado el comprador sabe de qué responde el piso.',
+ 'Secretario y visto bueno del presidente:secretari|presidente;7 días:7 dias|siete dias;Datos exactos:respons|exact|real',['9.1.e']);
+t('AD','d','seguro','Renovar el seguro','La póliza vence el mes que viene.','La aseguradora sube un 30%. ¿Estamos obligados a tener seguro?',
+ 'La LPH no obliga en general a tenerlo, pero es muy recomendable, y la ley permite pagarlo con cargo al fondo de reserva. Toca pedir varias ofertas y llevar la decisión al presupuesto o a la junta.',
+ 'Renovar sin comparar, que no hay tiempo.','Cancelarlo para ahorrar.',
+ 'Sin seguro, cualquier siniestro o reclamación lo pagan directamente los vecinos.',
+ 'Recomendable aunque no obligatorio:recomend|no obliga|conviene;Fondo de reserva:fondo de reserva;Comparar ofertas:ofert|presupuest|compar|junta',['9.1.f','CC1902']);
+t('AD','d','rgpdLista','Lista de morosos en el ascensor','Alguien quiere avergonzar a los morosos.','Proponen colgar en el ascensor la lista de vecinos que no pagan.',
+ 'No se puede: exponer datos de deudores en zonas comunes vulnera la protección de datos. La ley solo ampara incluirlos en la convocatoria de la junta y, si no hay otra forma de notificar, en el tablón para la notificación.',
+ 'Se puede, pero sin poner los importes.','Sí, y también en el grupo de WhatsApp.',
+ 'La comunidad responde como responsable del tratamiento de esos datos.',
+ 'Protección de datos:datos|rgpd|privacidad|proteccion;Solo convocatoria o notificación:convocatoria|tablon|notific',['RGPD','16.2','9.1.h']);
+t('AD','d','cae','Empresa de limpieza nueva','Hemos contratado una empresa de limpieza.','¿Tenemos alguna obligación de prevención de riesgos?',
+ 'Sí: la comunidad, como titular del edificio donde trabajan, debe coordinarse con la empresa: informarle de los riesgos del edificio y las medidas de emergencia, y pedirle que acredite su evaluación de riesgos y que sus trabajadores están formados y dados de alta.',
+ 'Solo si trabajan más de ocho horas al día.','No, eso es cosa exclusivamente de la empresa.',
+ 'Si hay un accidente, la falta de coordinación puede hacer responder a la comunidad.',
+ 'Coordinación de actividades:coordinac|cae;Informar de riesgos y emergencias:riesgo|emergenc|inform;Acreditar evaluación y altas:evaluac|alta|formac|document',['CAE','LPRL']);
+t('AD','d','presupuesto','Preparar el presupuesto','Se acerca la junta ordinaria.','Hay que preparar el presupuesto del año que viene. ¿Cómo lo enfocamos?',
+ 'El administrador prepara con antelación el plan de gastos previsibles: contratos (limpieza, ascensor, seguro), suministros, mantenimiento, personal y la dotación del fondo de reserva (mínimo el 10%). Se reparte por cuotas y lo aprueba la junta ordinaria.',
+ 'Copiar el del año pasado y ya está.','Que cada vecino pague lo mismo, para simplificar.',
+ 'Un buen presupuesto evita derramas por sorpresa.',
+ 'Plan de gastos:gasto|partida|contrato|suministro;Fondo de reserva 10%:fondo de reserva|10;Reparto por cuotas:cuota|coeficiente;Junta ordinaria:junta',['20.b','9.1.f','16.1']);
+
+// ---- LB · el empleado de la comunidad pregunta
+t('LB','d','vacaciones','Vacaciones','Quiero coger vacaciones en agosto.','¿Cuántos días me corresponden?',
+ 'Como mínimo 30 días naturales al año, o lo que mejore el convenio. Las fechas se acuerdan con la comunidad y deberías conocerlas al menos dos meses antes. Organizaremos una sustitución.',
+ '15 días, y el resto en invierno si hay suerte.','Los empleados de fincas no tienen vacaciones pagadas.',
+ 'Las vacaciones no se pueden sustituir por dinero salvo al terminar el contrato.',
+ '30 días naturales:30|treinta;Fechas de común acuerdo:acuerd|fechas|calendario;Dos meses antes:dos meses|2 meses',['ET38']);
+t('LB','d','baja','Baja médica','Me he roto el tobillo en casa.','El médico me da la baja. ¿Quién me paga mientras tanto?',
+ 'Por accidente no laboral, los tres primeros días no se cobran (salvo mejora del convenio); del 4º al 15º paga la comunidad y desde el 16º la Seguridad Social o la mutua, aunque la comunidad lo adelanta en la nómina. Hay que tramitar la baja y buscar sustituto.',
+ 'La comunidad le paga el sueldo entero todo el tiempo.','Si está de baja, se le despide.',
+ 'Despedir a alguien por estar de baja puede ser declarado nulo.',
+ 'Días 1 a 3:tres primeros|3 primeros|1 a 3;Del 4º al 15º, la comunidad:4|15|comunidad|empresa;Desde el 16º, Seguridad Social:16|seguridad social|inss|mutua',['IT']);
+t('LB','d','pagaExtra','La paga extra','En la nómina de diciembre no viene la paga extra.','¿No me corresponde?',
+ 'Sí: por ley hay al menos dos pagas extraordinarias al año, una por Navidad y otra cuando fije el convenio, que también puede permitir prorratearlas. Revisamos convenio y contrato y, si no está prorrateada, se le abona.',
+ 'Solo si la junta la aprueba.','Las pagas extra son voluntarias.',
+ 'Si está prorrateada, ya la cobra cada mes en la nómina.',
+ 'Dos pagas al año:dos pagas|2 pagas|navidad;Convenio / prorrateo:convenio|prorrat',['ET31']);
+t('LB','d','horasExtra','Horas de más','Muchos días me quedo una hora más.','Saco los contenedores fuera de mi horario. ¿Se me paga?',
+ 'Las horas extraordinarias se pagan o se compensan con descanso según el convenio o el contrato, y son voluntarias salvo pacto. Además, la comunidad debe llevar un registro diario de jornada y conservarlo 4 años. Revisamos su horario.',
+ 'Se le paga en negro a final de año.','No, es parte de su trabajo.',
+ 'Sin registro de jornada, la comunidad puede ser sancionada.',
+ 'Pagar o compensar:pag|compens|descanso;Registro de jornada:registro|jornada|fichar;4 años:4 anos|cuatro anos',['ET34']);
+t('LB','d','epis','Producto que pica','El producto de limpieza me pica en las manos.','Y no me habéis dado guantes. ¿Es normal?',
+ 'No. La comunidad, como empresa, debe evaluar los riesgos del puesto y darle gratis los equipos de protección (guantes, gafas) y formación sobre los productos, con su ficha de seguridad. Lo organizamos con el servicio de prevención.',
+ 'Que se compre unos guantes y nos pase el ticket.','Si no le gusta, que limpie solo con agua.',
+ 'Los equipos de protección los paga siempre el empleador.',
+ 'Equipos de protección gratis:guantes|epi|proteccion|equipos;Evaluación de riesgos:evaluac|riesgo|prevenc;Formación / ficha:formac|ficha',['LPRL']);
+t('LB','d','recados','Recados de una vecina','Una vecina me pide cosas personales.','Quiere que le suba la compra y le pasee al perro en horas de trabajo. ¿Tengo que hacerlo?',
+ 'No. Sus funciones son las de su contrato y del convenio, y las órdenes se las da la comunidad, a través del presidente o el administrador, no cada vecino. Lo que haga fuera de su horario es cosa suya.',
+ 'Hágalo si le da propina.','Sí, todos los vecinos son sus jefes.',
+ 'Las instrucciones contradictorias de cada vecino generan conflictos laborales.',
+ 'Funciones del contrato y convenio:contrato|convenio|funciones;Órdenes de la comunidad:presidente|administrador|comunidad',['ET20']);
+t('LB','d','retraso','Nómina con retraso','Ya es día 10.','Todavía no he cobrado la nómina del mes pasado. ¿Qué pasa?',
+ 'El salario debe pagarse puntualmente en la fecha pactada. Si se retrasa, la comunidad le debe además un interés por mora del 10% de lo adeudado. Hay que pagarle de inmediato y revisar por qué ha fallado la tesorería.',
+ 'Que espere a que paguen los morosos.','Si protesta, que busque otro trabajo.',
+ 'Los impagos de la comunidad no justifican retrasar el salario.',
+ 'Pago puntual / inmediato:puntual|fecha|inmediat;Interés por mora del 10%:mora|10|interes',['ET29']);
+
+const TM=Object.fromEntries(T.map(x=>[x.id,x]));
+const GRP={G:'Propietarios',V:'Vivienda',L:'Local comercial',P:'Garaje',C:'Zonas comunes y urgencias',PR:'Presidencia y juntas',AD:'Administración, fiscal y laboral',LB:'Personal de la comunidad'};
+const ELIG={flat:['G','V','C'],local:['G','L','C'],garage:['G','P','C'],pres:['PR','AD'],worker:['LB','C'],mail:['AD'],neighbor:['G','C']};
+
+/* =================== COMUNIDADES =================== */
+const L=(skin,hair,hc,shirt,x={})=>Object.assign({skin,hair,hc,shirt},x);
+const COMS=[
+{id:'pins',name:'Es Pins',place:'Eivissa · 4 plantas y áticos',floors:4,cols:2,attic:true,yard:'pool',sign:'BAR ES RACÓ',awn:'#d6336c',plaque:'ES PINS · 12',localName:'Local · Bar Es Racó',
+ pal:{wallD:'#fdfcf8',wall2D:'#e7e0d0',shutD:'#2f6e8e',wallN:'#d8d2c4',wall2N:'#b3ab9a',shutN:'#24506a'},
+ ents:[
+ {id:'toni',name:'Toni',role:'Dueño del Bar Es Racó',u:'local',kind:'local',look:L('#d9a07a','short','#2b1d14','#c0392b',{beard:1})},
+ {id:'tomas',name:'Tomás',role:'Propietario del bajo A',u:'bA',kind:'flat',old:1,look:L('#e8b98f','bald','#bbb','#6c757d',{glasses:1})},
+ {id:'lucia',name:'Lucía',role:'Propietaria del 1º A',u:'1A',kind:'flat',look:L('#f1c7a4','long','#4a2c1a','#2a9d8f')},
+ {id:'carmen',name:'Carmen',role:'Propietaria del 1º B · 79 años',u:'1B',kind:'flat',old:1,look:L('#f0c8a8','bun','#d9d9d9','#9b5de5',{glasses:1})},
+ {id:'javier',name:'Javier',role:'Propietario del 2º A',u:'2A',kind:'flat',look:L('#c68c5a','short','#111','#264653')},
+ {id:'marta',name:'Marta',role:'Propietaria del 2º B',u:'2B',kind:'flat',look:L('#e3b089','curly','#7a4b2a','#e76f51')},
+ {id:'pedro',name:'Pedro',role:'Propietario del 3º A',u:'3A',kind:'flat',look:L('#e0ac85','short','#6b6b6b','#1d3557',{mous:1})},
+ {id:'klaus',name:'Klaus',role:'Propietario del 3º B · vive en Múnich',u:'3B',kind:'flat',look:L('#f3d2b8','short','#d9b26f','#457b9d',{glasses:1})},
+ {id:'sofia',name:'Sofía',role:'Propietaria del 4º A',u:'4A',kind:'flat',look:L('#f1c7a4','long','#c9a227','#f4a261')},
+ {id:'james',name:'James',role:'Propietario del 4º B · británico',u:'4B',kind:'flat',look:L('#f6d5c0','short','#a0522d','#e9c46a')},
+ {id:'enrique',name:'Enrique',role:'Propietario del ático A',u:'atA',kind:'flat',look:L('#e8b98f','bald','#cfcfcf','#3a86ff',{beard:1})},
+ {id:'elena',name:'Elena',role:'Propietaria del ático B',u:'atB',kind:'flat',look:L('#c99267','bob','#1b1b1b','#06a77d')},
+ {id:'rosa',name:'Rosa',role:'Presidenta de la comunidad',u:'portal',kind:'pres',look:L('#d7a17c','bob','#8d5524','#d6336c',{glasses:1})},
+ {id:'diego',name:'Diego',role:'Plaza de garaje 7',u:'gar1',kind:'garage',look:L('#b97a50','short','#3d2817','#2b9348')},
+ {id:'nuria',name:'Nuria',role:'Plaza de garaje 12',u:'gar2',kind:'garage',look:L('#efc19d','long','#1b1b1b','#ff7f51')},
+ {id:'antonio',name:'Antonio',role:'Vecino del edificio y dueño de Toby',u:'yard',kind:'neighbor',dog:1,look:L('#e0ac85','curly','#9e9e9e','#ffbe0b')},
+ {id:'andres',name:'Andrés',role:'Conserje (empleado de la comunidad)',u:'street',kind:'worker',look:L('#c68c5a','short','#222','#0d4f8b',{mous:1})},
+ {id:'buzon',name:'Buzón y correo',role:'Hacienda, banco, gestoría y proveedores',u:'mail',kind:'mail'}
+ ]},
+{id:'blava',name:'Cala Blava',place:'Santa Eulària · 3 plantas, 3 puertas',floors:3,cols:3,attic:false,yard:'garden',sign:'FORN SA FORNADA',awn:'#e0a526',plaque:'CALA BLAVA · 3',localName:'Local · Forn Sa Fornada',
+ pal:{wallD:'#f6e7cb',wall2D:'#e3cda4',shutD:'#3c7a4a',wallN:'#c9b896',wall2N:'#a8966f',shutN:'#2b5a36'},
+ ents:[
+ {id:'xisco',name:'Xisco',role:'Panadero, dueño del local',u:'local',kind:'local',look:L('#e3b089','short','#5a3a22','#f4f1de',{beard:1})},
+ {id:'lola',name:'Lola',role:'Propietaria del bajo · 74 años',u:'bA',kind:'flat',old:1,look:L('#f0c8a8','curly','#e0e0e0','#e56b6f',{glasses:1})},
+ {id:'joan',name:'Joan',role:'Propietario del 1º A · 81 años',u:'1A',kind:'flat',old:1,look:L('#e8b98f','bald','#ddd','#6d597a',{glasses:1})},
+ {id:'aina',name:'Aina',role:'Propietaria del 1º B',u:'1B',kind:'flat',look:L('#f1c7a4','bun','#3b2314','#2a9d8f')},
+ {id:'rachid',name:'Rachid',role:'Propietario del 1º C',u:'1C',kind:'flat',look:L('#a86b45','short','#111','#f77f00',{beard:1})},
+ {id:'bea',name:'Bea',role:'Propietaria del 2º A',u:'2A',kind:'flat',look:L('#f3d2b8','long','#8d5524','#90be6d')},
+ {id:'hugo',name:'Hugo',role:'Propietario del 2º B',u:'2B',kind:'flat',look:L('#e0ac85','short','#c98b4a','#277da1')},
+ {id:'greta',name:'Greta',role:'Propietaria del 2º C · sueca',u:'2C',kind:'flat',look:L('#f8dcc8','long','#f1d27a','#4d908e')},
+ {id:'miquel',name:'Miquel',role:'Propietario del 3º A',u:'3A',kind:'flat',look:L('#d9a07a','short','#4a4a4a','#577590',{glasses:1})},
+ {id:'claire',name:'Claire',role:'Propietaria del 3º B · francesa',u:'3B',kind:'flat',look:L('#f1c7a4','bob','#a0522d','#f9844a')},
+ {id:'raul',name:'Raúl',role:'Propietario del 3º C',u:'3C',kind:'flat',look:L('#c68c5a','curly','#1b1b1b','#43aa8b')},
+ {id:'maria',name:'Maria',role:'Presidenta de la comunidad',u:'portal',kind:'pres',look:L('#e3b089','bob','#2b1d14','#9d4edd')},
+ {id:'ivan',name:'Iván',role:'Plaza de garaje 3',u:'gar1',kind:'garage',look:L('#e0ac85','short','#222','#e63946')},
+ {id:'paula',name:'Paula',role:'Plaza de garaje 9',u:'gar2',kind:'garage',look:L('#f1c7a4','long','#6b3e1f','#118ab2')},
+ {id:'pep',name:'Pep',role:'Jardinero (empleado de la comunidad)',u:'yard',kind:'worker',look:L('#c99267','short','#7a7a7a','#55a630',{mous:1})},
+ {id:'buzon2',name:'Buzón y correo',role:'Hacienda, banco, gestoría y proveedores',u:'mail',kind:'mail'}
+ ]}
 ];
-const TOTAL=N.reduce((a,n)=>a+n.qs.length,0);
 
-/* ---------- ESTADO ---------- */
-const KEY='lph-es-pins-v1';
-let st={players:['Sílvia','Jose','Marc'],turn:0,pts:[0,0,0],m:[60,70,70],ans:{},sel:null,pend:null};
+/* =================== ESTADO =================== */
+const KEY='lph-sim-v2';
+let st={players:['Sílvia','Jose','Marc'],cur:'pins',mode:'w',games:{},sel:null,pend:null,last:null,flash:null};
 try{const p=JSON.parse(localStorage.getItem('simfincas-players'));if(Array.isArray(p)&&p.length)st.players=p}catch(e){}
-try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.ans){Object.assign(st,s);st.sel=null;st.pend=null}}catch(e){}
-if(st.pts.length!==st.players.length)st.pts=st.players.map(()=>0);
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({players:st.players,turn:st.turn,pts:st.pts,m:st.m,ans:st.ans}))}catch(e){}};
-const answered=()=>Object.values(st.ans).reduce((a,v)=>a+v.length,0);
-const isDone=n=>(st.ans[n.id]||[]).length>=n.qs.length;
-const grade=n=>{const a=st.ans[n.id]||[];if(!a.length)return null;return Math.min(...a.map(x=>x.g))};
-const moodOf=n=>{const g=grade(n);return g===null||!isDone(n)?'worried':g===2?'happy':g===1?'meh':'sad'};
+try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.games)Object.assign(st,s,{sel:null,pend:null,last:null,flash:null})}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({players:st.players,cur:st.cur,mode:st.mode,games:st.games}))}catch(e){}};
+const com=()=>COMS.find(c=>c.id===st.cur);
+const floorOf=u=>{const m=/^(\d)/.exec(u);return m?+m[1]:0};
+const isTop=(C,e)=>C.attic?e.u.startsWith('at'):floorOf(e.u)===C.floors;
+function elig(C,e,tp){if(!ELIG[e.kind].includes(tp.g))return false;const r=tp.req;
+  if(r==='old')return !!e.old;if(r==='top')return e.kind==='flat'&&isTop(C,e);if(r==='notTop')return e.kind==='flat'&&!isTop(C,e);
+  if(r==='first')return floorOf(e.u)===1;if(r==='resident')return e.kind!=='worker';return true}
+function newGame(C){
+  const G={clock:8*60,turn:0,pts:st.players.map(()=>0),m:[60,70,70],q:{},done:{}},use={};
+  shuffle([...C.ents]).forEach(e=>{
+    const ids=T.filter(tp=>elig(C,e,tp)).map(tp=>({id:tp.id,k:(use[tp.id]||0)+Math.random()})).sort((a,b)=>a.k-b.k).slice(0,15).map(x=>x.id);
+    ids.forEach(id=>use[id]=(use[id]||0)+1);G.q[e.id]=shuffle(ids)});
+  st.games[C.id]=G;save();return G}
+const game=()=>{const C=com();let G=st.games[C.id];if(!G||!G.q||C.ents.some(e=>!G.q[e.id]))G=newGame(C);if(G.pts.length!==st.players.length)G.pts=st.players.map((p,k)=>G.pts[k]||0);if(G.turn>=st.players.length)G.turn=0;return G};
+const isNight=min=>{const h=Math.floor(min/60)%24;return h>=21||h<7};
+const DAYS=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+const clockTxt=min=>`${DAYS[Math.floor(min/1440)%7]} ${String(Math.floor(min/60)%24).padStart(2,'0')}:${String(min%60).padStart(2,'0')}`;
+const doneOf=e=>game().done[e.id]||[];
+function nextFor(e){const G=game(),d=new Set(doneOf(e).map(x=>x.id)),n=isNight(G.clock);
+  return G.q[e.id].map(id=>TM[id]).find(tp=>tp&&!d.has(tp.id)&&(tp.time==='a'||tp.time===(n?'n':'d')))}
+const finished=e=>doneOf(e).length>=game().q[e.id].length;
+const totalQ=()=>com().ents.reduce((a,e)=>a+game().q[e.id].length,0);
+const answered=()=>Object.values(game().done).reduce((a,v)=>a+v.length,0);
+const lastGrade=e=>{const d=doneOf(e);return d.length?d[d.length-1].g:null};
+const moodOf=e=>{if(nextFor(e))return 'worried';const g=lastGrade(e);return g===null?'meh':g===2?'happy':g===1?'meh':'sad'};
+function advance(mins){const G=game(),was=isNight(G.clock);G.clock+=mins;
+  for(let i=0;i<30&&!com().ents.some(e=>nextFor(e))&&answered()<totalQ();i++)G.clock+=60;
+  const now=isNight(G.clock);if(was!==now)st.flash=now?'night':'day';save()}
 
-/* ---------- DIBUJO ---------- */
+/* =================== DIBUJO =================== */
 let seed=1;const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;
-function person(L,x,by,s,full,mood){
-  const pants=L.pants||'#34495e',c=L.hc;
-  let g='';
+function person(Lk,x,by,s,full,mood){
+  const pants=Lk.pants||'#34495e',c=Lk.hc;let g='';
   if(full)g+=`<rect x="-14" y="-2" width="12" height="36" rx="4" fill="${pants}"/><rect x="2" y="-2" width="12" height="36" rx="4" fill="${pants}"/><rect x="-17" y="31" width="16" height="7" rx="3" fill="#222"/><rect x="1" y="31" width="16" height="7" rx="3" fill="#222"/>`;
-  if(L.hair==='long')g+=`<path d="M-19 -58 Q-21 -80 0 -80 Q21 -80 19 -58 L21 -26 Q0 -20 -21 -26Z" fill="${c}"/>`;
-  if(L.hair==='bob')g+=`<path d="M-19 -58 Q-21 -80 0 -80 Q21 -80 19 -58 L20 -42 Q0 -38 -20 -42Z" fill="${c}"/>`;
-  g+=`<path d="M-26 0 Q-27 -28 -12 -34 L12 -34 Q27 -28 26 0Z" fill="${L.shirt}"/><path d="M-6 -34 L0 -26 L6 -34Z" fill="rgba(255,255,255,.35)"/>`;
-  g+=`<rect x="-5" y="-43" width="10" height="11" fill="${L.skin}"/><circle cx="-16" cy="-55" r="3.5" fill="${L.skin}"/><circle cx="16" cy="-55" r="3.5" fill="${L.skin}"/><circle cy="-56" r="16" fill="${L.skin}"/>`;
-  if(L.hair==='short')g+=`<path d="M-16 -57 Q-17 -76 0 -76 Q17 -76 16 -57 Q13 -67 2 -67 Q-10 -68 -16 -57Z" fill="${c}"/>`;
-  if(L.hair==='long'||L.hair==='bob')g+=`<path d="M-17 -54 Q-18 -77 0 -77 Q18 -77 17 -54 Q14 -67 2 -69 Q-8 -64 -17 -54Z" fill="${c}"/>`;
-  if(L.hair==='bun')g+=`<circle cy="-79" r="8" fill="${c}"/><path d="M-16 -56 Q-17 -75 0 -75 Q17 -75 16 -56 Q12 -68 0 -68 Q-12 -68 -16 -56Z" fill="${c}"/>`;
-  if(L.hair==='curly'){for(let a=-170;a<=-10;a+=26){const r=a*Math.PI/180;g+=`<circle cx="${(Math.cos(r)*15).toFixed(1)}" cy="${(-58+Math.sin(r)*14).toFixed(1)}" r="6" fill="${c}"/>`}}
-  if(L.hair==='bald')g+=`<path d="M-16.5 -50 Q-18 -62 -12 -66 L-11 -52Z M16.5 -50 Q18 -62 12 -66 L11 -52Z" fill="${c}"/>`;
-  if(L.beard)g+=`<path d="M-15 -55 Q-15 -36 0 -36 Q15 -36 15 -55 Q11 -45 0 -45 Q-11 -45 -15 -55Z" fill="${c}"/>`;
-  g+=`<circle cx="-6" cy="-57" r="1.9" fill="#1b1b1b"/><circle cx="6" cy="-57" r="1.9" fill="#1b1b1b"/>`;
-  const br={worried:'M-10 -63 L-3 -65 M10 -63 L3 -65',sad:'M-10 -64 L-3 -62 M10 -64 L3 -62',meh:'M-10 -63.5 L-3 -63.5 M10 -63.5 L3 -63.5',happy:'M-10 -63 Q-6.5 -66 -3 -63 M10 -63 Q6.5 -66 3 -63'}[mood];
+  if(Lk.hair==='long')g+=`<path d="M-19 -58 Q-21 -80 0 -80 Q21 -80 19 -58 L21 -26 Q0 -20 -21 -26Z" fill="${c}"/>`;
+  if(Lk.hair==='bob')g+=`<path d="M-19 -58 Q-21 -80 0 -80 Q21 -80 19 -58 L20 -42 Q0 -38 -20 -42Z" fill="${c}"/>`;
+  g+=`<path d="M-26 0 Q-27 -28 -12 -34 L12 -34 Q27 -28 26 0Z" fill="${Lk.shirt}"/><path d="M-6 -34 L0 -26 L6 -34Z" fill="rgba(255,255,255,.35)"/>`;
+  g+=`<rect x="-5" y="-43" width="10" height="11" fill="${Lk.skin}"/><circle cx="-16" cy="-55" r="3.5" fill="${Lk.skin}"/><circle cx="16" cy="-55" r="3.5" fill="${Lk.skin}"/><circle cy="-56" r="16" fill="${Lk.skin}"/>`;
+  if(Lk.hair==='short')g+=`<path d="M-16 -57 Q-17 -76 0 -76 Q17 -76 16 -57 Q13 -67 2 -67 Q-10 -68 -16 -57Z" fill="${c}"/>`;
+  if(Lk.hair==='long'||Lk.hair==='bob')g+=`<path d="M-17 -54 Q-18 -77 0 -77 Q18 -77 17 -54 Q14 -67 2 -69 Q-8 -64 -17 -54Z" fill="${c}"/>`;
+  if(Lk.hair==='bun')g+=`<circle cy="-79" r="8" fill="${c}"/><path d="M-16 -56 Q-17 -75 0 -75 Q17 -75 16 -56 Q12 -68 0 -68 Q-12 -68 -16 -56Z" fill="${c}"/>`;
+  if(Lk.hair==='curly'){for(let a=-170;a<=-10;a+=26){const r=a*Math.PI/180;g+=`<circle cx="${(Math.cos(r)*15).toFixed(1)}" cy="${(-58+Math.sin(r)*14).toFixed(1)}" r="6" fill="${c}"/>`}}
+  if(Lk.hair==='bald')g+=`<path d="M-16.5 -50 Q-18 -62 -12 -66 L-11 -52Z M16.5 -50 Q18 -62 12 -66 L11 -52Z" fill="${c}"/>`;
+  if(Lk.beard)g+=`<path d="M-15 -55 Q-15 -36 0 -36 Q15 -36 15 -55 Q11 -45 0 -45 Q-11 -45 -15 -55Z" fill="${c}"/>`;
+  if(mood==='sleep')g+=`<path d="M-9 -57 q3 2 6 0 M3 -57 q3 2 6 0" stroke="#1b1b1b" stroke-width="1.6" fill="none"/>`;
+  else g+=`<circle cx="-6" cy="-57" r="1.9" fill="#1b1b1b"/><circle cx="6" cy="-57" r="1.9" fill="#1b1b1b"/>`;
+  const br={worried:'M-10 -63 L-3 -65 M10 -63 L3 -65',sad:'M-10 -64 L-3 -62 M10 -64 L3 -62',meh:'M-10 -63.5 L-3 -63.5 M10 -63.5 L3 -63.5',happy:'M-10 -63 Q-6.5 -66 -3 -63 M10 -63 Q6.5 -66 3 -63',sleep:'M-10 -63.5 L-3 -63.5 M10 -63.5 L3 -63.5'}[mood];
   g+=`<path d="${br}" stroke="#1b1b1b" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
-  const mo={worried:'M-5 -47 Q0 -50 5 -47',sad:'M-5 -46 Q0 -51 5 -46',meh:'M-4 -48 L4 -48',happy:'M-6 -49 Q0 -43 6 -49'}[mood];
-  if(L.mous)g+=`<path d="M-7 -50.5 Q0 -54 7 -50.5 Q0 -49 -7 -50.5Z" fill="${c}"/>`;
-  g+=`<path d="${mo}" stroke="${L.beard?'#fff':'#7a2e2e'}" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;
-  if(L.glasses)g+=`<circle cx="-6" cy="-57" r="5" fill="none" stroke="#222" stroke-width="1.4"/><circle cx="6" cy="-57" r="5" fill="none" stroke="#222" stroke-width="1.4"/><path d="M-1 -57h2" stroke="#222" stroke-width="1.4"/>`;
-  return `<g transform="translate(${x} ${full?by-38*s:by}) scale(${s})">${g}</g>`;
-}
+  const mo={worried:'M-5 -47 Q0 -50 5 -47',sad:'M-5 -46 Q0 -51 5 -46',meh:'M-4 -48 L4 -48',happy:'M-6 -49 Q0 -43 6 -49',sleep:'M-3 -48 Q0 -46 3 -48'}[mood];
+  if(Lk.mous)g+=`<path d="M-7 -50.5 Q0 -54 7 -50.5 Q0 -49 -7 -50.5Z" fill="${c}"/>`;
+  g+=`<path d="${mo}" stroke="${Lk.beard?'#fff':'#7a2e2e'}" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;
+  if(Lk.glasses)g+=`<circle cx="-6" cy="-57" r="5" fill="none" stroke="#222" stroke-width="1.4"/><circle cx="6" cy="-57" r="5" fill="none" stroke="#222" stroke-width="1.4"/><path d="M-1 -57h2" stroke="#222" stroke-width="1.4"/>`;
+  return `<g transform="translate(${x} ${full?by-38*s:by}) scale(${s})">${g}</g>`}
+const mailbox=()=>`<rect x="122" y="788" width="5" height="32" fill="#2b3640"/><path d="M106 792 V772 Q106 760 124 760 Q142 760 142 772 V792Z" fill="#2f6fb5"/><rect x="113" y="772" width="22" height="3.5" rx="1.5" fill="#173a63"/><path d="M142 770 h5 v-12 h10 v7 h-10" fill="#d6336c"/>`;
+const envelope=()=>`<rect x="-24" y="-66" width="48" height="34" rx="4" fill="#fff" stroke="#2f6fb5" stroke-width="3"/><path d="M-24 -64 L0 -46 L24 -64" stroke="#2f6fb5" stroke-width="3" fill="none"/><circle cx="20" cy="-66" r="8" fill="#d6336c"/><text x="20" y="-62" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">!</text>`;
 const dog=(x,y)=>`<g transform="translate(${x} ${y})"><path d="M-14 -18 Q-20 -26 -22 -30" stroke="#b5762f" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="0" cy="-16" rx="14" ry="7" fill="#c68642"/><rect x="-11" y="-12" width="4" height="12" fill="#c68642"/><rect x="7" y="-12" width="4" height="12" fill="#c68642"/><circle cx="14" cy="-24" r="7" fill="#c68642"/><path d="M11 -30 L8 -22 L13 -24Z" fill="#8a5a2b"/><circle cx="16" cy="-25" r="1.3" fill="#111"/><circle cx="20.5" cy="-22.5" r="1.6" fill="#111"/></g>`;
 const shut=(x,y,w,h)=>{let s=`<rect class="shut" x="${x}" y="${y}" width="${w}" height="${h}" rx="1"/>`;for(let yy=y+5;yy<y+h-2;yy+=5)s+=`<line class="louv" x1="${x+2}" x2="${x+w-2}" y1="${yy}" y2="${yy}"/>`;return s};
-const win=(x,y,w,h,opt={})=>{const sh=opt.noShut?'':shut(x-w/2-6,y-2,w/2,h+4)+shut(x+w+6,y-2,w/2,h+4);
-  return `${sh}<rect class="frame" x="${x-4}" y="${y-4}" width="${w+8}" height="${h+8}"/><rect class="glass" x="${x}" y="${y}" width="${w}" height="${h}"/><path d="M${x} ${y+h} L${x+w*.55} ${y} L${x+w*.75} ${y} L${x+w*.2} ${y+h}Z" fill="#fff" opacity=".12"/><path class="mull" d="M${x+w/2} ${y}v${h}${opt.door?'':`M${x} ${y+h*.42}h${w}`}"/>${opt.door?'':`<rect class="sill" x="${x-8}" y="${y+h+4}" width="${w+16}" height="5"/>`}`};
+const win=(x,y,w,h,o={})=>{const sh=o.noShut?'':shut(x-w/2-6,y-2,w/2,h+4)+shut(x+w+6,y-2,w/2,h+4);const gl=o.lit||rnd()>.3?'glass':'glass dim';
+  return `${sh}<rect class="frame" x="${x-4}" y="${y-4}" width="${w+8}" height="${h+8}"/><rect class="${gl}" x="${x}" y="${y}" width="${w}" height="${h}"/><path d="M${x} ${y+h} L${x+w*.55} ${y} L${x+w*.75} ${y} L${x+w*.2} ${y+h}Z" fill="#fff" opacity=".12"/><path class="mull" d="M${x+w/2} ${y}v${h}${o.door?'':`M${x} ${y+h*.42}h${w}`}"/>${o.door?'':`<rect class="sill" x="${x-8}" y="${y+h+4}" width="${w+16}" height="5"/>`}`};
 function balcony(x,y,w){let s=`<rect class="rail" x="${x+2}" y="${y-31}" width="${w-4}" height="3.5" rx="1"/>`;for(let xx=x+6;xx<x+w-3;xx+=7)s+=`<line class="bal" x1="${xx}" x2="${xx}" y1="${y-28}" y2="${y}"/>`;
   return s+`<rect class="slab" x="${x}" y="${y}" width="${w}" height="7"/><rect class="shade" x="${x+4}" y="${y+7}" width="${w-8}" height="6"/>`}
 const pot=(x,y)=>`<path d="M${x-8} ${y-12} h16 l-2 12 h-12z" fill="#b5652e"/><circle class="leaf" cx="${x}" cy="${y-18}" r="8"/><circle class="leaf" cx="${x-7}" cy="${y-14}" r="6"/><circle class="leaf" cx="${x+7}" cy="${y-14}" r="6"/><circle class="bloom" cx="${x-3}" cy="${y-21}" r="2.4"/><circle class="bloom" cx="${x+4}" cy="${y-17}" r="2.4"/>`;
 const car=(x,y,c)=>`<g transform="translate(${x} ${y})"><path d="M0 -14 Q0 -24 12 -26 L30 -40 Q36 -44 46 -44 L74 -44 Q84 -44 90 -38 L104 -26 Q116 -24 118 -14 L118 -6 L0 -6Z" fill="${c}"/><path d="M34 -38 L46 -40 L60 -40 L60 -28 L24 -28Z M66 -40 L76 -40 Q82 -40 86 -36 L95 -28 L66 -28Z" class="glass" opacity=".8"/><rect x="108" y="-22" width="8" height="5" rx="2" fill="#ffe08a"/><circle cx="26" cy="-6" r="10" fill="#1d1d1d"/><circle cx="26" cy="-6" r="4" fill="#99a"/><circle cx="92" cy="-6" r="10" fill="#1d1d1d"/><circle cx="92" cy="-6" r="4" fill="#99a"/></g>`;
 function palm(x,y,h,lean){const tx=x+lean,ty=y-h;let s=`<path class="trunk" stroke-width="9" d="M${x} ${y} Q${x+lean*.2} ${y-h*.6} ${tx} ${ty}"/>`;
-  for(let i=0;i<5;i++)s+=`<path class="trunk" stroke-width="1.5" opacity=".5" d="M${x+lean*(i/6)-5} ${y-h*(i+1)/6} h10"/>`;
   [-170,-140,-110,-75,-40,-10].forEach(a=>{const r=a*Math.PI/180,dx=Math.cos(r)*58,dy=Math.sin(r)*40;s+=`<path class="leafs" stroke-width="7" d="M${tx} ${ty} q${dx*.5} ${dy-18} ${dx} ${dy+22}"/>`});
   return s+`<circle cx="${tx}" cy="${ty+4}" r="5" fill="#7a5a2a"/>`}
-const bubble=(x,y)=>`<g transform="translate(${x} ${y})" pointer-events="none"><g class="bob"><path d="M6 0h24a6 6 0 0 1 6 6v14a6 6 0 0 1-6 6H16l-7 8v-8H6a6 6 0 0 1-6-6V6a6 6 0 0 1 6-6z" fill="#fff" stroke="#d6336c" stroke-width="2.5"/><text x="18" y="20" text-anchor="middle" font-family="Sora,sans-serif" font-weight="800" font-size="18" fill="#d6336c">!</text></g></g>`;
-const badge=(x,y,g)=>{const c=['#c92a2a','#b8730a','#2b8a3e'][g],t=['✗','~','✓'][g];return `<g transform="translate(${x} ${y})" pointer-events="none"><circle r="12" fill="${c}" stroke="#fff" stroke-width="2.5"/><text y="5" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">${t}</text></g>`};
+const bubble=(x,y,n)=>`<g transform="translate(${x} ${y})" pointer-events="none"><g class="bob"><path d="M6 0h24a6 6 0 0 1 6 6v14a6 6 0 0 1-6 6H16l-7 8v-8H6a6 6 0 0 1-6-6V6a6 6 0 0 1 6-6z" fill="${n?'#1c2b5a':'#fff'}" stroke="${n?'#91a7ff':'#d6336c'}" stroke-width="2.5"/><text x="18" y="20" text-anchor="middle" font-family="Sora,sans-serif" font-weight="800" font-size="18" fill="${n?'#ffd43b':'#d6336c'}">!</text></g></g>`;
+const zzz=(x,y)=>`<g transform="translate(${x} ${y})" pointer-events="none"><text class="zz" font-family="Sora,sans-serif" font-weight="800" font-size="16" fill="#bac8ff">z<tspan font-size="12" dy="-6">z</tspan></text></g>`;
+const badge=(x,y)=>`<g transform="translate(${x} ${y})" pointer-events="none"><circle r="12" fill="#2b8a3e" stroke="#fff" stroke-width="2.5"/><text y="5" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">✓</text></g>`;
 
-const FL={'4':220,'3':340,'2':460,'1':580};
-const U={};
-for(const f in FL){U[f+'A']={x:200,y:FL[f],w:270,h:120,l:f+'º A'};U[f+'B']={x:470,y:FL[f],w:270,h:120,l:f+'º B'}}
-Object.assign(U,{atA:{x:250,y:112,w:220,h:108,l:'Ático A'},atB:{x:470,y:112,w:220,h:108,l:'Ático B'},
- local:{x:200,y:700,w:220,h:120,l:'Local · Bar Es Racó'},portal:{x:420,y:700,w:100,h:120,l:'Portal'},bA:{x:520,y:700,w:220,h:120,l:'Bajo A'},
- gar1:{x:170,y:850,w:300,h:185,l:'Garaje · plaza 7'},gar2:{x:470,y:850,w:300,h:185,l:'Garaje · plaza 12'},pool:{x:745,y:730,w:255,h:145,l:'Piscina'}});
-function spot(u){const g=U[u];
-  if(/^[1-4]A$/.test(u))return{x:g.x+188,by:g.y+112,s:.72};
-  if(/^[1-4]B$/.test(u))return{x:g.x+82,by:g.y+112,s:.72};
-  return {atA:{x:333,by:220,s:.72},atB:{x:607,by:220,s:.72},local:{x:312,by:818,s:.62,full:1,bdx:16,bdy:26},portal:{x:470,by:818,s:.62,full:1,bdx:14,bdy:26},
-    bA:{x:600,by:797,s:.6},gar1:{x:385,by:1030,s:.7,full:1},gar2:{x:555,by:1030,s:.7,full:1},pool:{x:808,by:812,s:.62,full:1}}[u]}
+function unitsOf(C){if(C.U)return C.U;const U={},cw=540/C.cols,top=700-C.floors*120;
+  for(let f=1;f<=C.floors;f++)for(let c=0;c<C.cols;c++){const k=f+'ABC'[c];U[k]={x:200+c*cw,y:700-f*120,w:cw,h:120,l:f+'º '+'ABC'[c]}}
+  if(C.attic){U.atA={x:250,y:top-108,w:220,h:108,l:'Ático A'};U.atB={x:470,y:top-108,w:220,h:108,l:'Ático B'}}
+  Object.assign(U,{local:{x:200,y:700,w:220,h:120,l:C.localName},portal:{x:420,y:700,w:100,h:120,l:'Portal'},bA:{x:520,y:700,w:220,h:120,l:C.cols===3?'Bajo':'Bajo A'},
+   gar1:{x:170,y:850,w:300,h:185,l:'Garaje'},gar2:{x:470,y:850,w:300,h:185,l:'Garaje'},yard:{x:745,y:730,w:255,h:145,l:C.yard==='pool'?'Piscina':'Jardín'},
+   street:{x:150,y:740,w:48,h:82,l:'Calle'},mail:{x:102,y:752,w:46,h:70,l:'Buzón'}});
+  return C.U=U}
+function spot(C,u){const U=unitsOf(C),g=U[u],m=/^(\d)([ABC])$/.exec(u),top=700-C.floors*120;
+  if(m)return{x:C.cols===2?(m[2]==='A'?g.x+188:g.x+82):g.x+90,by:g.y+112,s:.72};
+  return {atA:{x:333,by:top,s:.72},atB:{x:607,by:top,s:.72},local:{x:312,by:818,s:.62,full:1,bdx:16,bdy:26},portal:{x:470,by:818,s:.62,full:1,bdx:14,bdy:26},
+   bA:{x:600,by:797,s:.6},gar1:{x:385,by:1030,s:.7,full:1},gar2:{x:555,by:1030,s:.7,full:1},yard:{x:808,by:812,s:.62,full:1},street:{x:178,by:818,s:.62,full:1},mail:{x:124,by:790}}[u]}
 
 function drawSVG(){
-  const P={},TOP=[];
-  N.forEach(n=>{const sp=spot(n.u);P[n.u]=person(n.look,sp.x,sp.by,sp.s,sp.full,moodOf(n))+(n.dog?dog(sp.x+40,sp.by):'');
-    const top=sp.by-(sp.full?38*sp.s:0)-80*sp.s;
-    TOP.push(isDone(n)?badge(sp.x+20,top+2,grade(n)):bubble(sp.x+4+(sp.bdx||0),top-38+(sp.bdy||0)))});
+  const C=com(),G=game(),night=isNight(G.clock),top=700-C.floors*120,P={},TOP=[];
+  C.ents.forEach(e=>{const sp=spot(C,e.u),nx=nextFor(e),fin=finished(e);
+    if(e.kind==='mail'){P.mail=mailbox();TOP.push(nx?bubble(sp.x-4,722,false):fin?badge(sp.x+14,752):'');return}
+    const mood=!nx&&night&&!fin?'sleep':moodOf(e);
+    P[e.u]=person(e.look,sp.x,sp.by,sp.s,sp.full,mood)+(e.dog?dog(sp.x+40,sp.by):'');
+    const ht=sp.by-(sp.full?38*sp.s:0)-80*sp.s;
+    TOP.push(nx?bubble(sp.x+4+(sp.bdx||0),ht-38+(sp.bdy||0),nx.time!=='d'):fin?badge(sp.x+20,ht+2):night?zzz(sp.x+14,ht+4):'')});
+  const svg=$('#svg');svg.classList.toggle('night',night);
+  Object.entries(C.pal).forEach(([k,v])=>svg.style.setProperty('--'+k,v));
   let s=`<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sky1)"/><stop offset="1" style="stop-color:var(--sky2)"/></linearGradient>
   <linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--seaBg2)"/><stop offset="1" style="stop-color:var(--seaBg)"/></linearGradient>
   <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".55"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></linearGradient></defs>`;
-  // cielo
   s+=`<rect width="1000" height="830" fill="url(#sky)"/>`;
   seed=11;for(let i=0;i<55;i++)s+=`<circle class="star" cx="${(rnd()*1000).toFixed(0)}" cy="${(rnd()*560).toFixed(0)}" r="${(rnd()*1.4+.5).toFixed(1)}"/>`;
   s+=`<circle class="sun" cx="870" cy="120" r="36"/><circle class="moonmask" cx="886" cy="108" r="32"/>`;
-  [[110,140,1],[690,70,.8],[880,260,.7]].forEach(([x,y,k])=>s+=`<g class="cloud" transform="translate(${x} ${y}) scale(${k})"><ellipse cx="0" cy="0" rx="48" ry="16"/><ellipse cx="-22" cy="-10" rx="22" ry="16"/><ellipse cx="14" cy="-16" rx="26" ry="20"/></g>`);
-  // mar y colinas
+  [[110,140,1],[690,60,.8],[880,260,.7]].forEach(([x,y,k])=>s+=`<g class="cloud" transform="translate(${x} ${y}) scale(${k})"><ellipse cx="0" cy="0" rx="48" ry="16"/><ellipse cx="-22" cy="-10" rx="22" ry="16"/><ellipse cx="14" cy="-16" rx="26" ry="20"/></g>`);
   s+=`<path class="hill" d="M0 702 Q70 640 150 670 Q190 684 210 702Z"/><path class="hill" d="M730 702 Q790 610 850 640 Q900 560 960 600 Q985 615 1000 625 V702Z"/>`;
   s+=`<rect y="700" width="1000" height="120" fill="url(#seaG)"/><g class="wave" opacity=".35"><path d="M0 730 q20 -6 40 0 t40 0 t40 0 t40 0 t40 0 M760 760 q20 -6 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 M20 785 q20 -6 40 0 t40 0 t40 0" stroke="#fff" stroke-width="2" fill="none"/></g>`;
-  // palmera izquierda y farola
-  s+=palm(80,820,190,-24);
-  s+=`<rect x="148" y="690" width="5" height="130" fill="#2b3640"/><path d="M150 690 q0 -14 16 -14" stroke="#2b3640" stroke-width="4" fill="none"/><rect x="160" y="676" width="16" height="9" rx="3" fill="#2b3640"/><path d="M162 685 L150 760 L188 760 L174 685Z" fill="url(#glow)" style="opacity:var(--stars)"/>`;
-  // azotea
-  s+=`<rect class="wall2" x="610" y="68" width="48" height="34" rx="4"/><ellipse class="wall" cx="634" cy="68" rx="24" ry="6"/><path d="M300 104 V52 M286 62 h28 M290 74 h20" stroke="#59636c" stroke-width="2.5"/>`;
-  s+=`<rect class="wall" x="250" y="104" width="440" height="116"/><rect class="wall2" x="244" y="100" width="452" height="10"/><rect class="wall2" x="676" y="110" width="14" height="110" opacity=".6"/>`;
-  // cuerpo
-  s+=`<rect class="wall" x="200" y="214" width="540" height="606"/><rect class="wall2" x="726" y="214" width="14" height="486" opacity=".55"/>`;
+  s+=palm(70,820,190,-24);
+  s+=`<rect x="152" y="690" width="5" height="130" fill="#2b3640"/><path d="M154 690 q0 -14 16 -14" stroke="#2b3640" stroke-width="4" fill="none"/><rect x="164" y="676" width="16" height="9" rx="3" fill="#2b3640"/><path d="M166 685 L150 770 L196 770 L178 685Z" fill="url(#glow)" class="lampglow"/>`;
+  // cubierta
+  if(C.attic){s+=`<rect class="wall2" x="610" y="${top-152}" width="48" height="34" rx="4"/><ellipse class="wall" cx="634" cy="${top-152}" rx="24" ry="6"/><path d="M300 ${top-116} V${top-168} M286 ${top-158} h28 M290 ${top-146} h20" stroke="#59636c" stroke-width="2.5"/>`;
+    s+=`<rect class="wall" x="250" y="${top-116}" width="440" height="116"/><rect class="wall2" x="244" y="${top-120}" width="452" height="10"/><rect class="wall2" x="676" y="${top-110}" width="14" height="110" opacity=".6"/>`}
+  else{for(let i=0;i<6;i++){const x=226+i*84;s+=`<path d="M${x} ${top-12} L${x+66} ${top-12} L${x+56} ${top-40} L${x+10} ${top-40}Z" fill="#1e3a5f" stroke="#9fb3c8" stroke-width="1.5"/><path d="M${x+33} ${top-12} L${x+33} ${top-40} M${x+5} ${top-26} H${x+61}" stroke="#9fb3c8" stroke-width="1"/>`}}
+  s+=`<rect class="wall" x="200" y="${top-6}" width="540" height="${826-top}"/><rect class="wall2" x="726" y="${top-6}" width="14" height="${706-top}" opacity=".55"/>`;
+  if(!C.attic)s+=`<rect class="wall2" x="194" y="${top-14}" width="552" height="10"/>`;
   s+=`<rect class="stone" x="196" y="700" width="548" height="120"/><rect class="stone2" x="196" y="812" width="548" height="8"/>`;
   for(let yy=716;yy<812;yy+=16)s+=`<line x1="196" x2="744" y1="${yy}" y2="${yy}" stroke="rgba(0,0,0,.06)"/>`;
-  [220,340,460,580].forEach(y=>s+=`<rect class="wall2" x="194" y="${y-4}" width="552" height="8"/>`);
-  s+=`<rect class="wall2" x="194" y="696" width="552" height="8"/><rect class="wall2" x="466" y="226" width="8" height="470"/>`;
-  // ático
-  s+=win(305,128,56,84,{door:1})+P.atA+win(400,140,44,56);
-  s+=win(579,128,56,84,{door:1})+P.atB+win(496,140,44,56);
-  s+=`<rect class="rail" x="202" y="186" width="536" height="3.5"/>`;for(let xx=206;xx<738;xx+=8)s+=`<line class="bal" x1="${xx}" x2="${xx}" y1="189" y2="214"/>`;
-  s+=pot(222,214)+pot(718,214)+`<path d="M250 160 h60" stroke="#8a6a45" stroke-width="4"/>`;
-  // plantas
-  for(const f in FL){const y=FL[f];
-    // A
-    s+=win(245,y+28,50,68)+win(360,y+20,56,92,{door:1})+P[f+'A']+balcony(320,y+112,136)+pot(338,y+112);
-    // B
-    s+=win(524,y+20,56,92,{door:1})+P[f+'B']+balcony(484,y+112,136)+win(645,y+28,50,68)+pot(602,y+112);
-  }
-  // buganvilla
-  seed=5;for(let i=0;i<70;i++){const yy=560+rnd()*250,xx=190+rnd()*26*(1-(yy-560)/400)+(yy>760?rnd()*6:0);s+=`<circle class="${rnd()<.62?'bloom':'leaf'}" cx="${xx.toFixed(0)}" cy="${yy.toFixed(0)}" r="${(4+rnd()*5).toFixed(1)}" opacity=".95"/>`}
+  for(let f=1;f<=C.floors;f++)s+=`<rect class="wall2" x="194" y="${700-f*120-4}" width="552" height="8"/>`;
+  s+=`<rect class="wall2" x="194" y="696" width="552" height="8"/>`;
+  seed=7;
+  if(C.cols===2)s+=`<rect class="wall2" x="466" y="${top+6}" width="8" height="${690-top}"/>`;else[377,557].forEach(x=>s+=`<rect class="wall2" x="${x}" y="${top+6}" width="6" height="${690-top}"/>`);
+  if(C.attic){s+=win(305,top-92,56,84,{door:1})+(P.atA||'')+win(400,top-80,44,56)+win(579,top-92,56,84,{door:1})+(P.atB||'')+win(496,top-80,44,56);
+    s+=`<rect class="rail" x="202" y="${top-34}" width="536" height="3.5"/>`;for(let xx=206;xx<738;xx+=8)s+=`<line class="bal" x1="${xx}" x2="${xx}" y1="${top-31}" y2="${top-6}"/>`;s+=pot(222,top-6)+pot(718,top-6)}
+  for(let f=1;f<=C.floors;f++){const y=700-f*120;
+    if(C.cols===2){s+=win(245,y+28,50,68)+win(360,y+20,56,92,{door:1})+(P[f+'A']||'')+balcony(320,y+112,136)+pot(338,y+112);
+      s+=win(524,y+20,56,92,{door:1})+(P[f+'B']||'')+balcony(484,y+112,136)+win(645,y+28,50,68)+pot(602,y+112)}
+    else for(let c=0;c<3;c++){const ux=200+c*180;s+=win(ux+62,y+20,56,92,{door:1})+(P[f+'ABC'[c]]||'')+balcony(ux+18,y+112,144)+pot(ux+36,y+112)}}
+  seed=5;for(let i=0;i<70;i++){const yy=560+rnd()*250,xx=190+rnd()*26*(1-(yy-560)/400);s+=`<circle class="${rnd()<.62?'bloom':'leaf'}" cx="${xx.toFixed(0)}" cy="${yy.toFixed(0)}" r="${(4+rnd()*5).toFixed(1)}"/>`}
   s+=`<path class="trunk" stroke-width="4" d="M200 820 Q206 760 198 700 Q194 640 206 580"/>`;
-  // bajos: bar
-  s+=`<rect class="sign" x="226" y="706" width="168" height="20" rx="3"/><text x="310" y="721" text-anchor="middle" font-family="Sora,sans-serif" font-weight="800" font-size="13" fill="#fff" letter-spacing="1.5">BAR ES RACÓ</text>`;
-  s+=`<rect class="frame" x="212" y="742" width="196" height="72"/><rect class="glass" x="216" y="746" width="188" height="68"/><path class="mull" d="M280 746v68M340 746v68"/>`;
-  s+=P.local;
-  for(let i=0;i<8;i++)s+=`<path d="M${210+i*25} 730 h25 l-3 14 h-19z" fill="${i%2?'#fff':'#d6336c'}"/>`;
-  s+=`<rect x="206" y="726" width="208" height="5" fill="#a5244f"/>`;
-  s+=`<rect x="160" y="792" width="30" height="4" fill="#59636c"/><rect x="173" y="796" width="4" height="22" fill="#59636c"/><rect x="152" y="800" width="4" height="18" fill="#59636c"/>`;
-  // portal
-  s+=`<text x="470" y="726" text-anchor="middle" font-family="Sora,sans-serif" font-weight="600" font-size="10" fill="#6b5a3e" letter-spacing="2">ES PINS · 12</text>`;
-  s+=`<path class="stone2" d="M434 820 V764 A36 36 0 0 1 506 764 V820Z"/><path class="glass2" d="M442 818 V766 A28 28 0 0 1 498 766 V818Z"/><path d="M470 738 V818" stroke="#3b2f22" stroke-width="3"/><circle cx="464" cy="790" r="2" fill="#c9a227"/><circle cx="476" cy="790" r="2" fill="#c9a227"/>`;
-  s+=`<rect x="512" y="760" width="8" height="12" rx="2" class="lamp"/>`+P.portal;
-  // bajo A
-  s+=win(560,735,80,62,{noShut:1})+P.bA;for(let xx=568;xx<640;xx+=10)s+=`<line x1="${xx}" x2="${xx}" y1="735" y2="797" stroke="#2b3640" stroke-width="2.4"/>`;
+  // bajos
+  s+=`<rect fill="#0d4f8b" x="226" y="706" width="168" height="20" rx="3"/><text x="310" y="721" text-anchor="middle" font-family="Sora,sans-serif" font-weight="800" font-size="12.5" fill="#fff" letter-spacing="1.2">${C.sign}</text>`;
+  s+=`<rect class="frame" x="212" y="742" width="196" height="72"/><rect class="glass" x="216" y="746" width="188" height="68"/><path class="mull" d="M280 746v68M340 746v68"/>`+(P.local||'');
+  for(let i=0;i<8;i++)s+=`<path d="M${210+i*25} 730 h25 l-3 14 h-19z" fill="${i%2?'#fff':C.awn}"/>`;
+  s+=`<rect x="206" y="726" width="208" height="5" fill="rgba(0,0,0,.35)"/>`;
+  s+=`<text x="470" y="726" text-anchor="middle" font-family="Sora,sans-serif" font-weight="600" font-size="9.5" fill="#6b5a3e" letter-spacing="1.5">${C.plaque}</text>`;
+  s+=`<path class="stone2" d="M434 820 V764 A36 36 0 0 1 506 764 V820Z"/><path class="glass2" d="M442 818 V766 A28 28 0 0 1 498 766 V818Z"/><path d="M470 738 V818" stroke="#3b2f22" stroke-width="3"/><circle cx="464" cy="790" r="2" fill="#c9a227"/><circle cx="476" cy="790" r="2" fill="#c9a227"/><rect x="512" y="760" width="8" height="12" rx="2" class="glass"/>`+(P.portal||'');
+  s+=win(560,735,80,62,{noShut:1,lit:1})+(P.bA||'');for(let xx=568;xx<640;xx+=10)s+=`<line x1="${xx}" x2="${xx}" y1="735" y2="797" stroke="#2b3640" stroke-width="2.4"/>`;
   s+=`<rect x="560" y="762" width="80" height="2.4" fill="#2b3640"/>`+win(675,740,44,56,{noShut:1});for(let xx=681;xx<720;xx+=9)s+=`<line x1="${xx}" x2="${xx}" y1="740" y2="796" stroke="#2b3640" stroke-width="2.2"/>`;
-  // acera
   s+=`<rect class="walk" y="818" width="1000" height="14"/><rect class="stone2" y="830" width="1000" height="3"/>`;
-  // piscina
-  s+=`<rect class="stone" x="745" y="812" width="255" height="10"/><path class="water" d="M785 822 H975 V858 Q975 872 961 872 H799 Q785 872 785 858Z"/><path d="M790 828 q12 -5 24 0 t24 0 t24 0 t24 0 t24 0 t24 0 t24 0" stroke="#fff" stroke-width="2" opacity=".55" fill="none" class="wave"/>`;
-  s+=`<path d="M792 812 v-24 M802 812 v-24 M792 796 h10 M792 804 h10" stroke="#9aa5ad" stroke-width="2.5"/>`;
-  s+=`<path d="M880 806 L940 806 L956 792" stroke="#fff" stroke-width="5" fill="none"/><path d="M884 806 v6 M936 806 v6" stroke="#9aa5ad" stroke-width="3"/>`;
-  s+=`<path d="M912 806 V744" stroke="#59636c" stroke-width="3"/><path d="M872 752 Q912 714 952 752Z" fill="#d6336c"/>`;
-  s+=palm(982,816,170,-30)+P.pool;
+  s+=(P.mail||'')+(P.street||'');
+  // patio
+  if(C.yard==='pool'){s+=`<rect class="stone" x="745" y="812" width="255" height="10"/><path class="water" d="M785 822 H975 V858 Q975 872 961 872 H799 Q785 872 785 858Z"/><path d="M790 828 q12 -5 24 0 t24 0 t24 0 t24 0 t24 0 t24 0 t24 0" stroke="#fff" stroke-width="2" opacity=".55" fill="none" class="wave"/>`;
+    s+=`<path d="M792 812 v-24 M802 812 v-24 M792 796 h10 M792 804 h10" stroke="#9aa5ad" stroke-width="2.5"/><path d="M880 806 L940 806 L956 792" stroke="#fff" stroke-width="5" fill="none"/><path d="M884 806 v6 M936 806 v6" stroke="#9aa5ad" stroke-width="3"/><path d="M912 806 V744" stroke="#59636c" stroke-width="3"/><path d="M872 752 Q912 714 952 752Z" fill="#d6336c"/>`;
+    s+=palm(982,816,170,-30)}
+  else{s+=`<rect class="grass" x="745" y="804" width="255" height="18" rx="4"/><rect x="948" y="716" width="12" height="92" fill="#7a5a2a"/><circle class="leaf" cx="954" cy="700" r="38"/><circle class="leaf" cx="926" cy="720" r="24"/><circle class="leaf" cx="982" cy="718" r="24"/>`;
+    s+=`<path d="M850 806 L866 748 L882 806 M866 748 H916 M900 748 L916 806" stroke="#e76f51" stroke-width="4" fill="none"/><path d="M880 750 v32 M896 750 v32" stroke="#59636c" stroke-width="1.5"/><rect x="874" y="782" width="28" height="5" fill="#f4a261"/>`;
+    s+=`<rect x="770" y="790" width="40" height="5" fill="#8a6a45"/><path d="M774 795 v10 M806 795 v10" stroke="#59636c" stroke-width="3"/>`}
+  s+=P.yard||'';
   // garaje en sección
   s+=`<rect class="soil" x="0" y="833" width="1000" height="227"/>`;seed=3;for(let i=0;i<120;i++)s+=`<circle class="soil2" cx="${(rnd()*1000).toFixed(0)}" cy="${(840+rnd()*215).toFixed(0)}" r="${(1+rnd()*2.5).toFixed(1)}"/>`;
   s+=`<rect class="garage2" x="160" y="842" width="620" height="200"/><rect class="garage" x="170" y="852" width="600" height="180"/><rect class="garage2" x="170" y="1030" width="600" height="8"/>`;
   [318,463,610].forEach(x=>s+=`<rect class="garage2" x="${x}" y="852" width="14" height="178"/>`);
   [240,400,540,700].forEach(x=>s+=`<rect x="${x-14}" y="852" width="28" height="4" fill="#ffe9a8"/><path d="M${x-14} 856 L${x-40} 930 L${x+40} 930 L${x+14} 856Z" fill="url(#glow)" opacity=".6"/>`);
-  s+=`<text x="182" y="874" class="lbl" style="fill:#d7dde3">GARAJE · SÓTANO −1</text><text x="200" y="1022" class="lbl" style="fill:#d7dde3;font-size:11px">7</text><text x="740" y="1022" class="lbl" style="fill:#d7dde3;font-size:11px">12</text>`;
-  s+=car(190,1030,'#e9ecef')+`<rect x="338" y="952" width="16" height="24" rx="3" fill="#1f2a33"/><circle cx="346" cy="960" r="3" fill="#2bd96b"/><path d="M346 976 q0 30 -30 34" stroke="#1f2a33" stroke-width="3" fill="none"/>`;
-  s+=car(640,1030,'#457b9d')+`<path d="M612 1000 h40 M622 1000 v30 M642 1000 v30" stroke="#9aa5ad" stroke-width="3"/><text x="632" y="994" text-anchor="middle" font-size="16">?</text>`;
-  s+=P.gar1+P.gar2;
-  // capa superior
+  s+=`<text x="182" y="874" font-family="Inter,sans-serif" font-weight="600" font-size="13" fill="#d7dde3">GARAJE · SÓTANO −1</text>`;
+  s+=car(190,1030,C.id==='pins'?'#e9ecef':'#e63946')+`<rect x="338" y="952" width="16" height="24" rx="3" fill="#1f2a33"/><circle cx="346" cy="960" r="3" fill="#2bd96b"/><path d="M346 976 q0 30 -30 34" stroke="#1f2a33" stroke-width="3" fill="none"/>`;
+  s+=car(640,1030,C.id==='pins'?'#457b9d':'#ffd166')+(P.gar1||'')+(P.gar2||'');
   s+=TOP.join('');
-  // zonas clicables
-  N.forEach(n=>{const g=U[n.u];s+=`<rect class="hit${st.sel===n.id?' sel':''}" data-id="${n.id}" x="${g.x}" y="${g.y}" width="${g.w}" height="${g.h}" rx="6" tabindex="0" role="button" aria-label="${esc(n.name+', '+g.l+(isDone(n)?' (resuelto)':' (tiene una incidencia)'))}"><title>${esc(n.name+' · '+g.l)}</title></rect>`});
-  $('#svg').innerHTML=s;
-  document.querySelectorAll('.hit').forEach(h=>{h.onclick=()=>select(h.dataset.id);h.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(h.dataset.id)}}});
+  const U=unitsOf(C);
+  C.ents.forEach(e=>{const g=U[e.u];s+=`<rect class="hit${st.sel===e.id?' sel':''}" data-id="${e.id}" x="${g.x}" y="${g.y}" width="${g.w}" height="${g.h}" rx="6" tabindex="0" role="button" aria-label="${esc(e.name+', '+g.l)}"><title>${esc(e.name+' · '+g.l)}</title></rect>`});
+  svg.innerHTML=s;
+  svg.querySelectorAll('.hit').forEach(h=>{h.onclick=()=>select(h.dataset.id);h.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();select(h.dataset.id)}}});
 }
-const miniAva=(n,cls)=>`<svg class="${cls||''}" viewBox="-34 -90 68 92" aria-hidden="true">${person(n.look,0,2,1,0,moodOf(n))}</svg>`;
+const miniAva=(e,cls)=>`<svg class="${cls||''}" viewBox="-34 -90 68 92" aria-hidden="true">${e.kind==='mail'?envelope():person(e.look,0,2,1,0,moodOf(e))}</svg>`;
 
-function drawMeters(){
-  const nm=['Caja de la comunidad','Convivencia','Seguridad jurídica'];
-  $('#meters').innerHTML=st.m.map((v,k)=>`<div class="m"><label><span>${nm[k]}</span><b>${v}</b></label><div class="bar"><i style="width:${v}%"></i></div></div>`).join('');
-}
-function topbar(){
-  const a=answered();
-  return `<div class="row" style="justify-content:space-between"><div class="turn">${st.players.map((p,k)=>`<span class="chip ${k===st.turn?'on':''}">${esc(p)} · ${st.pts[k]}</span>`).join('')}</div><span class="muted">${a}/${TOTAL} preguntas</span></div><div class="prog"><i style="width:${a/TOTAL*100}%"></i></div>`;
-}
-function stMark(n){if(!isDone(n))return `<span class="st p">!</span>`;const g=grade(n);return `<span class="st g${g}">${['✗','~','✓'][g]}</span>`}
+/* =================== PANEL =================== */
+function drawMeters(){const nm=['Caja de la comunidad','Convivencia','Seguridad jurídica'],G=game();
+  $('#meters').innerHTML=G.m.map((v,k)=>`<div class="m"><label><span>${nm[k]}</span><b>${v}</b></label><div class="bar"><i style="width:${v}%"></i></div></div>`).join('')}
+function tabs(){$('#ctabs').innerHTML=COMS.map(c=>`<button class="ctab${c.id===st.cur?' on':''}" data-c="${c.id}">${c.name}<small>${c.place}</small></button>`).join('');
+  document.querySelectorAll('.ctab').forEach(b=>b.onclick=()=>{st.cur=b.dataset.c;st.sel=null;save();tabs();home()})}
+function topbar(){const G=game(),a=answered(),T2=totalQ(),n=isNight(G.clock);
+  let f='';if(st.flash){f=st.flash==='night'?`<div class="toast">☾ Ha anochecido: ahora llegan las urgencias nocturnas.</div>`:`<div class="toast day">☀︎ Ha amanecido: vuelve el trabajo de oficina.</div>`;st.flash=null}
+  return f+`<div class="row" style="justify-content:space-between"><div class="turn">${st.players.map((p,k)=>`<span class="chip ${k===G.turn?'on':''}">${esc(p)} · ${G.pts[k]}</span>`).join('')}</div><span class="muted">${a}/${T2} incidencias</span></div>
+  <div class="prog"><i style="width:${a/T2*100}%"></i></div>
+  <div class="clock${n?' nt':''}"><span>${n?'☾':'☀︎'} ${clockTxt(G.clock)} · ${n?'Noche':'Día'}</span><button class="mini" id="ff">⏩ Avanzar 3 h</button></div>`}
+function bindTop(){const b=$('#ff');if(b)b.onclick=()=>{advance(180);st.sel=null;home()}}
+function stMark(e){const G=game(),d=doneOf(e).length,n=G.q[e.id].length;if(finished(e))return `<span class="st d">✓ ${n}/${n}</span>`;
+  return nextFor(e)?`<span class="st p">! ${d}/${n}</span>`:`<span class="st z">zz ${d}/${n}</span>`}
 function home(){
-  st.sel=null;st.pend=null;drawSVG();drawMeters();
-  if(answered()>=TOTAL)return results();
-  $('#panel').innerHTML=topbar()+`<h2>Elige a un vecino</h2>
-  <p class="muted" style="margin:6px 0 0">Toca en el edificio a cualquier vecino con un bocadillo <b style="color:var(--pink)">!</b> (o elígelo en la lista). Te contará su incidencia y tendrás que responderle. Le toca a <b>${esc(st.players[st.turn])}</b>.</p>
-  <div class="list">${N.map(n=>`<button class="nb" data-id="${n.id}">${miniAva(n)}<span><b>${esc(n.name)}</b><small>${esc(U[n.u].l)}</small></span>${stMark(n)}</button>`).join('')}</div>
+  st.sel=null;st.pend=null;drawSVG();drawMeters();const C=com(),G=game();
+  $('#panel').innerHTML=topbar()+`<h2 style="margin-top:14px">Comunidad ${C.name}</h2>
+  <p class="muted" style="margin:6px 0 0">Toca a cualquier vecino con un bocadillo <b style="color:var(--pink)">!</b> en el edificio o en la lista. Cada uno tiene 15 incidencias al azar; las urgencias (bocadillo azul) llegan sobre todo de noche. Le toca a <b>${esc(st.players[G.turn])}</b>.</p>
+  <div class="list">${C.ents.map(e=>`<button class="nb" data-id="${e.id}">${miniAva(e)}<span><b>${esc(e.name)}</b><small>${esc(unitsOf(C)[e.u].l)}</small></span>${stMark(e)}</button>`).join('')}</div>
+  <div class="row" style="margin-top:14px"><button class="ghost" id="sum">Ver resumen de la partida</button></div>
   <details class="cfg"><summary>Jugadores y partida</summary>
-   <p class="muted">Jugad por turnos en el mismo dispositivo: la comunidad es compartida y cada uno suma puntos según lo bien que responde (10 correcta, 5 mejorable).</p>
+   <p class="muted">Jugad por turnos en el mismo dispositivo: la comunidad es compartida y cada uno suma puntos (10 correcta, 5 mejorable). Cada edificio guarda su propia partida.</p>
    <div class="players">${[0,1,2,3].map(k=>`<input id="pl${k}" placeholder="Jugador ${k+1}${k?' (opcional)':''}" value="${esc(st.players[k]||'')}">`).join('')}</div>
-   <div class="row"><button class="main" id="newgame">Nueva partida</button><span class="muted">Borra el progreso actual.</span></div>
+   <div class="row"><button class="main" id="newgame">Nueva partida en ${esc(C.name)}</button><span class="muted">Reparte 15 incidencias nuevas a cada vecino.</span></div>
   </details>`;
+  bindTop();
   document.querySelectorAll('.nb').forEach(b=>b.onclick=()=>select(b.dataset.id));
+  $('#sum').onclick=summary;
   $('#newgame').onclick=()=>{const ps=[0,1,2,3].map(k=>$('#pl'+k).value.trim()).filter(Boolean);st.players=ps.length?ps:['Jugador 1'];
-    try{localStorage.setItem('simfincas-players',JSON.stringify(st.players))}catch(e){}
-    Object.assign(st,{turn:0,pts:st.players.map(()=>0),m:[60,70,70],ans:{}});save();home()};
+    try{localStorage.setItem('simfincas-players',JSON.stringify(st.players))}catch(e){}newGame(com());home()};
 }
-function lawBox(arts){
-  return `<div class="lawbox"><div class="lawtag">Qué dice la ley</div>${arts.map(k=>`<h4>${artName(k)} · ${ARTS[k][0]}</h4><p>${ARTS[k][1]}</p>`).join('')}
-  <p style="margin-top:10px"><a href="https://www.boe.es/buscar/act.php?id=BOE-A-1960-10906" target="_blank" rel="noopener">Texto consolidado de la LPH en el BOE ↗</a></p></div>`;
-}
+function lawBox(arts){return `<div class="lawbox"><div class="lawtag">Qué dice la ley</div>${arts.map(k=>`<h4>${/^\d/.test(k)?'Art. '+k+' LPH · ':''}${ARTS[k][0]}</h4><p>${ARTS[k][1]}</p>`).join('')}</div>`}
+const EFF={2:[3,5,5],1:[0,-2,-3],0:[-3,-8,-10]};
+const HEAD=['Respuesta incorrecta','Aceptable, pero mejorable','¡Correcto!'];
 function select(id){
-  const n=N.find(x=>x.id===id);st.sel=id;drawSVG();
-  const a=st.ans[id]||[];
-  if(a.length>=n.qs.length)return review(n);
-  const qi=a.length,Q=n.qs[qi];st.pend={id,qi,order:[0,1,2].sort(()=>Math.random()-.5)};
-  $('#panel').innerHTML=topbar()+`<div class="who">${miniAva(n,'ava')}<div><div class="zone">${esc(U[n.u].l)}${n.qs.length>1?` · pregunta ${qi+1} de ${n.qs.length}`:''}</div><h2>${esc(n.name)}</h2><div class="muted">${esc(n.role)}</div></div></div>
-  <div class="say"><p class="intro">“${Q.i}”</p><p class="q">${Q.q}</p></div>
-  <p style="margin:0"><b>¿Qué le respondes?</b> <span class="muted">· responde ${esc(st.players[st.turn])}</span></p>
-  <div class="opts">${st.pend.order.map(k=>`<button class="opt" data-k="${k}">${Q.o[k][0]}</button>`).join('')}</div><div id="fb"></div>
+  const C=com(),e=C.ents.find(x=>x.id===id),G=game();st.sel=id;drawSVG();
+  const tp=nextFor(e),U=unitsOf(C),head=`<div class="who">${miniAva(e,'ava')}<div><div class="zone">${esc(U[e.u].l)} · ${doneOf(e).length}/${G.q[e.id].length} resueltas</div><h2>${esc(e.name)}</h2><div class="muted">${esc(e.role)}</div></div></div>`;
+  if(!tp){
+    $('#panel').innerHTML=topbar()+`<div style="height:12px"></div>`+head+(finished(e)?`<div class="fb g2"><h3>¡${esc(e.name)} no tiene más incidencias!</h3><p>Has resuelto sus ${G.q[e.id].length} casos.</p></div>`:
+      `<div class="say"><p class="q">${isNight(G.clock)?'Zzz… Ahora está durmiendo: sus incidencias pendientes son de día.':'Ahora no tiene nada: sus incidencias pendientes son urgencias de noche.'}</p></div><div class="row"><button class="main" id="ff2">⏩ Avanzar el reloj</button></div>`)+
+      `<div class="row" style="margin-top:14px"><button class="ghost" id="bk">← Volver al edificio</button></div>`;
+    bindTop();$('#bk').onclick=home;const f2=$('#ff2');
+    if(f2)f2.onclick=()=>{const n=isNight(G.clock);let i=0;while(isNight(G.clock)===n&&i++<30)G.clock+=60;st.flash=isNight(G.clock)?'night':'day';save();select(id)};return}
+  st.pend={eid:id,tid:tp.id,order:shuffle([0,1,2])};
+  const tag=tp.time==='n'?'<span class="tag n">☾ Urgencia nocturna</span>':tp.time==='a'?'<span class="tag n">⚡ Urgencia</span>':'';
+  $('#panel').innerHTML=topbar()+`<div style="height:12px"></div>`+head+`<div class="tags">${tag}<span class="tag">${GRP[tp.g]}</span><span class="tag">${esc(tp.tit)}</span></div>
+  <div class="say"><p class="intro">“${tp.i}”</p><p class="q">${tp.q}</p></div>
+  <div class="mtabs"><button data-m="w" class="${st.mode==='w'?'on':''}">✍️ Escribir respuesta</button><button data-m="t" class="${st.mode==='t'?'on':''}">☑️ Elegir opción</button></div>
+  <div id="area"></div><div id="fb"></div>
   <div class="row" id="back" style="margin-top:14px"><button class="ghost" id="bk">← Volver al edificio</button></div>`;
-  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>pick(+b.dataset.k));
-  $('#bk').onclick=home;
+  bindTop();$('#bk').onclick=home;
+  document.querySelectorAll('.mtabs button').forEach(b=>b.onclick=()=>{if(!st.pend)return;st.mode=b.dataset.m;save();document.querySelectorAll('.mtabs button').forEach(x=>x.classList.toggle('on',x===b));area()});
+  area();
   if(matchMedia('(max-width:860px)').matches)$('#panel').scrollIntoView({behavior:'smooth',block:'start'});
 }
-function pick(k){
-  const p=st.pend;if(!p)return;st.pend=null;
-  const n=N.find(x=>x.id===p.id),Q=n.qs[p.qi],o=Q.o[k],g=o[2];
-  st.m=st.m.map((v,j)=>clamp(v+o[1][j]));
-  const pts=[0,5,10][g];st.pts[st.turn]+=pts;
-  (st.ans[n.id]=st.ans[n.id]||[]).push({k,g,who:st.players[st.turn]});
-  st.turn=(st.turn+1)%st.players.length;save();
-  document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;const kk=+b.dataset.k,q=Q.o[kk][2];if(kk===k||q===2)b.classList.add('q'+q)});
-  drawSVG();drawMeters();
-  const best=Q.o.find(x=>x[2]===2);
-  const more=(st.ans[n.id].length<n.qs.length);
-  $('#fb').innerHTML=`<div class="fb g${g}"><h3>${['Respuesta incorrecta','Aceptable, pero mejorable','¡Correcto!'][g]} · +${pts} puntos</h3><p>${o[3]}</p>${g<2?`<p><b>La respuesta correcta:</b> ${best[0]}</p>`:''}</div>${lawBox(Q.a)}`;
-  $('#back').innerHTML=more?`<button class="main" id="nx">Siguiente pregunta de ${esc(n.name)} →</button><button class="ghost" id="bk">Volver al edificio</button>`:`<button class="main" id="bk">${answered()>=TOTAL?'Ver resultados':'Volver al edificio'}</button>`;
-  $('#bk').onclick=home;if(more)$('#nx').onclick=()=>select(n.id);
-  ($('#nx')||$('#bk')).focus({preventScroll:true});
-}
-function review(n){
-  $('#panel').innerHTML=topbar()+`<div class="who">${miniAva(n,'ava')}<div><div class="zone">${esc(U[n.u].l)} · resuelto</div><h2>${esc(n.name)}</h2><div class="muted">${esc(n.role)}</div></div></div>`+
-  n.qs.map((Q,i)=>{const a=st.ans[n.id][i],best=Q.o.find(x=>x[2]===2);return `<div class="say"><p class="q">${Q.q}</p></div>
-   <div class="fb g${a.g}"><h3>${['Incorrecta','Mejorable','Correcta'][a.g]} <span class="muted">· respondió ${esc(a.who)}</span></h3><p><b>Respuesta correcta:</b> ${best[0]}</p></div>${lawBox(Q.a)}`}).join('<div style="height:16px"></div>')+
-  `<div class="row" style="margin-top:14px"><button class="main" id="bk">← Volver al edificio</button></div>`;
-  $('#bk').onclick=home;
-}
-function results(){
-  const rank=st.players.map((p,k)=>[p,st.pts[k]]).sort((a,b)=>b[1]-a[1]);
-  const avg=Math.round(st.m.reduce((a,b)=>a+b)/3);
-  const verdict=avg>=75?'La comunidad está contenta y bien gestionada. ¡Junta tranquila este año!':avg>=55?'La comunidad sobrevive, pero hay cosas que mejorar.':'La comunidad está pensando seriamente en cambiar de administrador.';
-  const miss=[];N.forEach(n=>(st.ans[n.id]||[]).forEach((a,i)=>{if(a.g<2)miss.push({n,Q:n.qs[i],a})}));
-  $('#panel').innerHTML=topbar()+`<h2>Resultado de la partida</h2><p>${verdict}</p>
+function area(){const p=st.pend,tp=TM[p.tid],G=game(),nm=com().ents.find(x=>x.id===p.eid).name;
+  if(st.mode==='w'){$('#area').innerHTML=`<label class="muted" for="ans">Responde a ${esc(nm)} con tus palabras · turno de <b>${esc(st.players[G.turn])}</b></label>
+    <textarea id="ans" placeholder="Escribe aquí qué le dirías, qué harías y en qué te basas…"></textarea><div class="row" style="margin-top:8px"><button class="main" id="go">Corregir mi respuesta</button><span class="muted">Se valora si mencionas los conceptos clave.</span></div>`;
+    $('#go').onclick=()=>{const txt=$('#ans').value.trim();if(txt.length<8){$('#ans').focus();return}grade(txt)}}
+  else{const opts=[tp.ok,tp.mid,tp.bad];$('#area').innerHTML=`<p class="muted" style="margin:0 0 8px">Turno de <b>${esc(st.players[G.turn])}</b>:</p><div class="opts">${p.order.map(k=>`<button class="opt" data-k="${k}">${opts[k]}</button>`).join('')}</div>`;
+    document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>pickOpt(+b.dataset.k))}}
+function record(g){const p=st.pend,G=game(),who=st.players[G.turn];
+  (G.done[p.eid]=G.done[p.eid]||[]).push({id:p.tid,g,who});
+  G.pts[G.turn]+=[0,5,10][g];G.m=G.m.map((v,j)=>clamp(v+EFF[g][j]));
+  st.last={eid:p.eid,idx:G.done[p.eid].length-1,turn:G.turn};
+  G.turn=(G.turn+1)%st.players.length;st.pend=null;advance(60+Math.floor(Math.random()*90));drawMeters()}
+function regrade(g){const L2=st.last,G=game();if(!L2)return;const d=G.done[L2.eid][L2.idx];if(d.g===g)return;
+  G.pts[L2.turn]+=([0,5,10][g]-[0,5,10][d.g]);G.m=G.m.map((v,j)=>clamp(v-EFF[d.g][j]+EFF[g][j]));d.g=g;save();drawMeters();drawSVG();
+  document.querySelectorAll('.rg').forEach(b=>b.classList.toggle('on',+b.dataset.g===g));$('#fbh').textContent=HEAD[g]+' · +'+[0,5,10][g]+' puntos';$('#fbbox').className='fb g'+g;
+  document.querySelectorAll('.turn .chip').forEach((c,k)=>c.textContent=st.players[k]+' · '+G.pts[k])}
+function afterButtons(eid){const e=com().ents.find(x=>x.id===eid),more=!!nextFor(e);
+  $('#back').innerHTML=(more?`<button class="main" id="nx">Siguiente incidencia de ${esc(e.name)} →</button>`:'')+`<button class="${more?'ghost':'main'}" id="bk">Volver al edificio</button>`;
+  $('#bk').onclick=home;if(more)$('#nx').onclick=()=>select(eid);($('#nx')||$('#bk')).focus({preventScroll:true})}
+function grade(txt){const p=st.pend,tp=TM[p.tid],nt=norm(txt);
+  const groups=tp.kw.split(';').map(s=>{const i=s.indexOf(':');return{l:s.slice(0,i),re:new RegExp(norm(s.slice(i+1)))}});
+  const hit=groups.map(g=>g.re.test(nt)),r=hit.filter(Boolean).length/groups.length,g=r>=.66?2:r>=.34?1:0,eid=p.eid;
+  $('#ans').disabled=true;$('#go').disabled=true;document.querySelectorAll('.mtabs button').forEach(b=>b.disabled=true);
+  record(g);drawSVG();
+  $('#fb').innerHTML=`<div class="fb g${g}" id="fbbox"><h3 id="fbh">${HEAD[g]} · +${[0,5,10][g]} puntos</h3>
+   <p class="muted" style="margin-top:4px">Conceptos clave que se esperaban:</p><ul class="kw">${groups.map((x,k)=>`<li class="${hit[k]?'y':'n'}">${hit[k]?'✓':'✗'} ${esc(x.l)}</li>`).join('')}</ul>
+   <p><b>Respuesta modelo:</b> ${tp.ok}</p><p>${tp.note}</p>
+   <div class="row" style="margin-top:10px"><span class="muted">¿La corrección automática no es justa? Ajusta la nota:</span>${[2,1,0].map(k=>`<button class="mini rg${k===g?' on':''}" data-g="${k}">${['Incorrecta','Mejorable','Correcta'][k]}</button>`).join('')}</div></div>${lawBox(tp.a)}`;
+  document.querySelectorAll('.rg').forEach(b=>b.onclick=()=>regrade(+b.dataset.g));
+  afterButtons(eid)}
+function pickOpt(k){const p=st.pend,tp=TM[p.tid],g=[2,1,0][k],eid=p.eid;
+  document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;const kk=+b.dataset.k;if(kk===k||kk===0)b.classList.add('q'+[2,1,0][kk])});
+  document.querySelectorAll('.mtabs button').forEach(b=>b.disabled=true);
+  record(g);drawSVG();
+  $('#fb').innerHTML=`<div class="fb g${g}"><h3>${HEAD[g]} · +${[0,5,10][g]} puntos</h3>${g<2?`<p><b>La respuesta correcta:</b> ${tp.ok}</p>`:''}<p>${tp.note}</p></div>${lawBox(tp.a)}`;
+  afterButtons(eid)}
+function summary(){
+  const C=com(),G=game(),rank=st.players.map((p,k)=>[p,G.pts[k]]).sort((a,b)=>b[1]-a[1]),avg=Math.round(G.m.reduce((a,b)=>a+b)/3);
+  const verdict=avg>=75?'La comunidad está contenta y bien gestionada.':avg>=55?'La comunidad sobrevive, pero hay cosas que mejorar.':'La comunidad está pensando seriamente en cambiar de administrador.';
+  const miss=[];C.ents.forEach(e=>doneOf(e).forEach(d=>{if(d.g<2)miss.push({e,tp:TM[d.id],d})}));
+  $('#panel').innerHTML=topbar()+`<h2 style="margin-top:14px">Resumen · ${esc(C.name)}</h2><p>${verdict}</p>
   <table><thead><tr><th>Jugador</th><th style="text-align:right">Puntos</th></tr></thead><tbody>${rank.map(r=>`<tr><td>${esc(r[0])}</td><td class="n">${r[1]}</td></tr>`).join('')}</tbody></table>
   <h3 style="margin-top:20px;font-size:18px">Para repasar (${miss.length})</h3>
-  ${miss.length?miss.map(x=>`<details style="margin-top:8px"><summary>${esc(x.n.name)} · <span class="muted">${esc(x.a.who)}</span></summary><p><i>${x.Q.q}</i></p><p><b>Correcta:</b> ${x.Q.o.find(o=>o[2]===2)[0]}</p><p class="muted">${x.Q.a.map(artName).join(' · ')}</p></details>`).join(''):'<p class="muted">Ningún fallo. Perfecto.</p>'}
-  <div class="row" style="margin-top:18px"><button class="main" id="again">Jugar otra vez</button></div>`;
-  $('#again').onclick=()=>{Object.assign(st,{turn:0,pts:st.players.map(()=>0),m:[60,70,70],ans:{}});save();home()};
-}
-function library(){
-  const used={};N.forEach(n=>n.qs.forEach(Q=>Q.a.forEach(k=>{(used[k]=used[k]||new Set).add(n.name)})));
-  const order=Object.keys(ARTS);
-  $('#lib').innerHTML=order.map(k=>`<div class="art" id="${artId(k)}"><h3>${artName(k)}</h3><h4>${ARTS[k][0]}</h4><p>${ARTS[k][1]}</p>${used[k]?`<div class="used">Sale en: ${[...used[k]].join(', ')}</div>`:''}</div>`).join('');
-}
-// tema día / noche
+  ${miss.length?miss.slice(-40).reverse().map(x=>`<details style="margin-top:8px"><summary>${esc(x.tp.tit)} · <span class="muted">${esc(x.e.name)} · ${esc(x.d.who)}</span></summary><p><i>${x.tp.q}</i></p><p><b>Correcta:</b> ${x.tp.ok}</p>${lawBox(x.tp.a)}</details>`).join(''):'<p class="muted">Ningún fallo todavía.</p>'}
+  <div class="row" style="margin-top:18px"><button class="main" id="bk">← Volver al edificio</button></div>`;
+  bindTop();$('#bk').onclick=home}
+
 $('#theme').onclick=()=>{const r=document.documentElement,dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=dark?'light':'dark'};
-library();home();
+if(!COMS.some(c=>c.id===st.cur))st.cur='pins';
+tabs();home();
 }
 </script>
 </body>
